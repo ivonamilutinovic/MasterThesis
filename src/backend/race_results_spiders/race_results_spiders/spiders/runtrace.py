@@ -2,11 +2,15 @@ from typing import Optional
 
 import scrapy
 
+from src.backend.utils.log import get_logger
 from src.backend.utils.run_info_utils import str_time_to_seconds, RaceInfoEnum
 
 from twisted.internet import reactor
 from scrapy.crawler import CrawlerRunner
 from scrapy.utils.log import configure_logging
+
+
+LOGGER = get_logger(__name__)
 
 
 class RuntraceSpider(scrapy.Spider):
@@ -58,6 +62,7 @@ class RuntraceSpider(scrapy.Spider):
                 total_time_field_pos = i + 1
 
         if avg_pace_field_pos is None or total_time_field_pos is None:
+            LOGGER.debug(f"Pace or time not found for {race_name}. ")
             return None
 
         race_obj = {"participants": list()}
