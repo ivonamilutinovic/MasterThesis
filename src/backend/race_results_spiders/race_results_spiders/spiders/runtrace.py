@@ -1,14 +1,12 @@
 from typing import Optional
 
 import scrapy
+from scrapy.crawler import CrawlerRunner
+from scrapy.utils.log import configure_logging
+from twisted.internet import reactor
 
 from src.backend.utils.log import get_logger
 from src.backend.utils.run_info_utils import str_time_to_seconds, RaceInfoEnum
-
-from twisted.internet import reactor
-from scrapy.crawler import CrawlerRunner
-from scrapy.utils.log import configure_logging
-
 
 LOGGER = get_logger(__name__)
 
@@ -65,7 +63,7 @@ class RuntraceSpider(scrapy.Spider):
             LOGGER.debug(f"Pace or time not found for {race_name}. ")
             return None
 
-        race_obj = {"participants": list()}
+        race_results_json = {"participants": list()}
 
         race_distance = None
         for runner in result_table.css("tbody>tr"):
@@ -79,15 +77,15 @@ class RuntraceSpider(scrapy.Spider):
             if race_distance is None:
                 race_distance = self.calculate_race_distance(runner_status, total_time, avg_pace)
 
-            race_obj["participants"].append({"runner_name": runner_name,
+            race_results_json["participants"].append({"runner_name": runner_name,
                                              "total_time": total_time,
                                              "avg_pace": avg_pace,
                                              "runner_status": runner_status})
 
-        race_obj["race_name"] = race_name
-        race_obj["race_distance"] = race_distance
+        race_results_json["race_name"] = race_name
+        race_results_json["race_distance"] = race_distance
 
-        return race_obj
+        return race_results_json
 
     @staticmethod
     def calculate_race_distance(runner_status: str, total_time: int, avg_pace: int) -> Optional[float]:
@@ -104,7 +102,7 @@ configure_logging({"LOG_FORMAT": "%(levelname)s: %(message)s"})
 crawler_runner = CrawlerRunner(
     settings={
         "FEEDS": {
-            "race_results.json": {"format": "json"},
+            "runtrace_race_results.json": {"format": "json"},
         },
     }
 )
