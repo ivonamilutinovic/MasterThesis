@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Optional
 
 import scrapy
@@ -41,7 +42,10 @@ class RuntraceSpider(scrapy.Spider):
 
     def parse_race(self, response):
         # response.url example: 'https://runtrace.net/zemun2023?race_id=664&race_info=true'
+        date_length = 11
         race_name = response.css("title::text").get()
+        race_date = response.css(".modal-race-date .date::text").get()
+        formatted_race_date = datetime.strptime(race_date, "%d.%m.%Y.")
 
         result_table = response.css("#results-table")
 
@@ -78,12 +82,13 @@ class RuntraceSpider(scrapy.Spider):
                 race_distance = self.calculate_race_distance(runner_status, total_time, avg_pace)
 
             race_results_json["participants"].append({"runner_name": runner_name,
-                                             "total_time": total_time,
-                                             "avg_pace": avg_pace,
-                                             "runner_status": runner_status})
+                                                      "total_time": total_time,
+                                                      "avg_pace": avg_pace,
+                                                      "runner_status": runner_status})
 
         race_results_json["race_name"] = race_name
         race_results_json["race_distance"] = race_distance
+        race_results_json["race_date"] = formatted_race_date
 
         return race_results_json
 
