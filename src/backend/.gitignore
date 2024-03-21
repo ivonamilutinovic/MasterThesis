@@ -153,3 +153,7 @@ dmypy.json
 cython_debug/
 
 training_data/
+
+# Django files
+backend/core/db.sqlite3
+backend/core/core/settings.py
