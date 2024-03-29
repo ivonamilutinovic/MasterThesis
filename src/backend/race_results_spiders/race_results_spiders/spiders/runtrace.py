@@ -42,19 +42,25 @@ class RuntraceSpider(scrapy.Spider):
 
     def parse_race(self, response):
         # response.url example: 'https://runtrace.net/zemun2023?race_id=664&race_info=true'
-        date_length = 11
         race_name = response.css("title::text").get()
         race_date = response.css(".modal-race-date .date::text").get()
         formatted_race_date = datetime.strptime(race_date, "%d.%m.%Y.")
 
         result_table = response.css("#results-table")
 
+        if result_table.css(".td-team-name"):
+            LOGGER.debug(f"Skipping race {race_name} because it is team race.")
+            return
+
         # Race info field positions in the table
         avg_pace_field_pos = None
         total_time_field_pos = None
         # Selects <th> elements that are inside <tr> elements which are inside a <thead> element
-        for i, column_name in enumerate(result_table.css("thead>tr>th")):
-            column_name = column_name.css("::text").get()
+        for i, column in enumerate(result_table.css("thead>tr>th")):
+            if column.css(".th-members"):
+                LOGGER.debug(f"Skipping race {race_name} because it is relay.")
+                return
+            column_name = column.css("::text").get()
             if column_name:
                 column_name = column_name.strip().lower()
 
@@ -65,7 +71,7 @@ class RuntraceSpider(scrapy.Spider):
 
         if avg_pace_field_pos is None or total_time_field_pos is None:
             LOGGER.debug(f"Pace or time not found for {race_name}. ")
-            return None
+            return
 
         race_results_json = {"participants": list()}
 
