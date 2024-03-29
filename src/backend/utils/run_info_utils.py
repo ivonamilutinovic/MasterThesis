@@ -23,3 +23,6 @@ def str_time_to_seconds(time_str: str) -> Optional[int]:
 class RaceInfoEnum(Enum):
     PACE = "tempo"
     TIME = "vreme"
+
+
+FINISHED_RACE_STATUS = 'finished'

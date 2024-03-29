@@ -7,7 +7,7 @@ from scrapy.utils.log import configure_logging
 from twisted.internet import reactor
 
 from src.backend.utils.log import get_logger
-from src.backend.utils.run_info_utils import str_time_to_seconds, RaceInfoEnum
+from src.backend.utils.run_info_utils import str_time_to_seconds, RaceInfoEnum, FINISHED_RACE_STATUS
 
 LOGGER = get_logger(__name__)
 
@@ -42,9 +42,12 @@ class RuntraceSpider(scrapy.Spider):
 
     def parse_race(self, response):
         # response.url example: 'https://runtrace.net/zemun2023?race_id=664&race_info=true'
-        race_name = response.css("title::text").get()
+        event_name = response.css("title::text").get().strip()
+        race_name = response.css("#raceInfoTitle::text").get().strip()
+        race_name = f"{event_name}, {race_name}"
+
         race_date = response.css(".modal-race-date .date::text").get()
-        formatted_race_date = datetime.strptime(race_date, "%d.%m.%Y.")
+        formatted_race_date = datetime.strptime(race_date, "%d.%m.%Y.").date()
 
         result_table = response.css("#results-table")
 
@@ -73,35 +76,37 @@ class RuntraceSpider(scrapy.Spider):
             LOGGER.debug(f"Pace or time not found for {race_name}. ")
             return
 
-        race_results_json = {"participants": list()}
+        race_results_json = {'participants_results': list()}
 
         race_distance = None
         for runner in result_table.css("tbody>tr"):
-            runner_name = runner.css(".td-name::text").get().strip()  # todo: cyrillic, latin
+            runner_status = runner.css(".js-status>.status::text").get().strip().lower()
+            if runner_status != FINISHED_RACE_STATUS:
+                continue
+            runner_name = runner.css(".td-name::text").get().strip()
             total_time = str_time_to_seconds(runner.css("td:nth-child({timePos})::text"
                                                         .format(timePos=total_time_field_pos)).get().strip())
             avg_pace = str_time_to_seconds(runner.css("td:nth-child({pacePos})::text"
                                                       .format(pacePos=avg_pace_field_pos)).get().strip())
-            runner_status = runner.css(".js-status>.status::text").get().strip()
 
             if race_distance is None:
                 race_distance = self.calculate_race_distance(runner_status, total_time, avg_pace)
 
-            race_results_json["participants"].append({"runner_name": runner_name,
-                                                      "total_time": total_time,
-                                                      "avg_pace": avg_pace,
-                                                      "runner_status": runner_status})
+            race_results_json['participants_results'].append({'runner_name': runner_name,
+                                                              'total_time': total_time,
+                                                              'avg_pace': avg_pace,
+                                                              'runner_status': runner_status})
 
-        race_results_json["race_name"] = race_name
-        race_results_json["race_distance"] = race_distance
-        race_results_json["race_date"] = formatted_race_date
+        race_results_json['race_name'] = race_name
+        race_results_json['race_distance'] = race_distance
+        race_results_json['race_date'] = formatted_race_date
 
         return race_results_json
 
     @staticmethod
     def calculate_race_distance(runner_status: str, total_time: int, avg_pace: int) -> Optional[float]:
         race_distance = None
-        if runner_status.lower() == "finished" and total_time and avg_pace:
+        if runner_status.lower() == FINISHED_RACE_STATUS and total_time and avg_pace:
             race_distance = round(total_time / avg_pace, 3)
         return race_distance
 
@@ -113,8 +118,10 @@ configure_logging({"LOG_FORMAT": "%(levelname)s: %(message)s"})
 crawler_runner = CrawlerRunner(
     settings={
         "FEEDS": {
-            "runtrace_race_results.json": {"format": "json"},
+            "../../../training_data/runtrace_race_results.json": {"format": "json"},
         },
+        "FEED_EXPORT_ENCODING": "utf-8",
+        "FEED_EXPORT_INDENT": 4,
     }
 )
 
