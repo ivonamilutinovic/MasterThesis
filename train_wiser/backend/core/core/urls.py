@@ -16,9 +16,22 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from oauth2_provider import urls as oauth2_urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('strava_gateway/', include('strava_gateway.urls')),
+    path('o/', include(oauth2_urls)),
     #    path('accounts/', include('accounts.urls')),
+    #path("api-auth/", include("rest_framework.urls")),
+    #path("api/v1/dj-rest-auth/", include("dj_rest_auth.urls"))
 ]
+#
+# from django.contrib import admin
+# from django.urls import include, path
+# from oauth2_provider import urls as oauth2_urls
+#
+# urlpatterns = [
+#     path('admin/', admin.site.urls),
+#     path('o/', include(oauth2_urls)),
+# ]
