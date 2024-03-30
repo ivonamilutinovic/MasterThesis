@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     # 3rd party
     "rest_framework",
     "corsheaders",
+    "django_crontab",
     # local
     "strava_gateway.apps.StravaGatewayConfig"
     # "accounts.apps.AccountsConfig",
@@ -141,3 +142,9 @@ REST_FRAMEWORK = {
         "rest_framework.authentication.TokenAuthentication",
     ],
 }
+
+
+CRONJOBS = [
+    ('0 */1 * * *', 'strava_gateway.tasks.activity_backfill',
+     '>> ' + '/home/hp/Desktop/debug7.log' + ' 2>&1 ')
+]
