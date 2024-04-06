@@ -7,7 +7,8 @@ from scrapy.utils.log import configure_logging
 from twisted.internet import reactor
 
 from src.backend.utils.log import get_logger
-from src.backend.utils.run_info_utils import str_time_to_seconds, RaceInfoEnum, FINISHED_RACE_STATUS
+from src.backend.utils.run_info_utils import str_time_to_seconds, RaceInfoEnum, FINISHED_RACE_STATUS, \
+    is_race_of_relevant_type
 
 LOGGER = get_logger(__name__)
 
@@ -45,6 +46,8 @@ class RuntraceSpider(scrapy.Spider):
         event_name = response.css("title::text").get().strip()
         race_name = response.css("#raceInfoTitle::text").get().strip()
         race_name = f"{event_name}, {race_name}"
+        if not is_race_of_relevant_type(race_name):
+            return
 
         race_date = response.css(".modal-race-date .date::text").get()
         formatted_race_date = datetime.strptime(race_date, "%d.%m.%Y.").date()
@@ -83,7 +86,7 @@ class RuntraceSpider(scrapy.Spider):
             runner_status = runner.css(".js-status>.status::text").get().strip().lower()
             if runner_status != FINISHED_RACE_STATUS:
                 continue
-            runner_name = runner.css(".td-name::text").get().strip()
+            runner_name = runner.css(".td-name::text").get().lower().strip()
             total_time = str_time_to_seconds(runner.css("td:nth-child({timePos})::text"
                                                         .format(timePos=total_time_field_pos)).get().strip())
             avg_pace = str_time_to_seconds(runner.css("td:nth-child({pacePos})::text"

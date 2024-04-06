@@ -1,26 +1,13 @@
 import csv
 import os
-from contextlib import suppress
+
 from io import BytesIO
 
 from PyPDF2 import PdfReader
 
+from src.backend.utils.log import get_logger
 
-def create_subfolders_to(filename: str):
-    """
-        Creating (sub)folders to provided filename (path) argument.
-
-        Check if filename argument has actual file name in itself (if filename has any extension in itself, then passed
-        filename argument has actual file name in itself) ---> create all folders that are above that actual file
-        name in provided path.
-        Otherwise, filename argument is actually (sub)folders structure that needs to be created if it doesn't exist.
-    """
-
-    with suppress(FileNotFoundError):
-        if not os.path.splitext(filename)[1]:
-            os.makedirs(os.path.normpath(filename), exist_ok=True)
-        else:
-            os.makedirs(os.path.dirname(os.path.normpath(filename)), exist_ok=True)
+LOGGER = get_logger(__name__)
 
 
 def pdf_to_csv(pdf_content: bytes, csv_file: str) -> None:
@@ -45,3 +32,11 @@ def pdf_to_csv(pdf_content: bytes, csv_file: str) -> None:
             # Writing each line to CSV
             for line in lines:
                 writer.writerow([line])
+
+
+def remove_file(file_to_delete: str) -> None:
+    if os.path.exists(file_to_delete):
+        os.remove(file_to_delete)
+        LOGGER.debug(f"File {file_to_delete} has been successfully deleted.")
+    else:
+        LOGGER.debug(f"File {file_to_delete} does not exist.")
