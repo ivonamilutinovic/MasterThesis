@@ -3,7 +3,7 @@ import os
 import re
 import zipfile
 from datetime import datetime
-from typing import List, Dict, Union, TYPE_CHECKING, Optional
+from typing import List, Dict, Union, TYPE_CHECKING, Optional, Tuple
 
 import requests
 import scrapy
@@ -14,7 +14,8 @@ from twisted.internet import reactor
 
 from src.backend.utils.file_operations import remove_file
 from src.backend.utils.log import get_logger
-from src.backend.utils.run_info_utils import is_race_of_relevant_type, str_time_to_seconds
+from src.backend.utils.run_info_utils import is_race_of_relevant_type, str_time_to_seconds, \
+    is_race_distance_of_relevant_type
 
 if TYPE_CHECKING:
     from scrapy.http.response import Response
@@ -52,42 +53,54 @@ class TrkaRsSpider(scrapy.Spider):
 
         results_ref = event.css(".event-list-item-results a::attr(href)").get()
 
-        # race_names_and_dest = self.parse_race_names_and_dist(response, event)
         if results_ref:
+            race_names_and_dist = self._parse_race_names_and_dist(response, event)
             return scrapy.Request(url=response.urljoin(results_ref), callback=self.download_event_results,
-                                  cb_kwargs={'event_name': event_name, 'race_date': formatted_race_date})
+                                  cb_kwargs={'event_name': event_name,
+                                             'race_date': formatted_race_date,
+                                             'race_names_and_dist': race_names_and_dist})
         else:
-            LOGGER.error(f"URL with results cannot be found for the event {event_name}.")
+            LOGGER.debug(f"URL with results cannot be found for the event {event_name}.")
             return
 
-    def parse_race_names_and_dist(self, response, event):
-        # TODO: Finish implementation
+    def _parse_race_names_and_dist(self, response, event) -> Dict[str, float]:
         event_link = event.css('a[href^="/events/"]::attr(href)').get()
         response_with_event = requests.get(url=response.urljoin(event_link))
         html_string = response_with_event.content.decode('utf-8')
         meta_description_content = re.search(
             r'<meta\sproperty="og:description"\s+content="Догађај се састоји од следећих трка: ([^"]*)"\s*/?>',
             html_string)
-        races_desc = meta_description_content.group(1)
-        race_names_and_dest_re = re.search(r"([\w\s.]+) \(([\w.]+)\skm\)(,\s([\w\s.]+) \(([\w.]+)\skm\))*", races_desc)
-        race_names_and_dest = dict()
-        race_names_and_dest[race_names_and_dest_re.group(1)] = race_names_and_dest_re.group(2)
-        return race_names_and_dest
+        race_names_and_dist_list: List[Tuple[str, str]] = re.findall(r"([\w\s.]+) \(([\w.]+)\skm\)",
+                                                                     meta_description_content.group(1))
+        race_names_and_dist: Dict[str, float] = dict()
+        for name_dest_tuple in race_names_and_dist_list:
+            race_names_and_dist[name_dest_tuple[0].strip()] = float(name_dest_tuple[1])
 
-    def download_event_results(self, response: 'Response', event_name: str, race_date: str):
+        return race_names_and_dist
+
+    def download_event_results(self, response: 'Response', event_name: str, race_date: str,
+                               race_names_and_dist: Dict[str, float]):
         download_link = response.css('a[href*="/_download-detailed-results/"]::attr(href)').get()
         if download_link:
             download_url = response.urljoin(download_link)
             return scrapy.Request(url=download_url, callback=self.parse_zip_results,
-                                  cb_kwargs={'event_name': event_name, 'race_date': race_date})
+                                  cb_kwargs={'event_name': event_name,
+                                             'race_date': race_date,
+                                             'race_names_and_dist': race_names_and_dist})
 
-    def parse_zip_results(self, response: 'Response', event_name: str, race_date: str):
+    def parse_zip_results(self, response: 'Response', event_name: str, race_date: str,
+                          race_names_and_dist: Dict[str, float]):
         if response.headers.get('Content-Type') == b'application/zip':
             csv_files = self.extract_zip_files_with_results(response, event_name)
             for csv_file in csv_files:
                 race_name = os.path.splitext(os.path.basename(csv_file))[0]
-                race_distance = self.determine_race_distance(csv_file)
-                if not race_distance:
+                try:
+                    race_distance = race_names_and_dist[race_name]  # self.determine_race_distance(csv_file)
+                except KeyError:
+                    LOGGER.debug(f"KEY ERROR race name: {race_name}, {race_names_and_dist}")
+                if not is_race_distance_of_relevant_type(race_distance):
+                    LOGGER.debug(f"Race {race_name} has distance {race_distance} that is not relevant for training. "
+                                 f"Proceeding with excluding this race from results.")
                     return
                 participants_results = self.parse_csv_results(csv_file)
                 race_name = f"{event_name}, {race_name}"
@@ -155,7 +168,7 @@ class TrkaRsSpider(scrapy.Spider):
         print(f"csv filename {csv_filename}")
         race_distance = None
         if 'stafeta' in csv_filename:
-            return
+            return None
         if re.search(r'([^0-9]|\b)10km|frtalj', csv_filename):
             race_distance = 10
         elif re.search(r'([^0-9]|\b)7km', csv_filename):
@@ -177,7 +190,7 @@ configure_logging({"LOG_FORMAT": "%(levelname)s: %(message)s"})
 crawler_runner = CrawlerRunner(
     settings={
         "FEEDS": {
-            "../../../training_data/trka_rs_race_results.json": {"format": "json"},
+            "../../../training_data/trka_rs_race_results1.json": {"format": "json"},
         },
         "FEED_EXPORT_ENCODING": "utf-8",
         "FEED_EXPORT_INDENT": 4,
@@ -188,3 +201,5 @@ d = crawler_runner.crawl(TrkaRsSpider)
 d.addBoth(lambda _: reactor.stop())
 reactor.run()  # the script will block here until the crawling is finished
 
+# TODO:
+# 1. AttributeError: 'NoneType' object has no attribute 'group'
