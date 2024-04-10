@@ -1,7 +1,7 @@
 import re
 import math
 from enum import Enum
-from typing import Optional
+from typing import Optional, Union
 
 
 class RaceInfoEnum(Enum):
@@ -14,13 +14,29 @@ SUCCESS_RACE_STATUS = 'ok'
 
 
 def is_race_of_relevant_type(race_name: str) -> bool:
-    not_relevant_race_types = ['trail', 'vertical', 'ocr', 'plivanje', 'swimming', 'tribalion', 'štafeta']
+    # Race name should be unidecoded
+    not_relevant_race_types = ['trail', 'trejl', 'vertical', 'ocr', 'plivanje', 'swimming', 'tribalion', 'stafeta',
+                               'stafetni', 'nordijsko', 'hodanje', 'kros']
     return not any(race_type in race_name.lower() for race_type in not_relevant_race_types)
 
 
+def round_race_distance(race_distance: float) -> Union[int, float]:
+    if math.floor(race_distance) == 7:
+        difference_to_7 = abs(race_distance - 7)
+        difference_to_7_7 = abs(race_distance - 7.7)
+        if difference_to_7 <= difference_to_7_7:
+            race_distance = 7
+        elif difference_to_7 > difference_to_7_7:
+            race_distance = 7.7
+    else:
+        race_distance = math.floor(race_distance)
+
+    return race_distance
+
+
 def is_race_distance_of_relevant_type(race_distance: float) -> bool:
-    relevant_distances = [5, 7, 7.7, 10, 21, 42]  # TODO: See runtrace for 7.7 and trka zadovoljstva on Ada
-    return math.floor(race_distance) in relevant_distances
+    relevant_distances = [5, 7, 7.7, 10, 21, 42]
+    return round_race_distance(race_distance) in relevant_distances
 
 
 def str_time_to_seconds(time_str: str) -> Optional[int]:

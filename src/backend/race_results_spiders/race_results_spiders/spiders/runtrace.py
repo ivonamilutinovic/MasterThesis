@@ -5,10 +5,11 @@ import scrapy
 from scrapy.crawler import CrawlerRunner
 from scrapy.utils.log import configure_logging
 from twisted.internet import reactor
+from unidecode import unidecode
 
 from src.backend.utils.log import get_logger
 from src.backend.utils.run_info_utils import str_time_to_seconds, RaceInfoEnum, FINISHED_RACE_STATUS, \
-    is_race_of_relevant_type
+    is_race_of_relevant_type, round_race_distance, is_race_distance_of_relevant_type
 
 LOGGER = get_logger(__name__)
 
@@ -43,10 +44,10 @@ class RuntraceSpider(scrapy.Spider):
 
     def parse_race(self, response):
         # response.url example: 'https://runtrace.net/zemun2023?race_id=664&race_info=true'
-        event_name = response.css("title::text").get().strip()
-        race_name = response.css("#raceInfoTitle::text").get().strip()
+        event_name = unidecode(response.css("title::text").get().strip())
+        race_name = unidecode(response.css("#raceInfoTitle::text").get().strip())
         race_name = f"{event_name}, {race_name}"
-        if not is_race_of_relevant_type(race_name):
+        if not is_race_of_relevant_type(event_name) or not is_race_of_relevant_type(race_name):
             return
 
         race_date = response.css(".modal-race-date .date::text").get()
@@ -92,7 +93,7 @@ class RuntraceSpider(scrapy.Spider):
             avg_pace = str_time_to_seconds(runner.css("td:nth-child({pacePos})::text"
                                                       .format(pacePos=avg_pace_field_pos)).get().strip())
 
-            if race_distance is None:
+            if not race_distance:
                 race_distance = self.calculate_race_distance(runner_status, total_time, avg_pace)
 
             race_results_json['participants_results'].append({'runner_name': runner_name,
@@ -100,8 +101,17 @@ class RuntraceSpider(scrapy.Spider):
                                                               'avg_pace': avg_pace,
                                                               'runner_status': runner_status})
 
+        if not race_distance:
+            LOGGER.debug(f"Race {race_name} has unknown race distance. Skipping this race.")
+            return
+
+        if not is_race_distance_of_relevant_type(race_distance):
+            LOGGER.debug(f"Race {race_name} has distance {race_distance} that is not relevant "
+                         f"for ML training. Proceeding with excluding this race from results.")
+            return
+
         race_results_json['race_name'] = race_name
-        race_results_json['race_distance'] = race_distance
+        race_results_json['race_distance'] = round_race_distance(race_distance)
         race_results_json['race_date'] = formatted_race_date
 
         return race_results_json

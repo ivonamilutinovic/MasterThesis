@@ -11,11 +11,12 @@ from scrapy.crawler import CrawlerRunner
 from scrapy.utils.log import configure_logging
 from transliterate import translit
 from twisted.internet import reactor
+from unidecode import unidecode
 
 from src.backend.utils.file_operations import remove_file
 from src.backend.utils.log import get_logger
 from src.backend.utils.run_info_utils import is_race_of_relevant_type, str_time_to_seconds, \
-    is_race_distance_of_relevant_type
+    is_race_distance_of_relevant_type, round_race_distance
 
 if TYPE_CHECKING:
     from scrapy.http.response import Response
@@ -45,9 +46,8 @@ class TrkaRsSpider(scrapy.Spider):
     def parse_event(self, event, response: 'Response'):
         race_date = event.css('.event-item-date::text').get().strip()
         formatted_race_date = datetime.strptime(race_date, "%d.%m.%Y.").date()
-        event_name = event.css('.event-item-name::text').get().\
-            replace('\r', '').replace('\n', '').replace('"', '').replace('?', '').strip()
-        event_name = translit(event_name, 'sr', reversed=True)
+        event_name = unidecode(event.css('.event-item-name::text').get().
+                               replace('\r', '').replace('\n', '').replace('"', '').replace('?', '').strip())
         if not is_race_of_relevant_type(event_name):
             return
 
@@ -93,23 +93,26 @@ class TrkaRsSpider(scrapy.Spider):
         if response.headers.get('Content-Type') == b'application/zip':
             csv_files = self.extract_zip_files_with_results(response, event_name)
             for csv_file in csv_files:
-                race_name = os.path.splitext(os.path.basename(csv_file))[0]
+                race_name = unidecode(os.path.splitext(os.path.basename(csv_file))[0])
                 try:
                     race_distance = race_names_and_dist[race_name]  # self.determine_race_distance(csv_file)
+                    if not is_race_distance_of_relevant_type(race_distance):
+                        LOGGER.debug(f"Race {race_name} has distance {race_distance} that is not relevant "
+                                     f"for ML training. Proceeding with excluding this race from results.")
+                        return
+                    if not is_race_of_relevant_type(race_name, p=True):
+                        return
+                    participants_results = self.parse_csv_results(csv_file)
+                    race_name = f"{event_name}, {race_name}"
+                    race_results_json = {'participants_results': participants_results,
+                                         'race_name': race_name,
+                                         'race_distance': round_race_distance(race_distance),
+                                         'race_date': race_date}
+                    remove_file(csv_file)
+                    yield race_results_json
                 except KeyError:
-                    LOGGER.debug(f"KEY ERROR race name: {race_name}, {race_names_and_dist}")
-                if not is_race_distance_of_relevant_type(race_distance):
-                    LOGGER.debug(f"Race {race_name} has distance {race_distance} that is not relevant for training. "
-                                 f"Proceeding with excluding this race from results.")
-                    return
-                participants_results = self.parse_csv_results(csv_file)
-                race_name = f"{event_name}, {race_name}"
-                race_results_json = {'participants_results': participants_results,
-                                     'race_name': race_name,
-                                     'race_distance': race_distance,
-                                     'race_date': race_date}
-                # remove_file(csv_file)
-                yield race_results_json
+                    LOGGER.debug(f"Race with name '{race_name}' not available in the dictionary "
+                                 f"(race_name -> race_distance): {race_names_and_dist}")
         else:
             raise AttributeError(f"Response is not a ZIP file: {response.url}")
 
@@ -165,7 +168,6 @@ class TrkaRsSpider(scrapy.Spider):
     def determine_race_distance(self, csv_filename: str) -> float:
         # If race distance is None, race is of not relevant type or distance
         csv_filename = translit(csv_filename, 'sr', reversed=True).lower().replace(' ', '')
-        print(f"csv filename {csv_filename}")
         race_distance = None
         if 'stafeta' in csv_filename:
             return None
@@ -190,7 +192,7 @@ configure_logging({"LOG_FORMAT": "%(levelname)s: %(message)s"})
 crawler_runner = CrawlerRunner(
     settings={
         "FEEDS": {
-            "../../../training_data/trka_rs_race_results1.json": {"format": "json"},
+            "../../../training_data/trka_rs_race_results.json": {"format": "json"},
         },
         "FEED_EXPORT_ENCODING": "utf-8",
         "FEED_EXPORT_INDENT": 4,
