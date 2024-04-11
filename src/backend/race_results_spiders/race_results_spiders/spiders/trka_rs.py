@@ -100,7 +100,7 @@ class TrkaRsSpider(scrapy.Spider):
                         LOGGER.debug(f"Race {race_name} has distance {race_distance} that is not relevant "
                                      f"for ML training. Proceeding with excluding this race from results.")
                         return
-                    if not is_race_of_relevant_type(race_name, p=True):
+                    if not is_race_of_relevant_type(race_name):
                         return
                     participants_results = self.parse_csv_results(csv_file)
                     race_name = f"{event_name}, {race_name}"
@@ -169,8 +169,6 @@ class TrkaRsSpider(scrapy.Spider):
         # If race distance is None, race is of not relevant type or distance
         csv_filename = translit(csv_filename, 'sr', reversed=True).lower().replace(' ', '')
         race_distance = None
-        if 'stafeta' in csv_filename:
-            return None
         if re.search(r'([^0-9]|\b)10km|frtalj', csv_filename):
             race_distance = 10
         elif re.search(r'([^0-9]|\b)7km', csv_filename):
@@ -185,7 +183,7 @@ class TrkaRsSpider(scrapy.Spider):
         return race_distance
 
 
-# SCRAPY_LOG_FILE = 'scrapy_runtrace_log.txt'
+# SCRAPY_LOG_FILE = 'scrapy_trka_rs_log.txt'
 # configure_logging({'LOG_FILE': SCRAPY_LOG_FILE})
 
 configure_logging({"LOG_FORMAT": "%(levelname)s: %(message)s"})
@@ -202,6 +200,3 @@ crawler_runner = CrawlerRunner(
 d = crawler_runner.crawl(TrkaRsSpider)
 d.addBoth(lambda _: reactor.stop())
 reactor.run()  # the script will block here until the crawling is finished
-
-# TODO:
-# 1. AttributeError: 'NoneType' object has no attribute 'group'

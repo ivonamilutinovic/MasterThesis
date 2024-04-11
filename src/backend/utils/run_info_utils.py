@@ -1,7 +1,10 @@
-import re
 import math
+import re
 from enum import Enum
 from typing import Optional, Union
+
+from transliterate import translit
+from unidecode import unidecode
 
 
 class RaceInfoEnum(Enum):
@@ -16,7 +19,7 @@ SUCCESS_RACE_STATUS = 'ok'
 def is_race_of_relevant_type(race_name: str) -> bool:
     # Race name should be unidecoded
     not_relevant_race_types = ['trail', 'trejl', 'vertical', 'ocr', 'plivanje', 'swimming', 'tribalion', 'stafeta',
-                               'stafetni', 'nordijsko', 'hodanje', 'kros']
+                               'stafetni', 'relay', 'nordijsko', 'hodanje', 'kros']
     return not any(race_type in race_name.lower() for race_type in not_relevant_race_types)
 
 
@@ -57,3 +60,11 @@ def str_time_to_seconds(time_str: str) -> Optional[int]:
         multiply *= 60
 
     return round(seconds)
+
+
+def translate_to_unidecode(text: str):
+    return unidecode(translit(text, 'sr', reversed=True).lower())
+
+
+def translate_to_unidecode_and_remove_spaces(text: str):
+    return unidecode(translit(text, 'sr', reversed=True).lower().replace(' ', ''))

@@ -16,12 +16,14 @@ LOGGER = get_logger(__name__)
 
 def prepare_data_for_training():
     results_per_runner_dict = defaultdict(list)
-    reorder_runtrace_results(os.path.join(TRAINING_DATA_DIR, 'runtrace_race_results.json'), results_per_runner_dict)
-    reorder_runtrace_results(os.path.join(TRAINING_DATA_DIR, 'trka_rs_race_results.json'), results_per_runner_dict)
+    rearrange_results_per_runner(os.path.join(TRAINING_DATA_DIR, 'runtrace_race_results.json'), results_per_runner_dict)
+    rearrange_results_per_runner(os.path.join(TRAINING_DATA_DIR, 'trka_rs_race_results.json'), results_per_runner_dict)
+    rearrange_results_per_runner(os.path.join(TRAINING_DATA_DIR, 'bgd_marathon_race_results.json'),
+                                 results_per_runner_dict)
     write_results_in_json(results_per_runner_dict)
 
 
-def reorder_runtrace_results(json_file: str, results_per_runner_dict: Dict) -> None:
+def rearrange_results_per_runner(json_file: str, results_per_runner_dict: Dict) -> None:
     with open(json_file, 'r', encoding='utf-8') as f:
         results_per_race_dict = json.load(f)
 
