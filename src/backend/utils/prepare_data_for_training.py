@@ -9,7 +9,7 @@ from src.backend.utils.log import get_logger
 from src.backend.utils.run_info_utils import FINISHED_RACE_STATUS, SUCCESS_RACE_STATUS
 
 TRAINING_DATA_DIR = 'training_data'
-JSON_OUTPUT = 'prepared_race_results.json'
+JSON_DATA_FOR_TRAINING = 'prepared_race_results.json'
 
 LOGGER = get_logger(__name__)
 
@@ -48,6 +48,6 @@ def rearrange_results_per_runner(json_file: str, results_per_runner_dict: Dict) 
 
 
 def write_results_in_json(results_per_runner_dict):
-    output_json = os.path.join(TRAINING_DATA_DIR, JSON_OUTPUT)
+    output_json = os.path.join(TRAINING_DATA_DIR, JSON_DATA_FOR_TRAINING)
     with open(output_json, 'w', encoding='utf-8') as f:
         json.dump(results_per_runner_dict, f, indent=4, ensure_ascii=False)
