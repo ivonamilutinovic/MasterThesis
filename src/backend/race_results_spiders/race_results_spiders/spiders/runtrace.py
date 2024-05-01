@@ -100,6 +100,8 @@ class RuntraceSpider(scrapy.Spider):
                                                               'total_time': total_time,
                                                               'avg_pace': avg_pace,
                                                               'runner_status': runner_status})
+        if not race_results_json['participants_results']:
+            return
 
         if not race_distance:
             LOGGER.debug(f"Race {race_name} has unknown race distance. Skipping this race.")
