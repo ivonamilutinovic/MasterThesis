@@ -1,7 +1,8 @@
+import json
 import math
 import re
 from enum import Enum
-from typing import Optional, Union
+from typing import Optional, Union, Dict
 
 from transliterate import translit
 from unidecode import unidecode
@@ -68,3 +69,36 @@ def translate_to_unidecode(text: str):
 
 def translate_to_unidecode_and_remove_spaces(text: str):
     return unidecode(translit(text, 'sr', reversed=True).lower().replace(' ', ''))
+
+
+def count_number_of_data() -> Dict[str, int]:
+    # todo: refactor
+    json_bgd_path = 'training_data/bgd_marathon_race_results.json'
+    json_trka_rs_path = 'training_data/trka_rs_race_results.json'
+    json_runtrace_path = 'training_data/runtrace_race_results.json'
+
+    with open(json_bgd_path, 'r', encoding='utf-8') as f:
+        list_data_bgd = json.load(f)
+
+    with open(json_trka_rs_path, 'r', encoding='utf-8') as f:
+        list_data_trka_rs = json.load(f)
+
+    with open(json_runtrace_path, 'r', encoding='utf-8') as f:
+        list_data_runtrace = json.load(f)
+
+    participants_results_len_bgd = 0
+    participants_results_len_trka_rs = 0
+    participants_results_len_runtrace = 0
+
+    for race_data in list_data_bgd:
+        participants_results_len_bgd += len(race_data['participants_results'])
+
+    for race_data in list_data_trka_rs:
+        participants_results_len_trka_rs += len(race_data['participants_results'])
+
+    for race_data in list_data_runtrace:
+        participants_results_len_runtrace += len(race_data['participants_results'])
+
+    return {'bgd_marathon_data_len': participants_results_len_bgd,
+            'trka_rs_data_len': participants_results_len_trka_rs,
+            'runtrace_data_len': participants_results_len_runtrace}
