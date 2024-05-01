@@ -1,4 +1,5 @@
 import csv
+import json
 import os.path
 import re
 from typing import List, Dict, Union, TYPE_CHECKING, Optional, Tuple
@@ -49,12 +50,14 @@ class BgdMarathonSpider(scrapy.Spider):
         #    <a id="wp-block-file--media-046f4620-6f9d-4a8e-b03c-6f8498e434ad"
         #    href="https://bgdmarathon.org/wp-content/uploads/2023/04/Marathon2023.pdf" target="_blank"
         #    rel="noreferrernoopener">Belgrade Marathon 2023 &#8211; Marathon</a></div></div> ...
+
+        race_date_dict = self._load_race_date_dict()
         for i, event in enumerate(all_events_in_year_divs):
             results_in_pdf = event.css("a::attr(href)").get()
             yield scrapy.Request(url=response.urljoin(results_in_pdf), callback=self.parse_pdf_race_results,
-                                 cb_kwargs={'event_year': event_year})
+                                 cb_kwargs={'event_year': event_year, 'race_date_dict': race_date_dict})
 
-    def parse_pdf_race_results(self, response: 'Response', event_year: str):
+    def parse_pdf_race_results(self, response: 'Response', event_year: str, race_date_dict: Dict[str, str]):
         if response.headers.get('Content-Type') != b'application/pdf':
             raise AttributeError(f"URL {response.url} is not pdf file.")
         pdf_name = os.path.basename(response.url).split('/')[-1].lower()
@@ -82,10 +85,13 @@ class BgdMarathonSpider(scrapy.Spider):
             pdf_name, best_time)
         if not race_distance:
             return
+        race_date = race_date_dict[race_name]
+        if not race_date.startswith(event_year):
+            raise AttributeError(f"Year of the race should be {event_year}, instead, date is {race_date}.")
         race_results_json = {'participants_results': participants_results,
                              'race_name': race_name,
                              'race_distance': race_distance,
-                             'race_date': event_year}
+                             'race_date': race_date}
         remove_file(local_pdf_path)
         remove_file(csv_path)
         return race_results_json
@@ -146,16 +152,21 @@ class BgdMarathonSpider(scrapy.Spider):
             return 7.7
         elif best_time_on_race > 6300:
             # If best time is bigger than 1h45min, it is supposed that marathon distance is in the results
-            return 42.2
+            return 42
         elif best_time_on_race > 3000:
             # If best time is bigger than 50min, it is supposed that half-marathon distance is in the results
-            return 21.1
+            return 21
         else:
             return None
 
     def is_resulting_pdf_relevant(self, pdf_name: str) -> bool:
         not_relevant_race_types = ['kategorije', 'category', 'gender']
         return not any(race_type in pdf_name.lower().strip() for race_type in not_relevant_race_types)
+
+    def _load_race_date_dict(self):
+        with open('../../../race_data/bgd_marathon_race_name_to_date.json', 'r', encoding='utf-8') as f:
+            race_date_dict = json.load(f)
+        return race_date_dict
 
 
 SCRAPY_LOG_FILE = 'scrapy_bgd_marathon_log.txt'
