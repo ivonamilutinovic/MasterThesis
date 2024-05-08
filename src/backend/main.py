@@ -1,7 +1,7 @@
 import argparse
 
 from src.backend.utils.log import get_logger
-from src.backend.utils.prepare_data_for_training import prepare_data_for_training
+from src.backend.utils.prepare_data_for_training import merge_all_race_results, prepare_data_for_training
 from src.backend.utils.run_info_utils import count_number_of_data
 
 LOGGER = get_logger(__name__)
@@ -12,7 +12,8 @@ def main():
     args = parse_command_line_params()
 
     if args.prepare_data_for_training:
-        prepare_data_for_training()
+        merge_all_race_results()
+        # prepare_data_for_training()
     if args.print_number_of_data:
         number_of_data = count_number_of_data()
         print(f"{number_of_data}")

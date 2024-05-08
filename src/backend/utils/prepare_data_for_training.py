@@ -9,15 +9,18 @@ from src.backend.utils.log import get_logger
 from src.backend.utils.run_info_utils import FINISHED_RACE_STATUS, SUCCESS_RACE_STATUS
 
 TRAINING_DATA_DIR = 'training_data'
+MERGED_RESULTS = 'merged_results1.json'
 JSON_DATA_FOR_TRAINING = 'prepared_race_results.json'
 
 LOGGER = get_logger(__name__)
 
 
-def prepare_data_for_training():
-    results_per_runner_dict = defaultdict(list)
-    rearrange_results_per_runner(os.path.join(TRAINING_DATA_DIR, 'runtrace_race_results.json'), results_per_runner_dict)
-    rearrange_results_per_runner(os.path.join(TRAINING_DATA_DIR, 'trka_rs_race_results.json'), results_per_runner_dict)
+def merge_all_race_results():
+    results_per_runner_dict = dict()
+    rearrange_results_per_runner(os.path.join(TRAINING_DATA_DIR, 'runtrace_race_results.json'),
+                                 results_per_runner_dict)
+    rearrange_results_per_runner(os.path.join(TRAINING_DATA_DIR, 'trka_rs_race_results.json'),
+                                 results_per_runner_dict)
     rearrange_results_per_runner(os.path.join(TRAINING_DATA_DIR, 'bgd_marathon_race_results.json'),
                                  results_per_runner_dict)
     write_results_in_json(results_per_runner_dict)
@@ -41,13 +44,33 @@ def rearrange_results_per_runner(json_file: str, results_per_runner_dict: Dict) 
             runner_status: str = runner_result_dict['runner_status'].strip().lower()
             if runner_status not in {FINISHED_RACE_STATUS, SUCCESS_RACE_STATUS}:
                 raise ValueError(f"Runner status should be set to 'finished'. Instead it is {runner_status}.")
-            results_per_runner_dict[runner_name].append({'race_name': race_name,
-                                                         'race_date': race_date,
-                                                         'race_distance': race_distance,
-                                                         'total_time': total_time})
+            runner = results_per_runner_dict.get(runner_name, None)
+            if runner is None:
+                results_per_runner_dict[runner_name] = {race_distance: [{'race_name': race_name,
+                                                                         'race_date': race_date,
+                                                                         'race_distance': race_distance,
+                                                                         'total_time': total_time}]}
+            else:
+                races_with_dist_for_runner = runner.get(race_distance, None)
+                if races_with_dist_for_runner:
+                    runner[race_distance].append({'race_name': race_name,
+                                                  'race_date': race_date,
+                                                  'race_distance': race_distance,
+                                                  'total_time': total_time})
+                else:
+                    runner[race_distance] = [{'race_name': race_name,
+                                              'race_date': race_date,
+                                              'race_distance': race_distance,
+                                              'total_time': total_time}]
 
 
 def write_results_in_json(results_per_runner_dict):
     output_json = os.path.join(TRAINING_DATA_DIR, JSON_DATA_FOR_TRAINING)
     with open(output_json, 'w', encoding='utf-8') as f:
         json.dump(results_per_runner_dict, f, indent=4, ensure_ascii=False)
+
+
+def prepare_data_for_training():
+    merged_results = os.path.join(TRAINING_DATA_DIR, JSON_DATA_FOR_TRAINING)
+    with open(merged_results, 'r', encoding='utf-8') as f:
+        results_per_runner = json.load(f)

@@ -85,7 +85,7 @@ class BgdMarathonSpider(scrapy.Spider):
             pdf_name, best_time)
         if not race_distance:
             return
-        race_date = race_date_dict[race_name]
+        race_date = race_date_dict.get(race_name, f'{event_year}-mm-dd')
         if not race_date.startswith(event_year):
             raise AttributeError(f"Year of the race should be {event_year}, instead, date is {race_date}.")
         race_results_json = {'participants_results': participants_results,
