@@ -1,5 +1,6 @@
 import argparse
 
+# from train_wiser.backend.ml_models.race_result_prediction.lstm_model import train_model_for_race_result_prediction
 from train_wiser.backend.utils.log import get_logger
 from train_wiser.backend.utils.prepare_data_for_training import merge_all_race_results
 from train_wiser.backend.utils.run_info_utils import count_number_of_data
@@ -18,6 +19,9 @@ def main():
         number_of_data = count_number_of_data()
         print(f"{number_of_data}")
 
+    if args.train_model_for_race_result:
+        pass
+        # train_model_for_race_result_prediction()
 
 def parse_command_line_params() -> argparse.Namespace:
     """
@@ -37,10 +41,10 @@ def get_parser() -> argparse:
                         help='Prints number of data per race organization')
     parser.add_argument('--prepare-data-for-training',
                         action='store_true')
+    parser.add_argument('--train-model-for-race-result',
+                        action='store_true')
     return parser
 
 
 if __name__ == '__main__':
     main()
-
-
