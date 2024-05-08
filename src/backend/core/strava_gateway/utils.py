@@ -2,7 +2,6 @@ from datetime import datetime
 
 import requests
 from decouple import config
-from django.http import HttpResponse
 
 from .models import StravaAthlete
 
