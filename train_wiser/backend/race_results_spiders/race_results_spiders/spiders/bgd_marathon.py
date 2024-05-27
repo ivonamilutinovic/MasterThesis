@@ -9,9 +9,9 @@ from scrapy.crawler import CrawlerRunner
 from scrapy.utils.log import configure_logging
 from twisted.internet import reactor
 
-from src.backend.utils.file_operations import pdf_to_csv, remove_file
-from src.backend.utils.log import get_logger
-from src.backend.utils.run_info_utils import is_race_of_relevant_type, str_time_to_seconds, SUCCESS_RACE_STATUS, \
+from train_wiser.backend.utils.file_operations import pdf_to_csv, remove_file
+from train_wiser.backend.utils.log import get_logger
+from train_wiser.backend.utils.run_info_utils import is_race_of_relevant_type, str_time_to_seconds, SUCCESS_RACE_STATUS, \
     translate_to_unidecode_and_remove_spaces, translate_to_unidecode
 
 if TYPE_CHECKING:

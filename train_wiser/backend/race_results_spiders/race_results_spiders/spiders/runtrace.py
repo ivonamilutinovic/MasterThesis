@@ -7,8 +7,8 @@ from scrapy.utils.log import configure_logging
 from twisted.internet import reactor
 from unidecode import unidecode
 
-from src.backend.utils.log import get_logger
-from src.backend.utils.run_info_utils import str_time_to_seconds, RaceInfoEnum, FINISHED_RACE_STATUS, \
+from train_wiser.backend.utils.log import get_logger
+from train_wiser.backend.utils.run_info_utils import str_time_to_seconds, RaceInfoEnum, FINISHED_RACE_STATUS, \
     is_race_of_relevant_type, round_race_distance, is_race_distance_of_relevant_type
 
 LOGGER = get_logger(__name__)

@@ -2,7 +2,7 @@ import os
 
 import tabula
 
-from src.backend.utils.log import get_logger
+from train_wiser.backend.utils.log import get_logger
 
 LOGGER = get_logger(__name__)
 

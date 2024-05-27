@@ -5,8 +5,8 @@ from typing import List, Union, Dict
 
 from unidecode import unidecode
 
-from src.backend.utils.log import get_logger
-from src.backend.utils.run_info_utils import FINISHED_RACE_STATUS, SUCCESS_RACE_STATUS
+from train_wiser.backend.utils.log import get_logger
+from train_wiser.backend.utils.run_info_utils import FINISHED_RACE_STATUS, SUCCESS_RACE_STATUS
 
 TRAINING_DATA_DIR = 'training_data'
 MERGED_RESULTS = 'merged_results1.json'

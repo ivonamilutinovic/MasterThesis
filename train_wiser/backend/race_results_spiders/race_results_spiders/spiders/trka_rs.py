@@ -13,9 +13,9 @@ from transliterate import translit
 from twisted.internet import reactor
 from unidecode import unidecode
 
-from src.backend.utils.file_operations import remove_file
-from src.backend.utils.log import get_logger
-from src.backend.utils.run_info_utils import is_race_of_relevant_type, str_time_to_seconds, \
+from train_wiser.backend.utils.file_operations import remove_file
+from train_wiser.backend.utils.log import get_logger
+from train_wiser.backend.utils.run_info_utils import is_race_of_relevant_type, str_time_to_seconds, \
     is_race_distance_of_relevant_type, round_race_distance
 
 if TYPE_CHECKING:

@@ -1,8 +1,8 @@
 import argparse
 
-from src.backend.utils.log import get_logger
-from src.backend.utils.prepare_data_for_training import merge_all_race_results, prepare_data_for_training
-from src.backend.utils.run_info_utils import count_number_of_data
+from train_wiser.backend.utils.log import get_logger
+from train_wiser.backend.utils.prepare_data_for_training import merge_all_race_results, prepare_data_for_training
+from train_wiser.backend.utils.run_info_utils import count_number_of_data
 
 LOGGER = get_logger(__name__)
 
