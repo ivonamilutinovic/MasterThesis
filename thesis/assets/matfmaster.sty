@@ -249,6 +249,8 @@
 \newcommand{\@disertacija}{\ifmatfmaster@latinica master rad\else мастер рад\fi}
 \newcommand{\@grad}{\ifmatfmaster@latinica Beograd\else Београд\fi}
 
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+
 % veličine fonta u zaglavlju (za a4 papir su propisane univerzitetskim pravilima)
 \ifmatfmaster@bfive
 \newcommand{\@headerfontsizeA}{14pt}
@@ -273,7 +275,9 @@
 
   \vspace{6em}                                                   % šest praznih redova
   {\size{\@headerfontsizeA} \matfautor}\\[3em]                     % ime autora u fontu 16pt i 3 prazna reda
-  {\size{\@headerfontsizeB} \textbf{\MakeTextUppercase{\matfnaslov}}}\\[3em] % naslov teze u fontu 22pt, svim velikim slovima i 3 prazna reda
+  \HRule \\[0.25cm]
+  {\size{\@headerfontsizeB} \textbf{\matfnaslov}}\\[0.2cm]
+  \HRule \\[3em]  % naslov teze u fontu 22pt, svim velikim slovima i 3 prazna reda
   {\size{\@headerfontsizeA} \@disertacija}                         % oznaka da je u pitanju disertacija u fontu 16pt
   \vfill                                                          % praznina do dna strane
   {\size{\@headerfontsizeC} \@grad, \matfgodina.}                  % oznaka grada i godine u fontu 14pt
