@@ -1,3 +1,4 @@
+import json
 import logging
 from typing import List
 
@@ -7,7 +8,7 @@ from django.http import HttpRequest, JsonResponse
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 
-from .models import StravaAthlete, StravaSettings
+from .models import StravaAthlete, StravaSettings, StravaActivity
 
 REQUIRED_SCOPE_TOKENS = ['read', 'activity:read_all']
 
@@ -59,7 +60,7 @@ def token_exchange(request: HttpRequest):
 def webhook_subscription(request: HttpRequest):
     subscription_id = StravaSettings.objects.filter(setting_key='subscription_id')
 
-    if subscription_id.exists() and subscription_id.get() is not None:
+    if subscription_id.exists() and subscription_id.setting_value is not None:
         return HttpResponse(content="<p>Subscription already exists.</p>")
 
     if request.method == 'POST':
@@ -81,5 +82,39 @@ def webhook_callback(request: HttpRequest):
     if request.method == "GET" and request.GET.get('hub.challenge') and request.GET.get('hub.mode') == 'subscribe' and \
             request.GET.get('hub.verify_token') == 'STRAVA_WEBHOOK_SUBSCRIPTION':
         return JsonResponse(data={'hub.challenge': request.GET.get('hub.challenge')}, status=200)
-    else:
-        return JsonResponse(data={}, status=400)
+    elif request.method == 'POST':
+        request_data = json.loads(request.body)
+        subscription_id_from_request = request_data.get('subscription_id')
+        subscription_id_in_db = StravaSettings.objects.filter(setting_key='subscription_id')
+
+        is_subscription_id_valid = subscription_id_from_request == int(subscription_id_in_db.get().setting_value) \
+            if subscription_id_in_db.exists() else False
+        if not is_subscription_id_valid:
+            return JsonResponse(data={'message': f'Subscription id is not valid, '
+                                          f'subscription id from request: {subscription_id_from_request}, '
+                                          f'subscription from db (value): {subscription_id_in_db.get().setting_value}, '
+                                      },
+                                status=200)
+
+        object_type = request_data.get('object_type')
+        if not object_type or object_type != 'activity':
+            return JsonResponse(data={'message': 'Object type is not activity'}, status=200)
+        activity_id = request_data.get('object_id')
+        if not activity_id:
+            return JsonResponse(data={'message': 'Activity id is not available'}, status=200)
+        aspect_type = request_data.get('aspect_type')
+        if not aspect_type or aspect_type != 'create':
+            return JsonResponse(data={'message': 'Aspect type different than "create" are not relevant'}, status=200)
+        athlete_id = request_data.get('owner_id')
+        if not athlete_id:
+            return JsonResponse(data={'message': 'Athlete id is not available'}, status=200)
+
+        if StravaAthlete.objects.filter(athlete_id=athlete_id).exists():
+            strava_athlete = StravaAthlete.objects.filter(athlete_id=athlete_id).get()
+            StravaActivity.objects.create(activity_id=activity_id, athlete_id=strava_athlete)
+            return JsonResponse(data={'message': 'Activity and athlete ids are read successfully'}, status=200)
+        else:
+            return JsonResponse(data={'message': f'Athlete with id {athlete_id} does not exists in database'},
+                                status=200)
+
+        # TODO: Make get request for reading HR stream and fill other data for activity
