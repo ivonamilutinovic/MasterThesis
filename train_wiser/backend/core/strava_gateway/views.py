@@ -7,7 +7,7 @@ from django.http import HttpRequest, JsonResponse
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 
-from .models import StravaAthlete
+from .models import StravaAthlete, StravaSettings
 
 REQUIRED_SCOPE_TOKENS = ['read', 'activity:read_all']
 
@@ -54,8 +54,14 @@ def token_exchange(request: HttpRequest):
                         f"{response.status_code}, response content: {response.json()}\nTest {strava_athlete}\n"
                         f"{response_json.get('athlete').get('id')}.</p>")
 
+
 @csrf_exempt
 def webhook_subscription(request: HttpRequest):
+    subscription_id = StravaSettings.objects.filter(setting_key='subscription_id')
+
+    if subscription_id.exists() and subscription_id.get() is not None:
+        return HttpResponse(content="<p>Subscription already exists.</p>")
+
     if request.method == 'POST':
         post_config = {'client_id': config("CLIENT_ID"),
                        'client_secret': config("CLIENT_SECRET"),
@@ -64,11 +70,13 @@ def webhook_subscription(request: HttpRequest):
 
         logger.info(str(post_config))
         response = requests.post(url="https://www.strava.com/api/v3/push_subscriptions", json=post_config)
-        config['SUBSCRIPTION_ID'] = '123'
+        if response.status_code == 201:
+            StravaSettings.objects.create(setting_key='subscription_id', setting_value=str(response.json().get('id')))
 
         return HttpResponse(content=response.content, status=response.status_code)
 
 
+@csrf_exempt
 def webhook_callback(request: HttpRequest):
     if request.method == "GET" and request.GET.get('hub.challenge') and request.GET.get('hub.mode') == 'subscribe' and \
             request.GET.get('hub.verify_token') == 'STRAVA_WEBHOOK_SUBSCRIPTION':
