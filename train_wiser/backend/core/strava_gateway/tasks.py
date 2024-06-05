@@ -8,11 +8,10 @@ from .utils import refresh_access_token_if_needed
 
 
 def activity_backfill():
-    # Taking all past activities for new Train wiser app users
+    """ Taking all past activities for new Train wiser app users """
     unsynced_users: List[StravaAthlete] = StravaAthlete.objects.exclude(backfill_progress__isnull=True)
-    # 1 2 3 4 5 6 7
-    for user in unsynced_users:
 
+    for user in unsynced_users:
         page = 1
         new_backfill_progress = user.backfill_progress
         while True:
@@ -47,6 +46,9 @@ def activity_backfill():
             page += 1
 
             # TODO: Filter type of activity
-            # TODO [other]: make db with activities, webhooks
         user.backfill_progress = new_backfill_progress
         user.save()
+
+
+def fetch_activity_data():
+    pass

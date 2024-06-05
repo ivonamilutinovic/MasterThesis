@@ -145,6 +145,6 @@ REST_FRAMEWORK = {
 
 
 CRONJOBS = [
-    ('0 */1 * * *', 'strava_gateway.tasks.activity_backfill',
-     '>> ' + '/home/hp/Desktop/debug7.log' + ' 2>&1 ')
+    ('0 */1 * * *', 'strava_gateway.tasks.activity_backfill'),
+    ('0.5 */1 * * *', 'strava_gateway.tasks.fetch_activity_data')
 ]
