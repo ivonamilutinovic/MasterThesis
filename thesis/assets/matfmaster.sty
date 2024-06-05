@@ -272,17 +272,19 @@
   {\size{\@headerfontsizeA} \MakeTextUppercase{\@univerzitet}}\\  % naziv univerziteta u fontu 16pt
   {\size{\@headerfontsizeA} \MakeTextUppercase{\@fakultet}}\\[2em]     % naziv fakulteta u fontu 16pt
   {\includegraphics[width=3cm]{assets/matf.png}}\\
-
   \vspace{6em}                                                   % šest praznih redova
   {\size{\@headerfontsizeA} \matfautor}\\[3em]                     % ime autora u fontu 16pt i 3 prazna reda
   \HRule \\[0.25cm]
+  } 
+  % headsans ne podrzava boldovanje, stoga ga isključujemo za naslov
   {\size{\@headerfontsizeB} \textbf{\matfnaslov}}\\[0.2cm]
+  {\headersans
   \HRule \\[3em]  % naslov teze u fontu 22pt, svim velikim slovima i 3 prazna reda
   {\size{\@headerfontsizeA} \@disertacija}                         % oznaka da je u pitanju disertacija u fontu 16pt
   \vfill                                                          % praznina do dna strane
   {\size{\@headerfontsizeC} \@grad, \matfgodina.}                  % oznaka grada i godine u fontu 14pt
-  }
-  \clearpage}           % nova strana
+  \clearpage
+  }}           % nova strana
 \end{DoubleSpace}
 }
 
