@@ -13,14 +13,22 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_login);
+    }
 
+    public void onClickSwitchToSignUp(View view) {
+        Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
+        startActivity(intent);
+    }
+
+    public void onClickLogIn(View view) {
         Button logInButton = this.findViewById(R.id.logInId);
         EditText userEmailEditText = this.findViewById(R.id.userEmailId);
         EditText userPasswordEditText = this.findViewById(R.id.userPasswordId);
         TextView signUpTextView = this.findViewById(R.id.signUpTextId);
 
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        // oauth2 ka backendu
     }
-    
+
 }

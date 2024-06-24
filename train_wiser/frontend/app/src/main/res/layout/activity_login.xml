@@ -38,7 +38,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/login_fields_h_margin"
-        android:hint="@string/confirm_password"
+        android:hint="@string/password"
         android:inputType="textPassword"
         android:textColor="@color/for_text_on_buttons"
         android:textSize="@dimen/login_font_size"
@@ -65,7 +65,8 @@
         app:layout_constraintBottom_toTopOf="@id/signUpTextId"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/userPasswordId" />
+        app:layout_constraintTop_toBottomOf="@id/userPasswordId"
+        android:onClick="onClickLogIn"/>
 
     <TextView
         android:id="@+id/signUpTextId"
@@ -82,5 +83,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/logInId" />
+        app:layout_constraintTop_toBottomOf="@+id/logInId"
+        android:onClick="onClickSwitchToSignUp"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

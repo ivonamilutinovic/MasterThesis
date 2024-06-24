@@ -14,33 +14,20 @@ public class MainMenuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
 
-        Button buttonPT = this.findViewById(R.id.buttonPT);
-        Button buttonAIPT = this.findViewById(R.id.buttonAIPT);
-        Button buttonPrediction = this.findViewById(R.id.buttonPrediction);
+    }
 
-        buttonPT.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent newActivity = new Intent(MainMenuActivity.this, PersonalTrainerActivity.class);
-                startActivity(newActivity);
-            }
-        });
+    public void onClickSwitchPersonalTrainerScreen(View view) {
+        Intent intent = new Intent(MainMenuActivity.this, PersonalTrainerActivity.class);
+        startActivity(intent);
+    }
 
-        buttonAIPT.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent newActivity = new Intent(MainMenuActivity.this, AIPersonalTrainerActivity.class);
-                startActivity(newActivity);
-            }
-        });
+    public void onClickSwitchToAIPersonalTrainerScreen(View view) {
+        Intent intent = new Intent(MainMenuActivity.this, AIPersonalTrainerActivity.class);
+        startActivity(intent);
+    }
 
-        buttonPrediction.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent newActivity = new Intent(MainMenuActivity.this, ResultsPredictionActivity.class);
-                startActivity(newActivity);
-            }
-        });
-
+    public void onClickSwitchResultsPredictionScreen(View view) {
+        Intent intent = new Intent(MainMenuActivity.this, ResultsPredictionActivity.class);
+        startActivity(intent);
     }
 }
