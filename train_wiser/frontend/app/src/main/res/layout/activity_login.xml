@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".LoginActivity">
+
+    <ImageView
+        android:id="@+id/backgroundImage"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/gray_background"
+        android:scaleType="fitXY"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <EditText
+        android:id="@+id/userEmailId"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/login_fields_w_margin"
+        android:layout_marginEnd="@dimen/login_fields_w_margin"
+        android:layout_marginBottom="@dimen/login_fields_h_margin"
+        android:hint="@string/email"
+        android:inputType="textEmailAddress"
+        android:textSize="@dimen/login_font_size"
+        app:layout_constraintBottom_toTopOf="@+id/userPasswordId"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
+       />
+
+    <EditText
+        android:id="@+id/userPasswordId"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/login_fields_h_margin"
+        android:hint="@string/confirm_password"
+        android:inputType="textPassword"
+        android:textColor="@color/for_text_on_buttons"
+        android:textSize="@dimen/login_font_size"
+        app:layout_constraintBottom_toTopOf="@+id/logInId"
+        app:layout_constraintEnd_toEndOf="@+id/userEmailId"
+        app:layout_constraintStart_toStartOf="@+id/userEmailId"
+        app:layout_constraintTop_toBottomOf="@+id/userEmailId"
+        />
+
+    <Button
+        android:id="@+id/logInId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/for_buttons"
+        android:hint="@string/log_in_text"
+        android:textColor="@color/for_text_on_buttons"
+        android:textStyle="bold"
+        android:textSize="@dimen/login_font_size"
+        android:paddingStart="50dp"
+        android:paddingTop="18dp"
+        android:paddingEnd="50dp"
+        android:paddingBottom="18dp"
+        android:layout_marginTop="@dimen/login_button_h_margin"
+        app:layout_constraintBottom_toTopOf="@id/signUpTextId"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/userPasswordId" />
+
+    <TextView
+        android:id="@+id/signUpTextId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:hint="@string/signup_on_login_activity"
+        android:textAlignment="center"
+        android:textColor="@color/for_text_on_buttons"
+        android:textSize="@dimen/login_font_size"
+        android:textStyle="bold"
+        android:layout_marginTop="150dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/logInId" />
+</androidx.constraintlayout.widget.ConstraintLayout>
