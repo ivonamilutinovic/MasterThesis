@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:id="@+id/ConstraintLayout"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+tools:context=".MainActivity">
+
+    <ImageView
+        android:id="@+id/backgroundImage"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/gray_background"
+        android:scaleType="fitXY"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/buttonPT"
+        android:layout_width="319dp"
+        android:layout_height="103dp"
+        android:backgroundTint="@color/for_buttons"
+        android:fontFamily="@font/alata"
+        android:text="@string/personal_trainer"
+        android:textColor="@color/for_text_on_buttons"
+        android:textSize="19sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/spacer1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.19999999"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <Space
+        android:id="@+id/spacer1"
+        android:layout_width="0dp"
+        android:layout_height="10dp"
+        app:layout_constraintBottom_toTopOf="@id/buttonAIPT"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/buttonPT" />
+
+    <Button
+        android:id="@+id/buttonAIPT"
+        android:layout_width="319dp"
+        android:layout_height="103dp"
+        android:backgroundTint="@color/for_buttons"
+        android:fontFamily="@font/alata"
+        android:text="@string/ai_personal_trainer"
+        android:textColor="@color/for_text_on_buttons"
+        android:textSize="19sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/spacer2"
+        app:layout_constraintStart_toStartOf="@+id/buttonPT"
+        app:layout_constraintTop_toBottomOf="@id/spacer1" />
+
+    <Button
+        android:id="@+id/buttonPrediction"
+        android:layout_width="319dp"
+        android:layout_height="103dp"
+        android:backgroundTint="@color/for_buttons"
+        android:fontFamily="@font/alata"
+        android:text="@string/predict_your_results"
+        android:textColor="@color/for_text_on_buttons"
+        android:textSize="19sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/buttonAIPT"
+        app:layout_constraintTop_toBottomOf="@id/spacer2" />
+
+    <Space
+        android:id="@+id/spacer2"
+        android:layout_width="wrap_content"
+        android:layout_height="10dp"
+        app:layout_constraintBottom_toBottomOf="@id/buttonPrediction"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonAIPT" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

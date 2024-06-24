@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".LoginActivity">
+
+    <ImageView
+        android:id="@+id/backgroundImage"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/gray_background"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <EditText
+        android:id="@+id/usernameId"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/login_fields_w_margin"
+        android:layout_marginEnd="@dimen/login_fields_w_margin"
+        android:layout_marginBottom="@dimen/login_fields_h_margin"
+        android:hint="@string/username"
+        android:textSize="@dimen/login_font_size"
+        app:layout_constraintBottom_toTopOf="@+id/userEmailId"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.38"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <EditText
+        android:id="@+id/userEmailId"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/login_fields_h_margin"
+        android:hint="@string/email"
+        android:inputType="textEmailAddress"
+        android:textSize="@dimen/login_font_size"
+        app:layout_constraintBottom_toTopOf="@+id/usernameFirstNameId"
+        app:layout_constraintEnd_toEndOf="@+id/usernameId"
+        app:layout_constraintStart_toStartOf="@+id/usernameId"
+        app:layout_constraintTop_toBottomOf="@+id/usernameId"
+        />
+
+    <EditText
+        android:id="@+id/usernameFirstNameId"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/login_fields_h_margin"
+        android:hint="@string/first_name"
+        android:inputType="text"
+        android:textSize="@dimen/login_font_size"
+        app:layout_constraintBottom_toTopOf="@+id/usernameLastNameId"
+        app:layout_constraintEnd_toEndOf="@+id/userEmailId"
+        app:layout_constraintStart_toStartOf="@+id/userEmailId"
+        app:layout_constraintTop_toBottomOf="@+id/userEmailId" />
+
+    <EditText
+        android:id="@+id/usernameLastNameId"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/login_fields_h_margin"
+        android:hint="@string/last_name"
+        android:inputType="text"
+        android:textSize="@dimen/login_font_size"
+        app:layout_constraintBottom_toTopOf="@+id/usernameBirthDateId"
+        app:layout_constraintEnd_toEndOf="@+id/usernameFirstNameId"
+        app:layout_constraintStart_toStartOf="@+id/usernameFirstNameId"
+        app:layout_constraintTop_toBottomOf="@+id/usernameFirstNameId" />
+
+    <EditText
+        android:id="@+id/usernameBirthDateId"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/login_fields_h_margin"
+        android:hint="@string/birth_date"
+        android:inputType="date"
+        android:textSize="@dimen/login_font_size"
+        app:layout_constraintBottom_toTopOf="@+id/userPasswordId"
+        app:layout_constraintEnd_toEndOf="@+id/usernameLastNameId"
+        app:layout_constraintStart_toStartOf="@+id/usernameLastNameId"
+        app:layout_constraintTop_toBottomOf="@+id/usernameLastNameId" />
+
+    <EditText
+        android:id="@+id/userPasswordId"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/login_fields_h_margin"
+        android:hint="@string/password"
+        android:inputType="textPassword"
+        android:textColor="@color/for_text_on_buttons"
+        android:textSize="@dimen/login_font_size"
+        app:layout_constraintBottom_toTopOf="@+id/userConfirmPasswordId"
+        app:layout_constraintEnd_toEndOf="@+id/usernameBirthDateId"
+        app:layout_constraintStart_toStartOf="@+id/usernameBirthDateId"
+        app:layout_constraintTop_toBottomOf="@+id/usernameBirthDateId" />
+
+    <EditText
+        android:id="@+id/userConfirmPasswordId"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/login_fields_h_margin"
+        android:hint="@string/confirm_password"
+        android:inputType="textPassword"
+        android:textColor="@color/for_text_on_buttons"
+        android:textSize="@dimen/login_font_size"
+        app:layout_constraintBottom_toTopOf="@+id/buttonSignUpId"
+        app:layout_constraintEnd_toEndOf="@+id/userPasswordId"
+        app:layout_constraintStart_toStartOf="@+id/userPasswordId"
+        app:layout_constraintTop_toBottomOf="@+id/userPasswordId" />
+
+    <Button
+        android:id="@+id/buttonSignUpId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/for_buttons"
+        android:paddingStart="50dp"
+        android:paddingTop="18dp"
+        android:paddingEnd="50dp"
+        android:paddingBottom="18dp"
+        android:layout_marginTop="@dimen/login_button_h_margin"
+        android:text="@string/sign_up"
+        android:textColor="@color/for_text_on_buttons"
+        android:textSize="@dimen/login_font_size"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/userConfirmPasswordId"
+        app:layout_constraintStart_toStartOf="@+id/userConfirmPasswordId"
+        app:layout_constraintTop_toBottomOf="@+id/userConfirmPasswordId" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

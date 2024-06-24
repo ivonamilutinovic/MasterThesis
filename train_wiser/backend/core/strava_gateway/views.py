@@ -69,7 +69,6 @@ def webhook_subscription(request: HttpRequest):
                        'callback_url': f"https://{config('HOSTNAME1')}/strava_gateway/{config('WEBHOOK_ENDPOINT')}",
                        'verify_token': 'STRAVA_WEBHOOK_SUBSCRIPTION'}  # TODO: Generate random token
 
-        logger.info(str(post_config))
         response = requests.post(url="https://www.strava.com/api/v3/push_subscriptions", json=post_config)
         if response.status_code == 201:
             StravaSettings.objects.create(setting_key='subscription_id', setting_value=str(response.json().get('id')))

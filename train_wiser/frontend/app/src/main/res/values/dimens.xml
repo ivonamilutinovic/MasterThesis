@@ -1,0 +1,7 @@
+<resources>
+      <dimen name="fab_margin">16dp</dimen>
+      <dimen name="login_fields_w_margin">50dp</dimen>
+      <dimen name="login_fields_h_margin">22dp</dimen>
+    <dimen name="login_font_size">19sp</dimen>
+    <dimen name="login_button_h_margin">25dp</dimen>
+</resources>
