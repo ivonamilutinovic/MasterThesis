@@ -26,7 +26,7 @@ SECRET_KEY = config("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['feasible-brightly-cobra.ngrok-free.app', 'localhost']
+ALLOWED_HOSTS = ['feasible-brightly-cobra.ngrok-free.app', 'localhost', '127.0.0.1']
 
 
 # Application definition
@@ -42,9 +42,11 @@ INSTALLED_APPS = [
     "rest_framework",
     "corsheaders",
     "django_crontab",
+    "oauth2_provider",
+    #"rest_framework.authtoken",
     # local
-    "strava_gateway.apps.StravaGatewayConfig"
-    # "accounts.apps.AccountsConfig",
+    "strava_gateway.apps.StravaGatewayConfig",
+    "users.apps.UsersConfig",
 ]
 
 MIDDLEWARE = [
@@ -107,6 +109,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTH_USER_MODEL = 'users.CustomUser'
+LOGIN_URL = '/admin/login/'
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
@@ -130,16 +134,12 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# AUTH_USER_MODEL = "accounts.CustomUser"
-
-
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
-        "rest_framework.permissions.IsAuthenticated",
+        'rest_framework.permissions.IsAuthenticated',
     ],
     "DEFAULT_AUTHENTICATION_CLASSES": [
-        "rest_framework.authentication.SessionAuthentication",
-        "rest_framework.authentication.TokenAuthentication",
+        'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
     ],
 }
 
