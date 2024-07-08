@@ -21,7 +21,7 @@ from oauth2_provider import urls as oauth2_urls
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('strava_gateway/', include('strava_gateway.urls')),
-    path('users/', include('users.urls')),
+    path('api/users/', include('users.urls')),
     path('o/', include(oauth2_urls)),
     #    path('accounts/', include('accounts.urls')),
     #path("api-auth/", include("rest_framework.urls")),
