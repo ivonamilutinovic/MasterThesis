@@ -3,10 +3,10 @@ from datetime import datetime
 import requests
 from decouple import config
 
-from .models import StravaAthlete
+from strava_gateway.models import HeartRateZones
 
 
-def refresh_access_token_if_needed(strava_athlete: StravaAthlete) -> bool:
+def refresh_access_token_if_needed(strava_athlete: 'StravaAthlete') -> bool:
     current_time = int(datetime.now().timestamp())
     time_delta = 30 * 60
     if strava_athlete.access_token_expires_at - time_delta <= current_time:
@@ -29,3 +29,25 @@ def refresh_access_token_if_needed(strava_athlete: StravaAthlete) -> bool:
         # TODO: Add logger message
 
     return True
+
+
+def set_athlete_hr_zone(strava_athlete):
+    print("usli u fju")
+    if not refresh_access_token_if_needed(strava_athlete):
+        print("Error happen during access token update.")
+        return
+
+    response = requests.get(url="https://www.strava.com/api/v3/athlete/zones",
+                                   headers={'Authorization': f'Bearer '
+                                            f'{strava_athlete.access_token}'})
+    print(f"SC {response.status_code}")
+    if response.status_code != 200:
+        print(f"status code {response.status_code}")
+
+    athlete_hr_zone = response.json()
+    print(athlete_hr_zone)
+    # # todo: fill in order with custom class
+    # athlete_hr_zone = {HeartRateZones.Z1: [2, 7], }
+    # # athlete_hr_zone = {HeartRateZones.Z1: [athlete_hr_zone.get(), athlete_hr_zone.get()], }
+    # strava_athlete.update(athlete_hr_zone=athlete_hr_zone)
+    # strava_athlete.save()

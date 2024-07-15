@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
-
+import os
 from pathlib import Path
 
 from decouple import config
@@ -150,6 +150,82 @@ OAUTH2_PROVIDER = {
 
 
 CRONJOBS = [
-    ('0 */1 * * *', 'strava_gateway.tasks.activity_backfill'),
-    ('0.5 */1 * * *', 'strava_gateway.tasks.fetch_activity_data')
+    ('* */1 * * *', 'strava_gateway.tasks.activity_backfill',
+     '>> ' + os.path.join('/home/hp/Desktop', 'train_wiser_crontab.log' + ' 2>&1 ')),
+    ('* */1 * * *', 'strava_gateway.tasks.fill_athlete_hr_zone',
+     '>> ' + os.path.join('/home/hp/Desktop', 'train_wiser_hr_zone.log' + ' 2>&1 ')),
+    # ('30 */1 * * *', 'strava_gateway.tasks.fetch_activity_data')
 ]
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '{levelname} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': 'train_wiser_django.log',
+            'formatter': 'verbose'
+        },
+        'console': {
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple'
+        },
+        'scraper_file' : {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': 'scraping.log',
+            'formatter': 'verbose'
+        }
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file', 'console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'scraper': {
+            'handlers': ['scraper_file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'django_crontab': {
+            'handlers': ['scraper_file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+
+        'django_crontab.crontab': {
+            'handlers': ['scraper_file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'crontab': {
+            'handlers': ['scraper_file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'scraper.django_crontab.crontab': {
+            'handlers': ['scraper_file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'scraper.tasks': {
+            'handlers': ['scraper_file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}

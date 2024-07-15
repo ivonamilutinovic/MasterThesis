@@ -1,17 +1,27 @@
 from django.db import models
 
 
+class HeartRateZones(models.IntegerChoices):
+    Z1 = 1, 'Z1'
+    Z2 = 2, 'Z2'
+    Z3 = 3, 'Z3'
+    Z4 = 4, 'Z4'
+    Z5 = 5, 'Z5'
+
+
 class StravaAthlete(models.Model):
     athlete_id = models.PositiveBigIntegerField(primary_key=True)
     access_token_expires_at = models.PositiveIntegerField()
     access_token = models.CharField(max_length=255)
     refresh_token = models.CharField(max_length=255)
+    hr_zones = models.JSONField(null=True)
     backfill_progress = models.PositiveIntegerField(default=0, null=True)  # TODO: Add description
 
 
 class StravaActivity(models.Model):
     activity_id = models.PositiveBigIntegerField(primary_key=True)
     athlete_id = models.ForeignKey(StravaAthlete, on_delete=models.CASCADE, db_column='athlete_id')
+    is_full_activity_filled = models.BooleanField(default=False)
     activity_type = models.CharField(max_length=255, null=True)
     distance = models.FloatField(null=True)
     moving_time = models.PositiveIntegerField(null=True)
@@ -22,8 +32,11 @@ class StravaActivity(models.Model):
     trainer = models.BooleanField(null=True)
     average_speed = models.FloatField(null=True)  # in m/sec
     max_speed = models.FloatField(null=True)
-    avg_heart_rate = models.PositiveIntegerField(null=True)
-    is_activity_interval_training = models.BooleanField(null=True)
+    has_heartrate = models.BooleanField(null=True)
+    average_heartrate = models.FloatField(null=True)
+    average_heartrate_zone = models.IntegerField(choices=HeartRateZones.choices, null=True)
+    max_heartrate = models.FloatField(null=True)
+    is_race = models.BooleanField(null=True)
 
 
 class StravaSettings(models.Model):

@@ -9,8 +9,9 @@ from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 
 from .models import StravaAthlete, StravaSettings, StravaActivity
+from .utils.athlete_utils import set_athlete_hr_zone
 
-REQUIRED_SCOPE_TOKENS = ['read', 'activity:read_all']
+REQUIRED_SCOPE_TOKENS = ['read', 'activity:read_all', 'profile:read_all_permission']
 
 logger = logging.getLogger(__name__)
 
@@ -51,10 +52,11 @@ def token_exchange(request: HttpRequest):
                                                   access_token=response_json.get('access_token'),
                                                   refresh_token=response_json.get('refresh_token'))
 
+    athlete_hr_zone = set_athlete_hr_zone(strava_athlete)
+
     return HttpResponse(f"<p>Code: {request.GET.get('code')}, scope {scope_tokens}, response code: "
                         f"{response.status_code}, response content: {response.json()}\nTest {strava_athlete}\n"
                         f"{response_json.get('athlete').get('id')}.</p>")
-
 
 @csrf_exempt
 def webhook_subscription(request: HttpRequest):
@@ -82,6 +84,7 @@ def webhook_callback(request: HttpRequest):
             request.GET.get('hub.verify_token') == 'STRAVA_WEBHOOK_SUBSCRIPTION':
         return JsonResponse(data={'hub.challenge': request.GET.get('hub.challenge')}, status=200)
     elif request.method == 'POST':
+        # We are only writing activity_id in database, full activity will be written separately with Cron job
         request_data = json.loads(request.body)
         subscription_id_from_request = request_data.get('subscription_id')
         subscription_id_in_db = StravaSettings.objects.filter(setting_key='subscription_id')
@@ -115,5 +118,3 @@ def webhook_callback(request: HttpRequest):
         else:
             return JsonResponse(data={'message': f'Athlete with id {athlete_id} does not exists in database'},
                                 status=200)
-
-        # TODO: Make get request for reading HR stream and fill other data for activity
