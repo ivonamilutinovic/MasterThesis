@@ -11,7 +11,7 @@ from django.views.decorators.csrf import csrf_exempt
 from .models import StravaAthlete, StravaSettings, StravaActivity
 from .utils.athlete_utils import set_athlete_hr_zone
 
-REQUIRED_SCOPE_TOKENS = ['read', 'activity:read_all', 'profile:read_all_permission']
+REQUIRED_SCOPE_TOKENS = ['read', 'activity:read_all', 'profile:read_all']
 
 logger = logging.getLogger(__name__)
 
@@ -52,7 +52,7 @@ def token_exchange(request: HttpRequest):
                                                   access_token=response_json.get('access_token'),
                                                   refresh_token=response_json.get('refresh_token'))
 
-    athlete_hr_zone = set_athlete_hr_zone(strava_athlete)
+    set_athlete_hr_zone(strava_athlete)
 
     return HttpResponse(f"<p>Code: {request.GET.get('code')}, scope {scope_tokens}, response code: "
                         f"{response.status_code}, response content: {response.json()}\nTest {strava_athlete}\n"

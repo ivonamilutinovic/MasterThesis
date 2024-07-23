@@ -28,6 +28,7 @@ public class LoginActivity extends AppCompatActivity {
         EditText userPasswordEditText = this.findViewById(R.id.userPasswordId);
         TextView signUpTextView = this.findViewById(R.id.signUpTextId);
 
+        // link for connection with strava: https://www.strava.com/api/v3/oauth/authorize?response_type=code&client_id=121978&redirect_uri=https://feasible-brightly-cobra.ngrok-free.app/stava_gateway/token_exchange/&scope=profile%3Aread_all%20read%20activity%3Aread_all
         // oauth2 ka backendu
     }
 

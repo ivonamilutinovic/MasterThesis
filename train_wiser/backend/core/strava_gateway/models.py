@@ -14,6 +14,7 @@ class StravaAthlete(models.Model):
     access_token_expires_at = models.PositiveIntegerField()
     access_token = models.CharField(max_length=255)
     refresh_token = models.CharField(max_length=255)
+    # scope_permissions = models.CharField(null=True)
     hr_zones = models.JSONField(null=True)
     backfill_progress = models.PositiveIntegerField(default=0, null=True)  # TODO: Add description
 
@@ -22,6 +23,7 @@ class StravaActivity(models.Model):
     activity_id = models.PositiveBigIntegerField(primary_key=True)
     athlete_id = models.ForeignKey(StravaAthlete, on_delete=models.CASCADE, db_column='athlete_id')
     is_full_activity_filled = models.BooleanField(default=False)
+    name = models.CharField(max_length=255, null=True)
     activity_type = models.CharField(max_length=255, null=True)
     distance = models.FloatField(null=True)
     moving_time = models.PositiveIntegerField(null=True)
