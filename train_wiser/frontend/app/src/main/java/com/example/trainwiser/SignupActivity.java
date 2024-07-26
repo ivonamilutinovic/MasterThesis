@@ -3,7 +3,6 @@ package com.example.trainwiser;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -16,7 +15,6 @@ import com.example.trainwiser.network.api_models.RegisterResponseData;
 
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.net.HttpURLConnection;
 
 import okhttp3.ResponseBody;
@@ -73,7 +71,7 @@ public class SignupActivity extends AppCompatActivity {
                         }
                     }
 
-                    Toast.makeText(SignupActivity.this, "Error happen during sign up of the user. Error code: " + response.code() + " (" + errorText + ")", Toast.LENGTH_LONG).show();
+                    Toast.makeText(SignupActivity.this, "Error happen during sign up. Error code: " + response.code() + " (" + errorText + ")", Toast.LENGTH_LONG).show();
                 }
             }
 

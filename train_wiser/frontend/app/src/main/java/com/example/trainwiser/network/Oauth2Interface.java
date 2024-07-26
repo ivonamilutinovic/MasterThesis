@@ -11,9 +11,9 @@ import retrofit2.http.POST;
 
 public interface Oauth2Interface {
 
-    @POST("o/token/")
+    @POST("token/")
     Call<LoginResponseData> loginUser(@Body LoginRequestData data);
 
-    @POST("o/revoke_token/")
+    @POST("revoke_token/")
     Call<Response<Void>> logoutUser(@Body RegisterRequestData data);
 }
