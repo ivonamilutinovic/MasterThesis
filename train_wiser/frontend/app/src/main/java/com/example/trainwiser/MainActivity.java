@@ -6,6 +6,8 @@ import android.os.Handler;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.trainwiser.network.utils.APIUtils;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -27,5 +29,26 @@ public class MainActivity extends AppCompatActivity {
                 finish();
             }
         }, 2000);
+    }
+
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+
+        String accessToken = APIUtils.getAccessToken(getApplicationContext());
+        String refreshToken = APIUtils.getRefreshToken(getApplicationContext());
+        long expiresAt = APIUtils.getExpiresAt(getApplicationContext());
+
+        Intent intent;
+
+        if(accessToken == null || refreshToken == null || expiresAt == Long.MAX_VALUE) {
+            intent = new Intent(this, LoginActivity.class);
+        }
+        else {
+            intent = new Intent(this, MainMenuActivity.class);
+        }
+
+        startActivity(intent);
     }
 }

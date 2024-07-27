@@ -1,12 +1,12 @@
 package com.example.trainwiser.network.api_models;
 
 public class RegisterRequestData {
-    private String username;
-    private String email;
-    private String first_name;
-    private String last_name;
-    private String password;
-    private String birth_date;
+    private final String username;
+    private final String email;
+    private final String first_name;
+    private final String last_name;
+    private final String password;
+    private final String birth_date;
 
     public RegisterRequestData(String username, String email, String first_name, String last_name, String password, String birth_date) {
         this.username = username;

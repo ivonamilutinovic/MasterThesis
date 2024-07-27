@@ -10,6 +10,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.trainwiser.common.PreferenceType;
+import com.example.trainwiser.common.SharedPreferenceSingleton;
 import com.example.trainwiser.network.APIInterface;
 import com.example.trainwiser.network.APIRetrofitClient;
 import com.example.trainwiser.network.Oauth2Interface;
@@ -18,6 +20,7 @@ import com.example.trainwiser.network.api_models.LoginRequestData;
 import com.example.trainwiser.network.api_models.LoginResponseData;
 import com.example.trainwiser.network.api_models.RegisterRequestData;
 import com.example.trainwiser.network.api_models.RegisterResponseData;
+import com.example.trainwiser.network.utils.APIKeys;
 
 import org.json.JSONObject;
 
@@ -59,8 +62,22 @@ public class LoginActivity extends AppCompatActivity {
                 if (response.code() == HttpURLConnection.HTTP_OK) {
 //                    assert response.body() != null;
 //                    Toast.makeText(SignupActivity.this, Integer.toString(response.body().getUser_id()), Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(LoginActivity.this, MainMenuActivity.class);
-                    startActivity(intent);
+
+                    if (response.body() != null) {
+                        String access_token = response.body().getAccess_token();
+                        int expires_in = response.body().getExpires_in();
+                        String refresh_token = response.body().getRefresh_token();
+
+                        SharedPreferenceSingleton sharedPreference = SharedPreferenceSingleton.getInstance(LoginActivity.this);
+                        sharedPreference.setValue(APIKeys.API_ACCESS_TOKEN.toString(), access_token, PreferenceType.STRING);
+                        sharedPreference.setValue(APIKeys.API_EXPIRES_AT.toString(), expires_in, PreferenceType.LONG);
+                        sharedPreference.setValue(APIKeys.API_REFRESH_TOKEN.toString(), refresh_token, PreferenceType.STRING);
+
+                        Intent intent = new Intent(LoginActivity.this, MainMenuActivity.class);
+                        startActivity(intent);
+                    }else{
+                        Toast.makeText(LoginActivity.this, "Response from the backend application is empty", Toast.LENGTH_LONG).show();
+                    }
                 }
                 else{
                     ResponseBody errorBody = response.errorBody();
