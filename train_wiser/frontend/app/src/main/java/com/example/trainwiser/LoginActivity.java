@@ -5,21 +5,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.trainwiser.common.GlobalData;
 import com.example.trainwiser.common.PreferenceType;
 import com.example.trainwiser.common.SharedPreferenceSingleton;
-import com.example.trainwiser.network.APIInterface;
-import com.example.trainwiser.network.APIRetrofitClient;
 import com.example.trainwiser.network.Oauth2Interface;
 import com.example.trainwiser.network.Oauth2RetrofitClient;
 import com.example.trainwiser.network.api_models.LoginRequestData;
 import com.example.trainwiser.network.api_models.LoginResponseData;
-import com.example.trainwiser.network.api_models.RegisterRequestData;
-import com.example.trainwiser.network.api_models.RegisterResponseData;
 import com.example.trainwiser.network.utils.APIKeys;
 
 import org.json.JSONObject;
@@ -65,7 +60,7 @@ public class LoginActivity extends AppCompatActivity {
 
                     if (response.body() != null) {
                         String access_token = response.body().getAccess_token();
-                        int expires_in = response.body().getExpires_in();
+                        long expires_in = response.body().getExpires_in();
                         String refresh_token = response.body().getRefresh_token();
 
                         SharedPreferenceSingleton sharedPreference = SharedPreferenceSingleton.getInstance(LoginActivity.this);
@@ -93,7 +88,8 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     }
 
-                    Toast.makeText(LoginActivity.this, "Error happen during login. Error code: " + response.code() + " (" + errorText + ")", Toast.LENGTH_LONG).show();
+                    Toast.makeText(LoginActivity.this, "Error happen during login. " +
+                            "Error code: " + response.code() + " (" + errorText + ")", Toast.LENGTH_LONG).show();
                 }
             }
 
@@ -102,11 +98,6 @@ public class LoginActivity extends AppCompatActivity {
 
             }
         });
-
-        // oauth2 ka backendu
     }
-
-    // link for connection with strava: https://www.strava.com/api/v3/oauth/authorize?response_type=code&client_id=121978&redirect_uri=https://feasible-brightly-cobra.ngrok-free.app/stava_gateway/token_exchange/&scope=profile%3Aread_all%20read%20activity%3Aread_all
-
 
 }

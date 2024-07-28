@@ -14,4 +14,7 @@
     <string name="password">Password</string>
     <string name="confirm_password">Confirm password</string>
     <string name="username">Username</string>
+    <string name="logout">Logout</string>
+    <string name="connect_with_strava">Connect with Strava</string>
+    <string name="profile">Profile</string>
 </resources>

@@ -2,7 +2,7 @@ package com.example.trainwiser.network;
 
 import com.example.trainwiser.network.api_models.LoginRequestData;
 import com.example.trainwiser.network.api_models.LoginResponseData;
-import com.example.trainwiser.network.api_models.RegisterRequestData;
+import com.example.trainwiser.network.api_models.LogoutRequestData;
 
 import retrofit2.Call;
 import retrofit2.Response;
@@ -15,5 +15,5 @@ public interface Oauth2Interface {
     Call<LoginResponseData> loginUser(@Body LoginRequestData data);
 
     @POST("revoke_token/")
-    Call<Response<Void>> logoutUser(@Body RegisterRequestData data);
+    Call<Void> logoutUser(@Body LogoutRequestData data);
 }

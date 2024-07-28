@@ -1,6 +1,6 @@
 package com.example.trainwiser.network;
 
-import com.example.trainwiser.GlobalData;
+import com.example.trainwiser.common.GlobalData;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;

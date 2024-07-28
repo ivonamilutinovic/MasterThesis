@@ -14,41 +14,29 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+    }
 
-        final boolean isLoggedIn = false;  // todo: replace with method
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        String accessToken = APIUtils.getAccessToken(getApplicationContext());
+        String refreshToken = APIUtils.getRefreshToken(getApplicationContext());
+        long expiresAt = APIUtils.getExpiresAt(getApplicationContext());
+        final boolean isLoggedIn = accessToken == null || refreshToken == null || expiresAt == Long.MAX_VALUE;
+
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 Intent newActivity = null;
-                if(isLoggedIn){
+                if (isLoggedIn) {
                     newActivity = new Intent(MainActivity.this, MainMenuActivity.class);
-                }else{
+                } else {
                     newActivity = new Intent(MainActivity.this, LoginActivity.class);
                 }
                 startActivity(newActivity);
                 finish();
             }
         }, 2000);
-    }
-
-    @Override
-    protected void onResume()
-    {
-        super.onResume();
-
-        String accessToken = APIUtils.getAccessToken(getApplicationContext());
-        String refreshToken = APIUtils.getRefreshToken(getApplicationContext());
-        long expiresAt = APIUtils.getExpiresAt(getApplicationContext());
-
-        Intent intent;
-
-        if(accessToken == null || refreshToken == null || expiresAt == Long.MAX_VALUE) {
-            intent = new Intent(this, LoginActivity.class);
-        }
-        else {
-            intent = new Intent(this, MainMenuActivity.class);
-        }
-
-        startActivity(intent);
     }
 }
