@@ -1,4 +1,4 @@
-package com.example.trainwiser.network.api_models;
+package com.example.trainwiser.network.api_models.registration;
 
 public class RegisterRequestData {
     private final String username;

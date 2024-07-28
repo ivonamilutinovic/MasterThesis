@@ -7,7 +7,7 @@
     <string name="signup_on_login_activity">IF YOU DON\'T HAVE AN ACCOUNT,\nCLICK HERE TO JOIN</string>
     <string name="log_in_text">LOG IN</string>
     <string name="last_name">Last name</string>
-    <string name="birth_date">Birth date</string>
+    <string name="birth_date">Birth date (in YYYY-MM-DD format)</string>
     <string name="first_name">First Name</string>
     <string name="sign_up">SIGN UP</string>
     <string name="email">Email</string>
@@ -15,6 +15,11 @@
     <string name="confirm_password">Confirm password</string>
     <string name="username">Username</string>
     <string name="logout">Logout</string>
-    <string name="connect_with_strava">Connect with Strava</string>
+    <string name="connect_with_strava">Connect your \nStrava account</string>
+    <string name="strava_account_connected">Strava account \nconnected</string>
+    <string name="disconnect_from_strava">Disconnect your\nStrava account</string>
     <string name="profile">Profile</string>
+    <string name="save_changes">SAVE CHANGES</string>
+    <string name="delete_your_account">DELETE YOUR ACCOUNT</string>
+    <string name="background">background</string>
 </resources>

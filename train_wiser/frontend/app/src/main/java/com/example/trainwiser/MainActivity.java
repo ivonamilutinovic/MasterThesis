@@ -14,8 +14,17 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-    }
 
+        String accessToken = APIUtils.getAccessToken(getApplicationContext());
+        String refreshToken = APIUtils.getRefreshToken(getApplicationContext());
+        long expiresAt = APIUtils.getExpiresAt(getApplicationContext());
+        final boolean isLoggedIn = !(accessToken == null || refreshToken == null || expiresAt == Long.MAX_VALUE);
+
+        if (isLoggedIn) {
+            ProfileSingleton profile = ProfileSingleton.getInstance();
+            profile.renderProfileData(MainActivity.this);
+        }
+    }
     @Override
     protected void onResume() {
         super.onResume();
@@ -23,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
         String accessToken = APIUtils.getAccessToken(getApplicationContext());
         String refreshToken = APIUtils.getRefreshToken(getApplicationContext());
         long expiresAt = APIUtils.getExpiresAt(getApplicationContext());
-        final boolean isLoggedIn = accessToken == null || refreshToken == null || expiresAt == Long.MAX_VALUE;
+        final boolean isLoggedIn = !(accessToken == null || refreshToken == null || expiresAt == Long.MAX_VALUE);
 
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -37,6 +46,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(newActivity);
                 finish();
             }
-        }, 2000);
+        }, 1300);
     }
 }

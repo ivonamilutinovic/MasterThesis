@@ -10,8 +10,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.trainwiser.network.APIInterface;
 import com.example.trainwiser.network.APIRetrofitClient;
-import com.example.trainwiser.network.api_models.RegisterRequestData;
-import com.example.trainwiser.network.api_models.RegisterResponseData;
+import com.example.trainwiser.network.api_models.registration.RegisterRequestData;
+import com.example.trainwiser.network.api_models.registration.RegisterResponseData;
 
 import org.json.JSONObject;
 
@@ -39,7 +39,22 @@ public class SignupActivity extends AppCompatActivity {
         EditText confirmPasswordEditText = this.findViewById(R.id.userConfirmPasswordId);
         EditText birthDateEditText = this.findViewById(R.id.usernameBirthDateId);
 
-        // todo: nullptr and confirm password / validation and datapicker
+        // Password check
+        String password = passwordEditText.getText().toString();
+        String confirmPassword = confirmPasswordEditText.getText().toString();
+        if (password.isEmpty()) {
+            Toast.makeText(SignupActivity.this, "Password field cannot be empty", Toast.LENGTH_LONG).show();
+            return;
+        }
+        if (confirmPassword.isEmpty()) {
+            Toast.makeText(SignupActivity.this, "Confirm Password cannot be empty", Toast.LENGTH_LONG).show();
+            return;
+        }
+        if (!password.equals(confirmPassword)) {
+            Toast.makeText(SignupActivity.this, "Password and confirm password do not match", Toast.LENGTH_LONG).show();
+            return;
+        }
+
         RegisterRequestData registerRequestData = new RegisterRequestData(
                 usernameEditText.getText().toString(),
                 userEmailEditText.getText().toString(),
@@ -52,8 +67,6 @@ public class SignupActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<RegisterResponseData> call, Response<RegisterResponseData> response) {
                 if (response.code() == HttpURLConnection.HTTP_CREATED) {
-//                    assert response.body() != null;
-//                    Toast.makeText(SignupActivity.this, Integer.toString(response.body().getUser_id()), Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
                     startActivity(intent);
                 }
@@ -70,7 +83,6 @@ public class SignupActivity extends AppCompatActivity {
 
                         }
                     }
-
                     Toast.makeText(SignupActivity.this, "Error happen during sign up. Error code: " + response.code() + " (" + errorText + ")", Toast.LENGTH_LONG).show();
                 }
             }

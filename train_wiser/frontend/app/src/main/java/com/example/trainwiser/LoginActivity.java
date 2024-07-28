@@ -8,13 +8,13 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.trainwiser.common.GlobalData;
+import com.example.trainwiser.common.GlobalAPIAccessData;
 import com.example.trainwiser.common.PreferenceType;
 import com.example.trainwiser.common.SharedPreferenceSingleton;
 import com.example.trainwiser.network.Oauth2Interface;
 import com.example.trainwiser.network.Oauth2RetrofitClient;
-import com.example.trainwiser.network.api_models.LoginRequestData;
-import com.example.trainwiser.network.api_models.LoginResponseData;
+import com.example.trainwiser.network.api_models.login.LoginRequestData;
+import com.example.trainwiser.network.api_models.login.LoginResponseData;
 import com.example.trainwiser.network.utils.APIKeys;
 
 import org.json.JSONObject;
@@ -47,8 +47,8 @@ public class LoginActivity extends AppCompatActivity {
         LoginRequestData loginRequestData = new LoginRequestData(
                 usernameEditText.getText().toString(),
                 passwordEditText.getText().toString(),
-                GlobalData.getClientId(),
-                GlobalData.getClientSecret(),
+                GlobalAPIAccessData.getClientId(),
+                GlobalAPIAccessData.getClientSecret(),
                 grant_type);
 
         Oauth2RetrofitClient.getOauth2Client().create(Oauth2Interface.class).loginUser(loginRequestData).enqueue(new Callback<LoginResponseData>() {

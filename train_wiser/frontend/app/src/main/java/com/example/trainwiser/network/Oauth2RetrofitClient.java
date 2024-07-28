@@ -1,6 +1,6 @@
 package com.example.trainwiser.network;
 
-import com.example.trainwiser.common.GlobalData;
+import com.example.trainwiser.common.GlobalAPIAccessData;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -11,7 +11,7 @@ public class Oauth2RetrofitClient {
     public static Retrofit getOauth2Client() {
         if (retrofit == null) {
             retrofit = new Retrofit.Builder()
-                    .baseUrl(GlobalData.getBackendUrl() + "o/")
+                    .baseUrl(GlobalAPIAccessData.getBackendUrl() + "o/")
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
         }

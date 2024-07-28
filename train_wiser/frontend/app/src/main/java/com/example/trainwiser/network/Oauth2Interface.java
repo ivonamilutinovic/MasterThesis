@@ -1,11 +1,10 @@
 package com.example.trainwiser.network;
 
-import com.example.trainwiser.network.api_models.LoginRequestData;
-import com.example.trainwiser.network.api_models.LoginResponseData;
-import com.example.trainwiser.network.api_models.LogoutRequestData;
+import com.example.trainwiser.network.api_models.login.LoginRequestData;
+import com.example.trainwiser.network.api_models.login.LoginResponseData;
+import com.example.trainwiser.network.api_models.logout.LogoutRequestData;
 
 import retrofit2.Call;
-import retrofit2.Response;
 import retrofit2.http.Body;
 import retrofit2.http.POST;
 

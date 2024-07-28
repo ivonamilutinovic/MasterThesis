@@ -1,4 +1,4 @@
-package com.example.trainwiser.network.api_models;
+package com.example.trainwiser.network.api_models.logout;
 
 public class LogoutRequestData {
     private final String client_id;

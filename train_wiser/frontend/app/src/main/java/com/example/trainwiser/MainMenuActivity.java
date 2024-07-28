@@ -1,23 +1,20 @@
 package com.example.trainwiser;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.trainwiser.common.GlobalData;
+import com.example.trainwiser.common.GlobalAPIAccessData;
 import com.example.trainwiser.network.Oauth2Interface;
 import com.example.trainwiser.network.Oauth2RetrofitClient;
-import com.example.trainwiser.network.api_models.LogoutRequestData;
+import com.example.trainwiser.network.api_models.logout.LogoutRequestData;
 import com.example.trainwiser.network.utils.APIUtils;
 
-import org.json.JSONObject;
-
-import java.net.HttpURLConnection;
-
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -28,7 +25,26 @@ public class MainMenuActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setContentView(R.layout.activity_main_menu);
+
+        Button stravaConnectionButton = findViewById(R.id.buttonConnectWithStrava);
+        ProfileSingleton profile = ProfileSingleton.getInstance();
+
+        if (profile.isUserConnectedWithStrava()) {
+            stravaConnectionButton.setText(R.string.strava_account_connected);
+            stravaConnectionButton.setClickable(false);
+            stravaConnectionButton.setBackgroundColor(getResources().getColor(R.color.negative_option_for_buttons, getTheme()));
+            stravaConnectionButton.setTextColor(getResources().getColor(R.color.for_text_on_negative_buttons, getTheme()));
+        } else {
+            stravaConnectionButton.setText(R.string.connect_with_strava);
+            stravaConnectionButton.setBackgroundColor(getResources().getColor(R.color.for_buttons, getTheme()));
+            stravaConnectionButton.setTextColor(getResources().getColor(R.color.for_text_on_buttons, getTheme()));
+        }
     }
 
     public void onClickSwitchPersonalTrainerScreen(View view) {
@@ -42,23 +58,41 @@ public class MainMenuActivity extends AppCompatActivity {
     }
 
     public void onClickProfile(View view) {
-        // link for connection with strava: https://www.strava.com/api/v3/oauth/authorize?response_type=code&client_id=121978&redirect_uri=https://feasible-brightly-cobra.ngrok-free.app/stava_gateway/token_exchange/&scope=profile%3Aread_all%20read%20activity%3Aread_all
+        ProfileSingleton profile = ProfileSingleton.getInstance();
+        profile.renderProfileData(MainMenuActivity.this);
 
-        Intent intent = new Intent(MainMenuActivity.this, ResultsPredictionActivity.class);
+        Intent intent = new Intent(MainMenuActivity.this, ProfileActivity.class);
         startActivity(intent);
-
     }
 
-    public void onClickConnectWithStrava(View view) {
-        Intent intent = new Intent(MainMenuActivity.this, ResultsPredictionActivity.class);
-        startActivity(intent);
+    public void onClickStravaConnection(View view) {
+        Button button = findViewById(R.id.buttonConnectWithStrava);
+        ProfileSingleton profile = ProfileSingleton.getInstance();
+
+        if (!profile.isUserConnectedWithStrava()) {
+            String stravaAuthorizationURL = GlobalAPIAccessData.getStravaAuthorizationURL();
+            if (stravaAuthorizationURL != null) {
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(stravaAuthorizationURL));
+                MainMenuActivity.this.startActivity(intent);
+
+                // upisati access token ka stravi i strava id u profile klasu
+                // profile.setStravaId();
+
+                button.setText(R.string.strava_account_connected);
+                button.setClickable(false);
+                button.setBackgroundColor(getResources().getColor(R.color.negative_option_for_buttons, getTheme()));
+                button.setTextColor(getResources().getColor(R.color.for_text_on_negative_buttons, getTheme()));
+            } else {
+                Toast.makeText(MainMenuActivity.this, "Error happen during Strava authorization", Toast.LENGTH_LONG).show();
+            }
+        }
     }
 
     public void onClickLogout(View view) {
         String token = APIUtils.getAccessToken(getApplicationContext());
         LogoutRequestData logoutRequestData = new LogoutRequestData(
-                GlobalData.getClientId(),
-                GlobalData.getClientSecret(),
+                GlobalAPIAccessData.getClientId(),
+                GlobalAPIAccessData.getClientSecret(),
                 token);
 
         Oauth2RetrofitClient.getOauth2Client().create(Oauth2Interface.class).logoutUser(logoutRequestData).enqueue(new Callback<Void>() {
@@ -81,4 +115,6 @@ public class MainMenuActivity extends AppCompatActivity {
 
     }
 
+    public void onClickSwitchResultsPredictionScreen(View view) {
+    }
 }

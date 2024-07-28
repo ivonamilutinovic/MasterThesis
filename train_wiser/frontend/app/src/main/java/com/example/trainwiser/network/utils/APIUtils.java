@@ -7,6 +7,7 @@ import com.example.trainwiser.common.PreferenceType;
 import com.example.trainwiser.common.SharedPreferenceSingleton;
 
 public class APIUtils {
+
     public static String getAccessToken(Context ctx) {
         return (String) SharedPreferenceSingleton.getInstance(ctx)
                 .getValue(APIKeys.API_ACCESS_TOKEN.toString(), PreferenceType.STRING);
