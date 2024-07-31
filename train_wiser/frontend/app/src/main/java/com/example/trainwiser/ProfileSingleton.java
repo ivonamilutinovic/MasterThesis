@@ -25,7 +25,6 @@ public class ProfileSingleton {
     private String email;
     private String first_name;
     private String last_name;
-    private String password;
     private String birth_date;
 
     private ProfileSingleton() {}
@@ -92,14 +91,6 @@ public class ProfileSingleton {
 
     public void setLast_name(String last_name) {
         this.last_name = last_name;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getBirth_date() {

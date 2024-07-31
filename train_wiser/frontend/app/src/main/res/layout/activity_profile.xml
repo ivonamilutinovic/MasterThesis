@@ -19,122 +19,197 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0" />
 
-    <EditText
-        android:id="@+id/usernameId"
+    <ScrollView
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/login_fields_w_margin"
-        android:layout_marginEnd="@dimen/login_fields_w_margin"
-        android:layout_marginBottom="@dimen/login_fields_h_margin"
-        android:textSize="@dimen/login_font_size"
-        app:layout_constraintBottom_toTopOf="@+id/userEmailId"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_height="0dp"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.38"
-        app:layout_constraintVertical_chainStyle="packed" />
-
-    <EditText
-        android:id="@+id/userEmailId"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/login_fields_h_margin"
-        android:inputType="textEmailAddress"
-        android:textSize="@dimen/login_font_size"
-        app:layout_constraintBottom_toTopOf="@+id/usernameFirstNameId"
-        app:layout_constraintEnd_toEndOf="@+id/usernameId"
-        app:layout_constraintStart_toStartOf="@+id/usernameId"
-        app:layout_constraintTop_toBottomOf="@+id/usernameId"
-        />
-
-    <EditText
-        android:id="@+id/usernameFirstNameId"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/login_fields_h_margin"
-        android:inputType="text"
-        android:textSize="@dimen/login_font_size"
-        app:layout_constraintBottom_toTopOf="@+id/usernameLastNameId"
-        app:layout_constraintEnd_toEndOf="@+id/userEmailId"
-        app:layout_constraintStart_toStartOf="@+id/userEmailId"
-        app:layout_constraintTop_toBottomOf="@+id/userEmailId" />
-
-    <EditText
-        android:id="@+id/usernameLastNameId"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/login_fields_h_margin"
-        android:inputType="text"
-        android:textSize="@dimen/login_font_size"
-        app:layout_constraintBottom_toTopOf="@+id/usernameBirthDateId"
-        app:layout_constraintEnd_toEndOf="@+id/usernameFirstNameId"
-        app:layout_constraintStart_toStartOf="@+id/usernameFirstNameId"
-        app:layout_constraintTop_toBottomOf="@+id/usernameFirstNameId" />
-
-    <EditText
-        android:id="@+id/userPasswordId"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/login_fields_h_margin"
-        android:inputType="textPassword"
-        android:textColor="@color/for_text_on_buttons"
-        android:textSize="@dimen/login_font_size"
-        app:layout_constraintBottom_toTopOf="@+id/buttonSaveChanges"
-        app:layout_constraintEnd_toEndOf="@+id/usernameFirstNameId"
-        app:layout_constraintStart_toStartOf="@+id/usernameFirstNameId"
-        app:layout_constraintTop_toBottomOf="@+id/usernameFirstNameId"
-        />
-
-    <EditText
-        android:id="@+id/usernameBirthDateId"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/login_fields_h_margin"
-        android:inputType="date"
-        android:textSize="@dimen/login_font_size"
-        app:layout_constraintBottom_toBottomOf="@+id/buttonSaveChanges"
-        app:layout_constraintEnd_toEndOf="@+id/usernameLastNameId"
-        app:layout_constraintStart_toStartOf="@+id/usernameLastNameId"
-        app:layout_constraintTop_toBottomOf="@+id/usernameLastNameId" />
-
-    <Button
-        android:id="@+id/buttonSaveChanges"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:backgroundTint="@color/for_buttons"
-        android:paddingStart="50dp"
-        android:paddingTop="18dp"
-        android:paddingEnd="50dp"
-        android:paddingBottom="18dp"
-        android:layout_marginTop="@dimen/login_button_h_margin"
-        android:text="@string/save_changes"
-        android:textColor="@color/for_text_on_buttons"
-        android:textSize="@dimen/login_font_size"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/buttonDeleteAccount"
-        app:layout_constraintEnd_toEndOf="@+id/usernameBirthDateId"
-        app:layout_constraintStart_toStartOf="@+id/usernameBirthDateId"
-        app:layout_constraintTop_toBottomOf="@+id/usernameBirthDateId"
-        android:onClick="onClickSaveChanges"/>
-
-    <Button
-        android:id="@+id/buttonDeleteAccount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:backgroundTint="@color/delete_account_button"
-        android:paddingStart="50dp"
-        android:paddingTop="18dp"
-        android:paddingEnd="50dp"
-        android:paddingBottom="18dp"
-        android:layout_marginTop="@dimen/login_button_h_margin"
-        android:text="@string/delete_your_account"
-        android:textColor="@color/text_on_delete_account_button"
-        android:textSize="@dimen/login_font_size"
-        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/buttonSaveChanges"
-        app:layout_constraintStart_toStartOf="@+id/buttonSaveChanges"
-        app:layout_constraintTop_toBottomOf="@+id/buttonSaveChanges"
-        android:onClick="onDeleteAccount"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Username Label -->
+            <TextView
+                android:id="@+id/usernameLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Username"
+                android:textSize="18sp"
+                android:layout_marginBottom="8dp" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/usernameLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/profileUsernameId"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint=""
+                    android:textSize="18sp"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Email Label -->
+            <TextView
+                android:id="@+id/userEmailLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Email"
+                android:textSize="18sp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="8dp" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/userEmailLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/profileEmailId"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint=""
+                    android:textSize="18sp"
+                    android:inputType="textEmailAddress"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- First Name Label -->
+            <TextView
+                android:id="@+id/usernameFirstNameLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="First Name"
+                android:textSize="18sp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="8dp" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/usernameFirstNameLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/profileFirstNameId"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint=""
+                    android:textSize="18sp"
+                    android:inputType="text"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Last Name Label -->
+            <TextView
+                android:id="@+id/usernameLastNameLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Last Name"
+                android:textSize="18sp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="8dp" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/usernameLastNameLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/profileLastNameId"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint=""
+                    android:textSize="18sp"
+                    android:inputType="text"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Password Label -->
+            <TextView
+                android:id="@+id/userPasswordLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Password"
+                android:textSize="18sp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="8dp" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/userPasswordLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/profilePasswordId"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint=""
+                    android:text="@string/default_password_text"
+                    android:textSize="18sp"
+                    android:inputType="textPassword"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Birth Date Label -->
+            <TextView
+                android:id="@+id/usernameBirthDateLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Birth Date"
+                android:textSize="18sp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="8dp" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/usernameBirthDateLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/profileBirthDateId"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint=""
+                    android:textSize="18sp"
+                    android:inputType="date"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Button
+                android:id="@+id/buttonSaveChanges"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/for_buttons"
+                android:paddingStart="50dp"
+                android:paddingTop="18dp"
+                android:paddingEnd="50dp"
+                android:paddingBottom="18dp"
+                android:layout_marginTop="@dimen/login_button_h_margin"
+                android:text="@string/save_changes"
+                android:textColor="@color/for_text_on_buttons"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_gravity="center"
+                android:onClick="onClickSaveChanges"/>
+
+            <Button
+                android:id="@+id/buttonDeleteAccount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/delete_account_button"
+                android:paddingStart="50dp"
+                android:paddingTop="18dp"
+                android:paddingEnd="50dp"
+                android:paddingBottom="18dp"
+                android:layout_marginTop="@dimen/login_button_h_margin"
+                android:text="@string/delete_your_account"
+                android:textColor="@color/text_on_delete_account_button"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_gravity="center"
+                android:onClick="onDeleteAccount"/>
+
+        </LinearLayout>
+    </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>
