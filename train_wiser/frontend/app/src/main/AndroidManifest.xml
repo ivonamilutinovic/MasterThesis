@@ -33,9 +33,6 @@
             android:name=".AIPersonalTrainerActivity"
             android:exported="false" />
         <activity
-            android:name=".PersonalTrainerActivity"
-            android:exported="false" />
-        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>

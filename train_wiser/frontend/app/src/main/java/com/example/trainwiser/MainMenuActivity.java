@@ -47,11 +47,6 @@ public class MainMenuActivity extends AppCompatActivity {
         }
     }
 
-    public void onClickSwitchPersonalTrainerScreen(View view) {
-        Intent intent = new Intent(MainMenuActivity.this, PersonalTrainerActivity.class);
-        startActivity(intent);
-    }
-
     public void onClickSwitchToAIPersonalTrainerScreen(View view) {
         Intent intent = new Intent(MainMenuActivity.this, AIPersonalTrainerActivity.class);
         startActivity(intent);
