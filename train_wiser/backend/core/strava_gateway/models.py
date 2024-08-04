@@ -25,7 +25,7 @@ class StravaActivity(models.Model):
     is_full_activity_filled = models.BooleanField(default=False)
     name = models.CharField(max_length=255, null=True)
     activity_type = models.CharField(max_length=255, null=True)
-    distance = models.FloatField(null=True)
+    distance = models.FloatField(null=True)  # in kilometers
     moving_time = models.PositiveIntegerField(null=True)
     elapsed_time = models.PositiveIntegerField(null=True)
     total_elevation_gain = models.FloatField(null=True)

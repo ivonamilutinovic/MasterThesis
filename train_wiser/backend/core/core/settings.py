@@ -150,13 +150,13 @@ OAUTH2_PROVIDER = {
     'ACCESS_TOKEN_EXPIRE_SECONDS': 3600
 }
 
-
+# todo: update :)
 CRONJOBS = [
-    ('* */1 * * *', 'strava_gateway.tasks.activity_backfill',
+    ('18 */1 * * *', 'strava_gateway.tasks.activity_backfill',
      '>> ' + os.path.join('/home/hp/Desktop', 'train_wiser_crontab.log' + ' 2>&1 ')),
-    # ('* */1 * * *', 'strava_gateway.tasks.fill_athlete_hr_zone',
-    #  '>> ' + os.path.join('/home/hp/Desktop', 'train_wiser_hr_zone.log' + ' 2>&1 ')),
-    # ('* */1 * * *', 'strava_gateway.tasks.fill_activity_hr_zone',
+    # # ('* */1 * * *', 'strava_gateway.tasks.fill_athlete_hr_zone',
+    # #  '>> ' + os.path.join('/home/hp/Desktop', 'train_wiser_hr_zone.log' + ' 2>&1 ')),
+    # ('53 */1 * * *', 'strava_gateway.tasks.fill_activity_hr_zone',
     #  '>> ' + os.path.join('/home/hp/Desktop', 'train_wiser_hr_zone_act.log' + ' 2>&1 ')),
     # ('30 */1 * * *', 'strava_gateway.tasks.fetch_activity_data')
 ]

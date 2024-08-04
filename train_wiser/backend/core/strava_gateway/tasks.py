@@ -4,14 +4,14 @@ from typing import List
 import requests
 
 from .models import StravaAthlete, StravaActivity
-from .utils.activity_utils import is_run_activity_race, set_activity_hr_zone
+from .utils.activity_utils import is_run_activity_race, get_activity_hr_zone
 from .utils.athlete_utils import refresh_access_token_if_needed
 import logging
 
 
 logger = logging.getLogger('django')
 
-ACTIVITIES_OF_INTEREST = {'WeightTraining', 'Run', 'TrailRun', 'Ride', 'VirtualRide'}
+ACTIVITIES_OF_INTEREST = {'WeightTraining', 'Run', 'TrailRun', 'Ride', 'VirtualRide', 'Swim'}
 
 def activity_backfill():
 
@@ -55,7 +55,7 @@ def activity_backfill():
                             is_full_activity_filled=True,
                             name=activity.get('name', None),
                             activity_type=activity.get('sport_type', None),
-                            distance=activity.get('distance', None),
+                            distance=activity.get('distance', 0) / 1000.0,
                             moving_time=activity.get('moving_time', None),
                             elapsed_time=activity.get('elapsed_time', None),
                             total_elevation_gain=activity.get('total_elevation_gain', None),
@@ -68,13 +68,11 @@ def activity_backfill():
                             average_heartrate=activity.get('average_heartrate', None),
                             max_heartrate=activity.get('max_heartrate', None),
                             is_race=is_run_activity_race(activity))
-                        strava_activity.average_heartrate_zone=set_activity_hr_zone(strava_activity, user)
+                        strava_activity.average_heartrate_zone=get_activity_hr_zone(strava_activity, user)
                         strava_activity.save()
                     except Exception as e:
                         print(str(e))
 
-            if page == 4:
-                break  # TODO: Remove after testing
             page += 1
 
         user.backfill_progress = new_backfill_progress
@@ -93,7 +91,7 @@ def fetch_activity_data():
         if activity_details.get('activity_type') in ACTIVITIES_OF_INTEREST:
             activity_to_fill.is_full_activity_filled=True
             activity_to_fill.activity_type=activity_details.get('activity_type')
-            activity_to_fill.distance=activity_details.get('distance')
+            activity_to_fill.distance=activity_details.get('distance', 0)  / 1000.0
             activity_to_fill.moving_time=activity_details.get('moving_time')
             activity_to_fill.elapsed_time=activity_details.get('elapsed_time')
             activity_to_fill.total_elevation_gain=activity_details.get('total_elevation_gain')
@@ -109,7 +107,12 @@ def fetch_activity_data():
             activity_to_fill.delete()
 
 def fill_activity_hr_zone():
-    athlete_id = 43296965
+    # todo: ovo treba obrisati
+    athlete_id = 43296965  # todo: this cannot stay :D
     if StravaAthlete.objects.filter(athlete_id=athlete_id).exists():
         strava_athlete = StravaAthlete.objects.filter(athlete_id=athlete_id).get()
-        set_activity_hr_zone(None, strava_athlete)
+
+        for strava_activity in StravaActivity.objects.all():
+            strava_activity.average_heartrate_zone = (
+                get_activity_hr_zone(strava_activity, strava_athlete))
+            strava_activity.save()
