@@ -38,7 +38,7 @@ class UserRegister(APIView):
 #         return CustomUser.objects.get(username=username)
 
 
-class UserAccount(generics.RetrieveUpdateAPIView):
+class UserAccount(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = UserAccountSerializer
     permission_classes = [IsAuthenticated]
 
