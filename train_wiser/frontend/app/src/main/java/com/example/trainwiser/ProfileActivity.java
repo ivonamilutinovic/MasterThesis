@@ -153,6 +153,7 @@ public class ProfileActivity extends AppCompatActivity {
                 .deleteAccount().enqueue(new Callback<Void>() {
                     private void delete_user_account() {
                         APIUtils.removeAPIKeysData(getApplicationContext());
+                        ProfileSingleton.getInstance().emptyProfileData();
                         Intent intent = new Intent(ProfileActivity.this, LoginActivity.class);
                         startActivity(intent);
                         finish();

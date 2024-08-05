@@ -112,6 +112,7 @@ public class ProfileSingleton {
                     last_name = accountData.getLast_name();
                     email = accountData.getEmail();
                     username = accountData.getUsername();
+                    birth_date = accountData.getBirth_date();
                     strava_athlete_id = accountData.getStrava_athlete_id();
                 }
                 else{
@@ -133,6 +134,15 @@ public class ProfileSingleton {
 
             }
         });
+    }
+
+    public void emptyProfileData() {
+        this.strava_athlete_id = null;
+        this.username = null;
+        this.email = null;
+        this.first_name = null;
+        this.last_name = null;
+        this.birth_date = null;
     }
  }
 

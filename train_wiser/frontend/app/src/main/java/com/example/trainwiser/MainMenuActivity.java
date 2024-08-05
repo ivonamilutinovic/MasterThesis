@@ -93,6 +93,7 @@ public class MainMenuActivity extends AppCompatActivity {
         Oauth2RetrofitClient.getOauth2Client().create(Oauth2Interface.class).logoutUser(logoutRequestData).enqueue(new Callback<Void>() {
             private void logout_user() {
                 APIUtils.removeAPIKeysData(getApplicationContext());
+                ProfileSingleton.getInstance().emptyProfileData();
                 Intent intent = new Intent(MainMenuActivity.this, LoginActivity.class);
                 startActivity(intent);
                 finish();
