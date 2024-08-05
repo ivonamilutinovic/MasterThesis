@@ -2,6 +2,7 @@ package com.example.trainwiser;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -9,8 +10,11 @@ import android.widget.Toast;
 
 import com.example.trainwiser.network.APIClientWithInterceptorForTokens;
 import com.example.trainwiser.network.APIInterfaceWithInterceptorForTokens;
+import com.example.trainwiser.network.Oauth2Interface;
+import com.example.trainwiser.network.Oauth2RetrofitClient;
 import com.example.trainwiser.network.api_models.account.AccountDataRequest;
 import com.example.trainwiser.network.api_models.account.AccountDataResponse;
+import com.example.trainwiser.network.utils.APIUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -144,7 +148,25 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     public void onDeleteAccount(View view) {
+        APIClientWithInterceptorForTokens.getAPIClient(ProfileActivity.this)
+                .create(APIInterfaceWithInterceptorForTokens.class)
+                .deleteAccount().enqueue(new Callback<Void>() {
+                    private void delete_user_account() {
+                        APIUtils.removeAPIKeysData(getApplicationContext());
+                        Intent intent = new Intent(ProfileActivity.this, LoginActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                    @Override
+                    public void onResponse(Call<Void> call, Response<Void> response) {
+                        delete_user_account();
+                    }
 
+                    @Override
+                    public void onFailure(Call<Void> call, Throwable t) {
+                        delete_user_account();
+                    }
+                });
     }
 
 }

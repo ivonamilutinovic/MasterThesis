@@ -1,13 +1,13 @@
 package com.example.trainwiser.network.api_models.registration;
 
 public class RegisterResponseData {
-    private int user_id;
+    private Integer user_id;
 
 //    public RegisterResponseData(int user_id) {
 //        this.user_id = user_id;
 //    }
 
-    public int getUser_id() {
+    public Integer getUser_id() {
         return user_id;
     }
 

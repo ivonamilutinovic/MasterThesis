@@ -19,7 +19,7 @@ public interface APIInterface {
 //    @GET("account/{username}/")
 //    Call<AccountDataResponse> getAccount(@Path("username") String username);
 
-    @PATCH("account/{username}/")
-    Call<AccountDataResponse> updateAccount(@Path("username") String username, @Body AccountDataRequest account);
+//    @PATCH("account/{username}/")
+//    Call<AccountDataResponse> updateAccount(@Path("username") String username, @Body AccountDataRequest account);
 
 }
