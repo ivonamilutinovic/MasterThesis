@@ -1,6 +1,8 @@
 package com.example.trainwiser;
 
 
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -101,7 +103,7 @@ public class ProfileSingleton {
         this.birth_date = birth_date;
     }
 
-    public void renderProfileData(AppCompatActivity activity){
+    public void renderProfileData(AppCompatActivity activity, Runnable callbackFunction){
         APIClientWithInterceptorForTokens.getAPIClient(activity).create(APIInterfaceWithInterceptorForTokens.class)
                 .getAccount().enqueue(new Callback<AccountDataResponse>() {
             @Override
@@ -114,6 +116,8 @@ public class ProfileSingleton {
                     username = accountData.getUsername();
                     birth_date = accountData.getBirth_date();
                     strava_athlete_id = accountData.getStrava_athlete_id();
+                    Handler mainHandler = new Handler(Looper.getMainLooper());
+                    mainHandler.post(callbackFunction);
                 }
                 else{
                     ResponseBody errorBody = response.errorBody();
@@ -124,8 +128,7 @@ public class ProfileSingleton {
                         } catch (Exception ignored) {
                         }
                     }
-                    Toast.makeText(activity, "Error happen during profile reading. " +
-                            "Error code: " + response.code() + " (" + errorText + ")", Toast.LENGTH_LONG).show();
+                    Toast.makeText(activity, "Error code: " + response.code() + " (" + errorText + ")", Toast.LENGTH_LONG).show();
                 }
             }
 

@@ -23,4 +23,18 @@
     <string name="background">background</string>
     <string name="default_password_text">********</string>
     <string name="monthly_training_log">Monthly training log</string>
+    <string name="predict_button_text">Predict race time</string>
+    <string name="predicted_time_according_to_races_in_serbia">Predicted time according to your race results in Serbia:</string>
+    <string name="predict_race_time">Predict race time</string>
+    <string name="next_road_race_dist">Your next road race distance:</string>
+    <string name="next_road_race_distance">Your next road race distance:</string>
+    <string-array name="race_distances">
+        <item>5k</item>
+        <item>7k</item>
+        <item>7.7k</item>
+        <item>10k</item>
+        <item>21k</item>
+        <item>42k</item>
+    </string-array>
+
 </resources>

@@ -52,13 +52,21 @@ public class MainMenuActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void onClickProfile(View view) {
-        ProfileSingleton profile = ProfileSingleton.getInstance();
-        profile.renderProfileData(MainMenuActivity.this);
-
+    private void switchToProfileActivity() {
         Intent intent = new Intent(MainMenuActivity.this, ProfileActivity.class);
         startActivity(intent);
     }
+
+    public void onClickProfile(View view) {
+        ProfileSingleton profile = ProfileSingleton.getInstance();
+        profile.renderProfileData(MainMenuActivity.this,  new Runnable() {
+            @Override
+            public void run() {
+                switchToProfileActivity();
+            }
+        });
+    }
+
 
     public void onClickStravaConnection(View view) {
         Button button = findViewById(R.id.buttonConnectWithStrava);
@@ -100,17 +108,29 @@ public class MainMenuActivity extends AppCompatActivity {
             }
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
+
+                int a=1;
                 logout_user();
             }
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
+                int a=1;
                 logout_user();
             }
         });
-
+        token = APIUtils.getAccessToken(getApplicationContext());
+        String a = token;
     }
 
     public void onClickSwitchResultsPredictionScreen(View view) {
+        Intent intent = new Intent(MainMenuActivity.this, ResultsPredictActivity.class);
+        startActivity(intent);
+    }
+
+    public void onClickSwitchTrainingLog(View view) {
+        // todo: implement all
+        Intent intent = new Intent(MainMenuActivity.this, LoginActivity.class);
+        startActivity(intent);
     }
 }

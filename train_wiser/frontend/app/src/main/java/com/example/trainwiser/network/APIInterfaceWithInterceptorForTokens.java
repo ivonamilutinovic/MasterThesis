@@ -1,6 +1,8 @@
 package com.example.trainwiser.network;
 
 import com.example.trainwiser.network.api_models.account.AccountDataResponse;
+import com.example.trainwiser.network.api_models.results_prediction.ResultsPredictionRequestData;
+import com.example.trainwiser.network.api_models.results_prediction.ResultsPredictionResponseData;
 
 import java.util.Map;
 
@@ -20,5 +22,8 @@ public interface APIInterfaceWithInterceptorForTokens {
 
     @DELETE("users/me/")
     Call<Void> deleteAccount();
+
+    @GET("api/result_prediction/")
+    Call<ResultsPredictionResponseData> getResultsPrediction(ResultsPredictionRequestData resultsPredictionRequestData);
 
 }

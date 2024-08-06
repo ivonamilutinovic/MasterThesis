@@ -27,7 +27,7 @@
             android:name=".LoginActivity"
             android:exported="false" />
         <activity
-            android:name=".ResultsPredictionActivity"
+            android:name=".ResultsPredictActivity"
             android:exported="false" />
         <activity
             android:name=".AIPersonalTrainerActivity"

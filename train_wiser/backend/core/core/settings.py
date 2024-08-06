@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     # local
     "strava_gateway.apps.StravaGatewayConfig",
     "users.apps.UsersConfig",
+    "results_predictor.apps.ResultsPredictorConfig",
 ]
 
 MIDDLEWARE = [

@@ -58,7 +58,7 @@ tools:context=".MainMenuActivity">
         app:layout_constraintBottom_toTopOf="@id/spacer2"
         app:layout_constraintStart_toStartOf="@+id/buttonAIPT"
         app:layout_constraintTop_toBottomOf="@id/spacer1"
-        android:onClick="onClickSwitchToAIPersonalTrainerScreen"/>
+        android:onClick="onClickSwitchResultsPredictionScreen"/>
 
     <Button
         android:id="@+id/buttonTrainingLog"
@@ -73,7 +73,7 @@ tools:context=".MainMenuActivity">
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@+id/buttonPrediction"
         app:layout_constraintTop_toBottomOf="@id/spacer2"
-        android:onClick="onClickSwitchResultsPredictionScreen"/>
+        android:onClick="onClickSwitchTrainingLog"/>
 
     <Space
         android:id="@+id/spacer2"

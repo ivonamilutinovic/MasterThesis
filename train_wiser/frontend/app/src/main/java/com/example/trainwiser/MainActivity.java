@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (isLoggedIn) {
             ProfileSingleton profile = ProfileSingleton.getInstance();
-            profile.renderProfileData(MainActivity.this);
+            profile.renderProfileData(MainActivity.this, null);
         }
     }
     @Override

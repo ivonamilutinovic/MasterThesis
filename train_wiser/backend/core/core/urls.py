@@ -22,6 +22,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('strava_gateway/', include('strava_gateway.urls')),
     path('api/users/', include('users.urls')),
+    path('api/results_prediction', include('results_predictor.urls')),
     path('o/', include(oauth2_urls)),
 ]
 
