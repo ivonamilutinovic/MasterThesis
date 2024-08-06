@@ -15,7 +15,6 @@ public class TrainingResponseData {
     @SerializedName("average_heartrate_zone")
     private int averageHeartrateZone;
 
-    // Getters and Setters
     public String getActivityType() {
         return activityType;
     }

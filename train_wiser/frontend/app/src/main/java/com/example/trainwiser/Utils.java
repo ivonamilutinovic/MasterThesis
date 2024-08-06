@@ -1,5 +1,6 @@
 package com.example.trainwiser;
 
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -21,6 +22,10 @@ public class Utils {
         return context.getString(emojiResId);
     }
 
+    public static long currentTimestampInSeconds() {
+        return Instant.now().getEpochSecond();
+    }
+
     public static String secondsInFormatedTime(Integer seconds) {
         if (seconds == null)
             return "00:00:00";
@@ -32,4 +37,5 @@ public class Utils {
 
         return String.format(Locale.US, "%02d:%02d:%02d", hours, minutes, seconds);
     }
+
 }
