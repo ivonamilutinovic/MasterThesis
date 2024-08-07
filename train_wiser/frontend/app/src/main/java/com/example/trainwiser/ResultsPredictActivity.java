@@ -37,13 +37,18 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ResultsPredictActivity extends AppCompatActivity {
+    Spinner distanceSpinner;
+    TextView predictedTime;
+    TextView predictedTimeLabel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_results_prediction);
 
-        Spinner distanceSpinner = findViewById(R.id.distance_spinner);
+        distanceSpinner = findViewById(R.id.distance_spinner);
+        predictedTime = findViewById(R.id.predicted_time);
+        predictedTimeLabel = findViewById(R.id.predicted_label);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.race_distances, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -54,30 +59,19 @@ public class ResultsPredictActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        Spinner distanceSpinner = findViewById(R.id.distance_spinner);
-        TextView predictedTime = findViewById(R.id.predicted_time);
         distanceSpinner.setSelection(0);
         predictedTime.setText("");
-    }
-
-    private int getIndex(Spinner spinner, String value) {
-        for (int i = 0; i < spinner.getCount(); i++) {
-            if (spinner.getItemAtPosition(i).toString().equalsIgnoreCase(value)) {
-                return i;
-            }
-        }
-        return 0;
+        predictedTimeLabel.setText("");
     }
 
     public void onClickPredict(View view) {
-        Spinner distanceSpinner = findViewById(R.id.distance_spinner);
         String selectedDistance = distanceSpinner.getSelectedItem().toString();
         predictRaceTime(selectedDistance);
     }
 
     private void predictRaceTime(String distance) {
-        float distanceInKm = convertDistanceToFloat(distance);
-        ResultsPredictionRequestData resultPredictionData = new ResultsPredictionRequestData(distanceInKm);
+        String distanceWithoutK = distance.replace("k", "");
+        ResultsPredictionRequestData resultPredictionData = new ResultsPredictionRequestData(distanceWithoutK);
 
         APIClientWithInterceptorForTokens.getAPIClient(ResultsPredictActivity.this)
                 .create(APIInterfaceWithInterceptorForTokens.class)
@@ -86,10 +80,9 @@ public class ResultsPredictActivity extends AppCompatActivity {
                     public void onResponse(Call<ResultsPredictionResponseData> call, Response<ResultsPredictionResponseData> response) {
                         if (response.code() == HttpURLConnection.HTTP_OK) {
                             if (response.body() != null) {
-                                TextView predictedTime = findViewById(R.id.predicted_time);
-
                                 String predictedTimeText = response.body().getRace_result();
                                 predictedTime.setText(predictedTimeText);
+                                predictedTimeLabel.setText(R.string.predicted_time_according_to_races_in_serbia);
                             } else {
                                 Toast.makeText(ResultsPredictActivity.this, "Empty response", Toast.LENGTH_LONG).show();
                             }
@@ -117,10 +110,5 @@ public class ResultsPredictActivity extends AppCompatActivity {
                     }
 
                 });
-    }
-
-    private float convertDistanceToFloat(String distance) {
-        String distanceWithoutK = distance.replace("k", "");
-        return Float.parseFloat(distanceWithoutK);
     }
 }

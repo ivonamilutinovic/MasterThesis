@@ -39,8 +39,6 @@ def predict_next_race_time(runner_name: str, race_distance: float) -> Optional[s
 
     df['error'] = df['total_time'] - df['EWMA_prediction']
 
-    # print(df)
-
     next_race_prediction = df['EWMA_total_time'].iloc[-1]
     hours = int(next_race_prediction // 3600)
     minutes = int((next_race_prediction % 3600) // 60)
