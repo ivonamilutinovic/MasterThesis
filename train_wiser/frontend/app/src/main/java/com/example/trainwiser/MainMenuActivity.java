@@ -108,19 +108,14 @@ public class MainMenuActivity extends AppCompatActivity {
             }
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
-
-                int a=1;
                 logout_user();
             }
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
-                int a=1;
                 logout_user();
             }
         });
-        token = APIUtils.getAccessToken(getApplicationContext());
-        String a = token;
     }
 
     public void onClickSwitchResultsPredictionScreen(View view) {
@@ -128,9 +123,8 @@ public class MainMenuActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void onClickSwitchTrainingLog(View view) {
-        // todo: implement all
-        Intent intent = new Intent(MainMenuActivity.this, LoginActivity.class);
+    public void onClickSwitchToTrainingStats(View view) {
+        Intent intent = new Intent(MainMenuActivity.this, TrainingStatsActivity.class);
         startActivity(intent);
     }
 }

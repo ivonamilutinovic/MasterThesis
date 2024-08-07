@@ -73,7 +73,7 @@ tools:context=".MainMenuActivity">
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@+id/buttonPrediction"
         app:layout_constraintTop_toBottomOf="@id/spacer2"
-        android:onClick="onClickSwitchTrainingLog"/>
+        android:onClick="onClickSwitchToTrainingStats"/>
 
     <Space
         android:id="@+id/spacer2"

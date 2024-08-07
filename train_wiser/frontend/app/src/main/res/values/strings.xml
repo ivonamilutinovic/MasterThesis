@@ -2,7 +2,7 @@
     <string name="app_name">Train Wiser</string>
     <string name="title_activity_aipersonal_trainer">AIPersonalTrainerActivity</string>
     <string name="ai_personal_trainer">AI Personal trainer</string>
-    <string name="predict_your_results">Predict your results</string>
+    <string name="predict_your_results">Predict your race results</string>
     <string name="signup_on_login_activity">IF YOU DON\'T HAVE AN ACCOUNT,\nCLICK HERE TO JOIN</string>
     <string name="log_in_text">LOG IN</string>
     <string name="last_name">Last name</string>
@@ -22,7 +22,7 @@
     <string name="delete_your_account">DELETE YOUR ACCOUNT</string>
     <string name="background">background</string>
     <string name="default_password_text">********</string>
-    <string name="monthly_training_log">Monthly training log</string>
+    <string name="monthly_training_log">Training statistics</string>
     <string name="predict_button_text">Predict race time</string>
     <string name="predicted_time_according_to_races_in_serbia">Predicted time according to\nyour race results in Serbia:</string>
     <string name="predict_race_time">PREDICT RACE TIME</string>
