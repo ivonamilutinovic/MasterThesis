@@ -19,7 +19,8 @@ class TrainingStatsAPIView(APIView):
         weekly_data = {}
         for week in weeks:
             week_activities = activities.filter(start_date__week=week)
-            activities_list = list(week_activities.values('activity_type', 'distance', 'moving_time', 'average_heartrate_zone'))
+            activities_list = list(week_activities.values('activity_type', 'distance', 'moving_time',
+                                                          'average_heartrate_zone', 'start_date'))
 
             summary = week_activities.values('activity_type').annotate(
                 total_duration=Sum('moving_time'),
@@ -32,6 +33,7 @@ class TrainingStatsAPIView(APIView):
                     {**activity,
                      'distance': round(activity['distance'], 2) if activity['distance'] else 0,
                      'duration': activity['moving_time'],
+                     'start_date': activity['start_date'].date()
                     } for activity in activities_list
                 ],
                 'summary': {

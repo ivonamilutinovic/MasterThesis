@@ -28,6 +28,9 @@ public class TrainingStatsResponseData {
 
         @SerializedName("average_heartrate_zone")
         public int averageHeartrateZone;
+
+        @SerializedName("start_date")
+        public String startDate;
     }
 
     public static class ActivitySummary {
