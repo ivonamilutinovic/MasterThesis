@@ -144,6 +144,8 @@ public class TrainingsSuggestionsActivity extends AppCompatActivity {
     }
 
 //    private void displayTrainingSuggestions(List<List<List<TrainingResponseData>>> trainingSuggestions) {
+//        String activityEmoji;
+//
 //        tableTrainings.removeAllViews();
 //
 //        // Create header row
@@ -173,15 +175,16 @@ public class TrainingsSuggestionsActivity extends AppCompatActivity {
 //            for (List<TrainingResponseData> day : week) {
 //                TextView dayLabel = new TextView(this);
 //                if (day.size() == 1 && day.get(0).getActivityType().equals("Rest day")) {
-//                    dayLabel.setText("🏖️ Rest day");
+//                    Utils.getActivityEmoji(getApplicationContext(), "RestDay");
 //                } else {
 //                    StringBuilder dayText = new StringBuilder();
 //                    for (TrainingResponseData training : day) {
-//                        dayText.append(training.getActivityType())
-//                                .append(" - ")
-//                                .append("Distance: ").append(training.getDistance()).append("km, ")
-//                                .append("Duration: ").append(training.getDuration() / 60).append("min, ")
-//                                .append("HR Zone: ").append(training.getAverageHeartrateZone())
+//                        activityEmoji = Utils.getActivityEmoji(getApplicationContext(), training.getActivityType());
+//                        dayText.append(activityEmoji)
+//                                .append(training.getDistance()).append("km, ")
+//                                .append(training.getDuration()).append(", ")
+//                                .append("Z")
+//                                .append(training.getAverageHeartrateZone())
 //                                .append("\n");
 //                    }
 //                    dayLabel.setText(dayText.toString().trim());
@@ -194,19 +197,17 @@ public class TrainingsSuggestionsActivity extends AppCompatActivity {
 //    }
 
     private void displayTrainingSuggestions(List<List<List<TrainingResponseData>>> trainingSuggestions) {
+        String activityEmoji;
+
         tableTrainings.removeAllViews();
 
         // Create header row
         TableRow headerRow = new TableRow(this);
-        TextView headerWeeks = new TextView(this);
-        headerWeeks.setText("Weeks\\Days");
-        headerWeeks.setPadding(8, 8, 8, 8);
+        TextView headerWeeks = createTextView("Weeks\\Days", true);
         headerRow.addView(headerWeeks);
 
         for (int i = 1; i <= 7; i++) {
-            TextView headerDay = new TextView(this);
-            headerDay.setText("Day " + i);
-            headerDay.setPadding(8, 8, 8, 8);
+            TextView headerDay = createTextView("Day " + i, true);
             headerRow.addView(headerDay);
         }
         tableTrainings.addView(headerRow);
@@ -214,33 +215,46 @@ public class TrainingsSuggestionsActivity extends AppCompatActivity {
         for (int weekIndex = 0; weekIndex < trainingSuggestions.size(); weekIndex++) {
             TableRow weekRow = new TableRow(this);
 
-            TextView weekLabel = new TextView(this);
-            weekLabel.setText("Week " + (weekIndex + 1));
-            weekLabel.setPadding(8, 8, 8, 8);
+            TextView weekLabel = createTextView("Week " + (weekIndex + 1), true);
             weekRow.addView(weekLabel);
-
+            weekLabel.setHeight(150);
             List<List<TrainingResponseData>> week = trainingSuggestions.get(weekIndex);
             for (List<TrainingResponseData> day : week) {
-                TextView dayLabel = new TextView(this);
-                if (day.size() == 1 && day.get(0).getActivityType().equals("Rest day")) {
-                    dayLabel.setText(Utils.activityEmojisMap.get("RestDay") + "️ Rest day");
+                TextView dayLabel = createTextView("", false);
+                dayLabel.setHeight(170);
+                if (day.size() == 1 && day.get(0).getActivityType().equals("RestDay")) {
+                    activityEmoji = Utils.getActivityEmoji(getApplicationContext(), "RestDay");
+                    dayLabel.setText(activityEmoji);
                 } else {
                     StringBuilder dayText = new StringBuilder();
                     for (TrainingResponseData training : day) {
-                        dayText.append(training.getActivityType())
+                        activityEmoji = Utils.getActivityEmoji(getApplicationContext(), training.getActivityType());
+                        dayText.append(activityEmoji)
                                 .append(training.getDistance()).append("km, ")
-                                .append(training.getDurationTimeFormat()).append(", ")
-                                .append("Z")
-                                .append(training.getAverageHeartrateZone())
+                                .append(Utils.secondsInFormatedTime(training.getDuration()))
+                                .append(", Z").append(training.getAverageHeartrateZone())
                                 .append("\n");
                     }
                     dayLabel.setText(dayText.toString().trim());
                 }
-                dayLabel.setPadding(8, 8, 8, 8);
                 weekRow.addView(dayLabel);
             }
+
             tableTrainings.addView(weekRow);
         }
     }
+
+    private TextView createTextView(String text, boolean isHeader) {
+        TextView textView = new TextView(this);
+        textView.setText(text);
+        textView.setPadding(8, 8, 8, 8);
+        textView.setBackgroundResource(R.drawable.table_border);
+        if (isHeader) {
+            textView.setTypeface(null, android.graphics.Typeface.BOLD);
+        }
+        return textView;
+    }
+
+
 }
 

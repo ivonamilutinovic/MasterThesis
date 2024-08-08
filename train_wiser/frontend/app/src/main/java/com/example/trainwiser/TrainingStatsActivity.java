@@ -146,17 +146,16 @@ public class TrainingStatsActivity extends AppCompatActivity {
 
             sb.append("Activities:\n");
             for (TrainingStatsResponseData.Activity activity : weekSummary.activities) {
+                String activityEmoji = Utils.getActivityEmoji(getApplicationContext(), activity.activityType);
                 if (!activity.activityType.equals("WeightTraining")){
-                    String activityEmoji = Utils.activityEmojisMap.getOrDefault(activity.activityType, "");
                     sb.append(activityEmoji).append(" :")
                             .append("Distance: ").append(activity.distance).append(" km, ")
-                            .append("Duration: ").append(formatDuration(activity.duration)).append(" , ")
+                            .append("Duration: ").append(Utils.secondsInFormatedTime(activity.duration)).append(" , ")
                             .append("Date: ").append(activity.startDate).append(" , ")
                             .append("Avg HR Zone: ").append(activity.averageHeartrateZone).append("\n");
                 }else{
-                    String activityEmoji = Utils.activityEmojisMap.getOrDefault(activity.activityType, "");
                     sb.append(activityEmoji).append(" :")
-                            .append("Duration: ").append(formatDuration(activity.duration)).append(" , ")
+                            .append("Duration: ").append(Utils.secondsInFormatedTime(activity.duration)).append(" , ")
                             .append("Date: ").append(activity.startDate).append(" , ")
                             .append("Avg HR Zone: ").append(activity.averageHeartrateZone).append("\n");
                 }
@@ -166,7 +165,7 @@ public class TrainingStatsActivity extends AppCompatActivity {
             for (String activityType : weekSummary.summary.keySet()) {
                 TrainingStatsResponseData.ActivitySummary summary = weekSummary.summary.get(activityType);
                 sb.append(activityType).append(": ")
-                        .append("Total Duration: ").append(formatDuration(summary.totalDuration)).append(" , ")
+                        .append("Total Duration: ").append(Utils.secondsInFormatedTime(summary.totalDuration)).append(" , ")
                         .append("Total Distance: ").append(summary.totalDistance).append(" km, ")
                         .append("Avg HR Zone: ").append(summary.averageHeartrateZone).append("\n");
             }
@@ -176,15 +175,4 @@ public class TrainingStatsActivity extends AppCompatActivity {
         textView.setText(sb.toString());
     }
 
-    private static String formatDuration(Integer seconds) {
-        if (seconds == null)
-            return "00:00:00";
-
-        int hours = seconds / 3600;
-        int remainder = seconds % 3600;
-        int minutes = remainder / 60;
-        seconds = remainder % 60;
-
-        return String.format(Locale.US, "%02d:%02d:%02d", hours, minutes, seconds);
-    }
 }

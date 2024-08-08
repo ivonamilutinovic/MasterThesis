@@ -36,10 +36,6 @@ public class TrainingResponseData {
         return duration;
     }
 
-    public int getDurationTimeFormat() {
-        return duration;
-    }
-
     public void setDuration(int duration) {
         this.duration = duration;
     }

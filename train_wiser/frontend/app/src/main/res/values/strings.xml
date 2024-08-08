@@ -31,10 +31,10 @@
     <string name="next_road_race_distance">Your next road race distance:</string>
     <string name="race_goal_time">Goal time:</string>
     <string name="race_distance">Race distance:</string>
-    <string name="year">Year: </string>
+    <string name="year">Year:     </string>
     <string name="month">"Month: "</string>
     <string name="hh_mm_ss">hh:mm:ss</string>
-    <string name="suggest_trainings">Suggest Trainings</string>
+    <string name="suggest_trainings">Get training plan</string>
     <string name="username_label">Username:</string>
     <string name="email_label">E-mail:</string>
     <string-array name="race_distances">
@@ -45,11 +45,11 @@
         <item>21k</item>
         <item>42k</item>
     </string-array>
-    <resources>
-        <string name="run_activity">🏃</string>
-        <string name="ride_activity">🚲</string>
-        <string name="swim_activity">🏊</string>
-        <string name="weight_training_activity">🏋</string>
-        <string name="rest_day_activity">🏖 Rest day</string>
-    </resources>
+    <string name="run_emoji">🏃</string>
+    <string name="ride_emoji">🚲</string>
+    <string name="swim_emoji">🏊</string>
+    <string name="weight_training_emoji">🏋</string>
+    <string name="rest_day_emoji">🏖 Rest day</string>
+    <string name="empty_training">Error</string>
+    <string name="statistics">Statistics</string>
 </resources>
