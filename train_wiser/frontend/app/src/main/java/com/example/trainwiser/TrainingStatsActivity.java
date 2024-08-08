@@ -130,7 +130,6 @@ public class TrainingStatsActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<TrainingStatsResponseData> call, Throwable t) {
-                        int a = 1;
 
                     }
 
@@ -141,12 +140,6 @@ public class TrainingStatsActivity extends AppCompatActivity {
     private void displayData(TrainingStatsResponseData trainingSummary) {
         StringBuilder sb = new StringBuilder();
 
-        Map<String, String> activityEmojisMap = new HashMap<>();
-        activityEmojisMap.put("Run", "\uD83C\uDFC3"); // 🏃
-        activityEmojisMap.put("Ride", "\uD83D\uDEB2"); // 🚲
-        activityEmojisMap.put("Swim", "\uD83C\uDFCA"); // 🏊
-        activityEmojisMap.put("WeightTraining", "\uD83C\uDFCB"); // 🏋
-
         for (String week : trainingSummary.trainingWeeks.keySet()) {
             sb.append("Week: ").append(week).append("\n");
             TrainingStatsResponseData.WeekSummary weekSummary = trainingSummary.trainingWeeks.get(week);
@@ -154,14 +147,14 @@ public class TrainingStatsActivity extends AppCompatActivity {
             sb.append("Activities:\n");
             for (TrainingStatsResponseData.Activity activity : weekSummary.activities) {
                 if (!activity.activityType.equals("WeightTraining")){
-                    String activityEmoji = activityEmojisMap.getOrDefault(activity.activityType, "");
+                    String activityEmoji = Utils.activityEmojisMap.getOrDefault(activity.activityType, "");
                     sb.append(activityEmoji).append(" :")
                             .append("Distance: ").append(activity.distance).append(" km, ")
                             .append("Duration: ").append(formatDuration(activity.duration)).append(" , ")
                             .append("Date: ").append(activity.startDate).append(" , ")
                             .append("Avg HR Zone: ").append(activity.averageHeartrateZone).append("\n");
                 }else{
-                    String activityEmoji = activityEmojisMap.getOrDefault(activity.activityType, "");
+                    String activityEmoji = Utils.activityEmojisMap.getOrDefault(activity.activityType, "");
                     sb.append(activityEmoji).append(" :")
                             .append("Duration: ").append(formatDuration(activity.duration)).append(" , ")
                             .append("Date: ").append(activity.startDate).append(" , ")

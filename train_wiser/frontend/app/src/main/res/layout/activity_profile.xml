@@ -33,12 +33,14 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <!-- Username Label -->
             <TextView
                 android:id="@+id/usernameLabel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Username"
+                android:text="@string/username_label"
+                android:fontFamily="@font/alata"
+                android:textStyle="bold"
+                android:textColor="@color/for_text_on_labels_darker"
                 android:textSize="18sp"
                 android:layout_marginBottom="8dp" />
 
@@ -55,12 +57,14 @@
                     android:textSize="18sp"/>
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- Email Label -->
             <TextView
                 android:id="@+id/userEmailLabel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Email"
+                android:text="@string/email_label"
+                android:fontFamily="@font/alata"
+                android:textStyle="bold"
+                android:textColor="@color/for_text_on_labels_darker"
                 android:textSize="18sp"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="8dp" />
@@ -84,7 +88,10 @@
                 android:id="@+id/usernameFirstNameLabel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="First Name"
+                android:fontFamily="@font/alata"
+                android:textStyle="bold"
+                android:textColor="@color/for_text_on_labels_darker"
+                android:text="First name:"
                 android:textSize="18sp"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="8dp" />
@@ -108,7 +115,10 @@
                 android:id="@+id/usernameLastNameLabel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Last Name"
+                android:fontFamily="@font/alata"
+                android:textStyle="bold"
+                android:textColor="@color/for_text_on_labels_darker"
+                android:text="Last name:"
                 android:textSize="18sp"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="8dp" />
@@ -132,7 +142,10 @@
                 android:id="@+id/userPasswordLabel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Password"
+                android:text="Password:"
+                android:fontFamily="@font/alata"
+                android:textStyle="bold"
+                android:textColor="@color/for_text_on_labels_darker"
                 android:textSize="18sp"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="8dp" />
@@ -157,7 +170,10 @@
                 android:id="@+id/usernameBirthDateLabel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Birth Date"
+                android:text="Birth Date:"
+                android:fontFamily="@font/alata"
+                android:textStyle="bold"
+                android:textColor="@color/for_text_on_labels_darker"
                 android:textSize="18sp"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="8dp" />

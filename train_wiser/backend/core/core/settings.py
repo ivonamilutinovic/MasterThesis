@@ -49,7 +49,7 @@ INSTALLED_APPS = [
     "users.apps.UsersConfig",
     "results_predictor.apps.ResultsPredictorConfig",
     "stats.apps.StatsConfig",
-    "activities.apps.ActivitiesConfig",
+    "trainings.apps.TrainingsConfig",
 ]
 
 MIDDLEWARE = [
@@ -150,7 +150,7 @@ REST_FRAMEWORK = {
 
 OAUTH2_PROVIDER = {
     'OAUTH2_BACKEND_CLASS': 'oauth2_provider.oauth2_backends.JSONOAuthLibCore',
-    'ACCESS_TOKEN_EXPIRE_SECONDS': 36000
+    'ACCESS_TOKEN_EXPIRE_SECONDS': 36000  # todo: 7200
 }
 
 # todo: update :)

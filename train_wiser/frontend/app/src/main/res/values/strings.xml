@@ -2,14 +2,15 @@
     <string name="app_name">Train Wiser</string>
     <string name="title_activity_aipersonal_trainer">AIPersonalTrainerActivity</string>
     <string name="ai_personal_trainer">AI Personal trainer</string>
+    <string name="race_training_plan">Race training plan</string>
     <string name="predict_your_results">Predict your race results</string>
     <string name="signup_on_login_activity">IF YOU DON\'T HAVE AN ACCOUNT,\nCLICK HERE TO JOIN</string>
     <string name="log_in_text">LOG IN</string>
     <string name="last_name">Last name</string>
-    <string name="birth_date">Birth date (in YYYY-MM-DD format)</string>
-    <string name="first_name">First Name</string>
+    <string name="birth_date">Birth date <i>(YYYY-MM-DD format)</i></string>
+    <string name="first_name">First name</string>
     <string name="sign_up">SIGN UP</string>
-    <string name="email">Email</string>
+    <string name="email">E-mail</string>
     <string name="password">Password</string>
     <string name="confirm_password">Confirm password</string>
     <string name="username">Username</string>
@@ -28,6 +29,14 @@
     <string name="predict_race_time">PREDICT RACE TIME</string>
     <string name="next_road_race_dist">Your next road race distance:</string>
     <string name="next_road_race_distance">Your next road race distance:</string>
+    <string name="race_goal_time">Goal time:</string>
+    <string name="race_distance">Race distance:</string>
+    <string name="year">Year: </string>
+    <string name="month">"Month: "</string>
+    <string name="hh_mm_ss">hh:mm:ss</string>
+    <string name="suggest_trainings">Suggest Trainings</string>
+    <string name="username_label">Username:</string>
+    <string name="email_label">E-mail:</string>
     <string-array name="race_distances">
         <item>5k</item>
         <item>7k</item>
@@ -36,5 +45,11 @@
         <item>21k</item>
         <item>42k</item>
     </string-array>
-
+    <resources>
+        <string name="run_activity">🏃</string>
+        <string name="ride_activity">🚲</string>
+        <string name="swim_activity">🏊</string>
+        <string name="weight_training_activity">🏋</string>
+        <string name="rest_day_activity">🏖 Rest day</string>
+    </resources>
 </resources>

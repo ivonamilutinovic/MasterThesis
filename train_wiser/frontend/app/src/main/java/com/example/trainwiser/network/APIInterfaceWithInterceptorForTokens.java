@@ -4,7 +4,9 @@ import com.example.trainwiser.network.api_models.account.AccountDataResponse;
 import com.example.trainwiser.network.api_models.results_prediction.ResultsPredictionRequestData;
 import com.example.trainwiser.network.api_models.results_prediction.ResultsPredictionResponseData;
 import com.example.trainwiser.network.api_models.stats.TrainingStatsResponseData;
+import com.example.trainwiser.network.api_models.trainings.TrainingResponseData;
 
+import java.util.List;
 import java.util.Map;
 
 import retrofit2.Call;
@@ -14,6 +16,7 @@ import retrofit2.http.GET;
 import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface APIInterfaceWithInterceptorForTokens {
     @GET("users/me/")
@@ -34,12 +37,9 @@ public interface APIInterfaceWithInterceptorForTokens {
             @Path("month") int month
     );
 
-
-//    @GET("api/training/")
-//    Call<MonthlyStatsResponse> getMonthlyStats(Float race_distance, Integer goal_in_seconds);
-
-
-//    @GET("api/stats/")
-//    Call<MonthlyStatsResponse> getMonthlyStats(@Path("month") String month);
-
+    @GET("trainings/")
+    Call<List<List<List<TrainingResponseData>>>> getTrainingSuggestions(
+            @Query("goal_time") int goalTime,
+            @Query("race_distance") float raceDistance
+    );
 }

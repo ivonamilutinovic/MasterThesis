@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".TrainingsSuggestionsActivity">
+
+  <LinearLayout
+      android:id="@+id/controls_layout"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal"
+      android:padding="16dp">
+
+    <LinearLayout
+        android:id="@+id/layout_race_distance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginEnd="16dp">
+
+      <TextView
+          android:id="@+id/label_race_distance"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/race_distance"
+          android:textSize="16sp" />
+
+      <EditText
+          android:id="@+id/editText_race_distance"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:inputType="numberDecimal" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_goal_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginEnd="16dp">
+
+      <TextView
+          android:id="@+id/label_goal_time"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/race_goal_time"
+          android:textSize="16sp" />
+
+      <EditText
+          android:id="@+id/editText_goal_time"
+          android:layout_width="wrap_content"
+          android:layout_height="match_parent"
+          android:inputType="number"
+          android:hint="@string/hh_mm_ss" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/button_suggest_trainings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/suggest_trainings"
+        android:onClick="onClickTrainingSuggestions" />
+  </LinearLayout>
+
+
+  <ScrollView
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_below="@id/controls_layout">
+
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+      <TableLayout
+          android:id="@+id/tableTrainings"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:padding="16dp" />
+    </HorizontalScrollView>
+  </ScrollView>
+
+</RelativeLayout>

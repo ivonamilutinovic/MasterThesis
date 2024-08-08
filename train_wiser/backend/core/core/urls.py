@@ -24,7 +24,7 @@ urlpatterns = [
     path('api/users/', include('users.urls')),
     path('api/results_prediction/', include('results_predictor.urls')),
     path('api/stats/', include('stats.urls')),
-    # path('api/activities/', include('activities.urls')),
+    path('api/trainings/', include('trainings.urls')),
     path('o/', include(oauth2_urls)),
 ]
 

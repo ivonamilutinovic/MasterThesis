@@ -6,7 +6,8 @@
     <color name="negative_option_for_buttons">#c3a788</color>
     <color name="delete_account_button">#b3987b</color>
     <color name="for_text_on_buttons">#9E7A68</color>
-    <color name="for_text_on_labels_darker">#8c6a5a</color>
+    <color name="for_text_on_labels_dark">#7c5e50</color>
+    <color name="for_text_on_labels_darker">#5d463c</color>
     <color name="for_text_on_negative_buttons">#ddcdbb</color>
     <color name="text_on_delete_account_button">#ccb399</color>
 </resources>

@@ -47,8 +47,18 @@ public class MainMenuActivity extends AppCompatActivity {
         }
     }
 
-    public void onClickSwitchToAIPersonalTrainerScreen(View view) {
-        Intent intent = new Intent(MainMenuActivity.this, AIPersonalTrainerActivity.class);
+    public void onClickSwitchToTrainingSuggestions(View view) {
+        Intent intent = new Intent(MainMenuActivity.this, TrainingsSuggestionsActivity.class);
+        startActivity(intent);
+    }
+
+    public void onClickSwitchToResultsPredictionScreen(View view) {
+        Intent intent = new Intent(MainMenuActivity.this, ResultsPredictActivity.class);
+        startActivity(intent);
+    }
+
+    public void onClickSwitchToTrainingStats(View view) {
+        Intent intent = new Intent(MainMenuActivity.this, TrainingStatsActivity.class);
         startActivity(intent);
     }
 
@@ -118,13 +128,4 @@ public class MainMenuActivity extends AppCompatActivity {
         });
     }
 
-    public void onClickSwitchResultsPredictionScreen(View view) {
-        Intent intent = new Intent(MainMenuActivity.this, ResultsPredictActivity.class);
-        startActivity(intent);
-    }
-
-    public void onClickSwitchToTrainingStats(View view) {
-        Intent intent = new Intent(MainMenuActivity.this, TrainingStatsActivity.class);
-        startActivity(intent);
-    }
 }

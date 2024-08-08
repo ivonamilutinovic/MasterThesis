@@ -22,7 +22,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Year: "
+                android:text="@string/year"
                 android:textSize="16sp" />
 
             <Spinner
@@ -40,7 +40,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Month: "
+                android:text="@string/month"
                 android:textSize="16sp" />
 
             <Spinner
