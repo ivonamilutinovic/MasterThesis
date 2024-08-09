@@ -21,13 +21,13 @@ public class TrainingStatsResponseData {
         public String activityType;
 
         @SerializedName("distance")
-        public float distance;
+        public Float distance;
 
         @SerializedName("duration")
-        public int duration;
+        public Integer duration;
 
         @SerializedName("average_heartrate_zone")
-        public int averageHeartrateZone;
+        public Integer averageHeartrateZone;
 
         @SerializedName("start_date")
         public String startDate;
@@ -35,13 +35,13 @@ public class TrainingStatsResponseData {
 
     public static class ActivitySummary {
         @SerializedName("total_duration")
-        public int totalDuration;
+        public Integer totalDuration;
 
         @SerializedName("total_distance")
-        public float totalDistance;
+        public Float totalDistance;
 
         @SerializedName("average_heartrate_zone")
-        public int averageHeartrateZone;
+        public Integer averageHeartrateZone;
     }
 
     public TrainingStatsResponseData(Map<String, WeekSummary> trainingWeeks) {

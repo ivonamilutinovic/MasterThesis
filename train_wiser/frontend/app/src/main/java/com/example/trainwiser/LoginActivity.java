@@ -52,9 +52,9 @@ public class LoginActivity extends AppCompatActivity {
                 GlobalAPIAccessData.getClientSecret(),
                 grant_type);
 
-        String accessToken = APIUtils.getAccessToken(getApplicationContext());
-        String refreshToken = APIUtils.getRefreshToken(getApplicationContext());
-        long expiresAt = APIUtils.getExpiresAt(getApplicationContext());
+//        String accessToken = APIUtils.getAccessToken(getApplicationContext());
+//        String refreshToken = APIUtils.getRefreshToken(getApplicationContext());
+//        long expiresAt = APIUtils.getExpiresAt(getApplicationContext());
 
         Oauth2RetrofitClient.getOauth2Client().create(Oauth2Interface.class).loginUser(loginRequestData).enqueue(new Callback<LoginResponseData>() {
             @Override

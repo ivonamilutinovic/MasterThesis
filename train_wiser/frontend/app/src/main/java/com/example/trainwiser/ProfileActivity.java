@@ -87,7 +87,7 @@ public class ProfileActivity extends AppCompatActivity {
         }
 
         String newPassword = editTextPassword.getText().toString();
-        if (!newPassword.equals(R.string.default_password_text)) {
+        if (!newPassword.equals("********")) {
             profileUpdates.put("password", newPassword);
         }
 
@@ -124,6 +124,12 @@ public class ProfileActivity extends AppCompatActivity {
                             profile.setEmail(accountData.getEmail());
                             profile.setUsername(accountData.getUsername());
                             profile.setStrava_athlete_id(accountData.getStrava_athlete_id());
+
+                            Toast.makeText(ProfileActivity.this, "Profile data successfully changed.",
+                                    Toast.LENGTH_LONG).show();
+
+                            Intent intent = new Intent(ProfileActivity.this, MainMenuActivity.class);
+                            startActivity(intent);
                         }
                         else{
                             ResponseBody errorBody = response.errorBody();
@@ -134,8 +140,7 @@ public class ProfileActivity extends AppCompatActivity {
                                 } catch (Exception ignored) {
                                 }
                             }
-                            Toast.makeText(ProfileActivity.this, "Error happen during profile updating. " +
-                                    "Error code: " + response.code() + " (" + errorText + ")",
+                            Toast.makeText(ProfileActivity.this, "Error code: " + response.code() + " (" + errorText + ")",
                                     Toast.LENGTH_LONG).show();
                         }
                     }

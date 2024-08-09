@@ -29,15 +29,6 @@ class UserRegister(APIView):
         return Response(data={"error": "User is already authenticated"}, status=status.HTTP_403_FORBIDDEN)
 
 
-# class UserAccount(generics.RetrieveUpdateDestroyAPIView):
-#     queryset = CustomUser.objects.all()
-#     serializer_class = UserAccountSerializer
-#
-#     def get_object(self):
-#         username = self.kwargs['username']
-#         return CustomUser.objects.get(username=username)
-
-
 class UserAccount(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = UserAccountSerializer
     permission_classes = [IsAuthenticated]

@@ -91,12 +91,15 @@ public class MainMenuActivity extends AppCompatActivity {
                 // upisati access token ka stravi i strava id u profile klasu
                 // profile.setStravaId();
 
-                button.setText(R.string.strava_account_connected);
-                button.setClickable(false);
-                button.setBackgroundColor(getResources().getColor(R.color.negative_option_for_buttons, getTheme()));
-                button.setTextColor(getResources().getColor(R.color.for_text_on_negative_buttons, getTheme()));
+                boolean connectionWithStravaSucceeded = true;
+                if (connectionWithStravaSucceeded) {
+                    button.setText(R.string.strava_account_connected);
+                    button.setClickable(false);
+                    button.setBackgroundColor(getResources().getColor(R.color.negative_option_for_buttons, getTheme()));
+                    button.setTextColor(getResources().getColor(R.color.for_text_on_negative_buttons, getTheme()));
+                }
             } else {
-                Toast.makeText(MainMenuActivity.this, "Error happen during Strava authorization", Toast.LENGTH_LONG).show();
+                Toast.makeText(MainMenuActivity.this, "Error during Strava authorization", Toast.LENGTH_LONG).show();
             }
         }
     }
