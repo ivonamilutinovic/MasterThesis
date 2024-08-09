@@ -12,7 +12,7 @@ from .predict_results import predict_next_race_time, \
 class ResultPredictor(APIView):
     permission_classes = [IsAuthenticated]
 
-    def post(self, request):
+    def get(self, request):
         race_distance = request.query_params.get('race_distance')
         if type(race_distance) != str:
             return Response({'error': 'Invalid type of race distance'}, status=status.HTTP_400_BAD_REQUEST)

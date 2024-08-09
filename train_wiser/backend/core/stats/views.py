@@ -1,12 +1,10 @@
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from datetime import datetime, timedelta
-from django.http import JsonResponse
-
 from django.db.models import Sum, Avg
 from strava_gateway.models import StravaActivity
-import datetime
+from datetime import datetime, timedelta
+import calendar
 
 
 class TrainingStatsAPIView(APIView):
@@ -47,10 +45,16 @@ class TrainingStatsAPIView(APIView):
 
         return Response({'training_weeks': weekly_data})
 
+
 def get_weeks_covered_by_month(year, month):
-    start_date = datetime.datetime(year, month, 1)
-    end_date = start_date + datetime.timedelta(days=31)
-    end_date = end_date.replace(day=1) - datetime.timedelta(days=1)
+    first_day_of_month = datetime(year, month, 1)
+    last_day_of_month = datetime(year, month, calendar.monthrange(year, month)[1])
+
+    # Start from the Monday of the week containing the first day of the month
+    start_date = first_day_of_month - timedelta(days=first_day_of_month.weekday())
+    # End on the Sunday of the week containing the last day of the month
+    end_date = last_day_of_month + timedelta(days=(6 - last_day_of_month.weekday()))
+
     start_week = start_date.isocalendar()[1]
     end_week = end_date.isocalendar()[1]
     return list(range(start_week, end_week + 1))
