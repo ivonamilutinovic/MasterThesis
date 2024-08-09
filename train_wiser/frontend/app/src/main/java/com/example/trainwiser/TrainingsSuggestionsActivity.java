@@ -217,11 +217,11 @@ public class TrainingsSuggestionsActivity extends AppCompatActivity {
 
             TextView weekLabel = createTextView("Week " + (weekIndex + 1), true);
             weekRow.addView(weekLabel);
-            weekLabel.setHeight(150);
+            weekLabel.setHeight(200);
             List<List<TrainingResponseData>> week = trainingSuggestions.get(weekIndex);
             for (List<TrainingResponseData> day : week) {
                 TextView dayLabel = createTextView("", false);
-                dayLabel.setHeight(170);
+                dayLabel.setHeight(200);
                 if (day.size() == 1 && day.get(0).getActivityType().equals("RestDay")) {
                     activityEmoji = Utils.getActivityEmoji(getApplicationContext(), "RestDay");
                     dayLabel.setText(activityEmoji);
@@ -254,7 +254,5 @@ public class TrainingsSuggestionsActivity extends AppCompatActivity {
         }
         return textView;
     }
-
-
 }
 

@@ -71,11 +71,10 @@ public class ResultsPredictActivity extends AppCompatActivity {
 
     private void predictRaceTime(String distance) {
         String distanceWithoutK = distance.replace("k", "");
-        ResultsPredictionRequestData resultPredictionData = new ResultsPredictionRequestData(distanceWithoutK);
 
         APIClientWithInterceptorForTokens.getAPIClient(ResultsPredictActivity.this)
                 .create(APIInterfaceWithInterceptorForTokens.class)
-                .getResultsPrediction(resultPredictionData).enqueue(new Callback<ResultsPredictionResponseData>() {
+                .getResultsPrediction(distanceWithoutK).enqueue(new Callback<ResultsPredictionResponseData>() {
                     @Override
                     public void onResponse(Call<ResultsPredictionResponseData> call, Response<ResultsPredictionResponseData> response) {
                         if (response.code() == HttpURLConnection.HTTP_OK) {

@@ -28,8 +28,9 @@ public interface APIInterfaceWithInterceptorForTokens {
     @DELETE("users/me/")
     Call<Void> deleteAccount();
 
-    @POST("results_prediction/")
-    Call<ResultsPredictionResponseData> getResultsPrediction(@Body ResultsPredictionRequestData resultsPredictionRequestData);
+    @GET("results_prediction/")
+    Call<ResultsPredictionResponseData> getResultsPrediction(
+            @Query("race_distance") String race_distance);
 
     @GET("stats/{year}/{month}/")
     Call<TrainingStatsResponseData> getMonthlyStats(

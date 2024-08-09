@@ -7,14 +7,18 @@ class TrainingsView(APIView):
     def get(self, request):
         goal_time = request.query_params.get('goal_time')
         race_distance = request.query_params.get('race_distance')
-        if not goal_time or not goal_time.isdigit():
-            return Response({'error': 'Invalid goal_time'}, status=status.HTTP_400_BAD_REQUEST)
+
+        if not goal_time:
+            return Response({'error': 'Race goal time not provided'}, status=status.HTTP_400_BAD_REQUEST)
+        if not goal_time.isdigit():
+            return Response({'error': 'Invalid type of race goal time'}, status=status.HTTP_400_BAD_REQUEST)
 
         if not race_distance:
-            try:
-                float(race_distance)
-            except ValueError:
-                return Response({'error': 'Invalid race_distance'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'Race distance not provided'}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            float(race_distance)
+        except ValueError:
+            return Response({'error': 'Invalid type of race distance'}, status=status.HTTP_400_BAD_REQUEST)
 
         mock_data = [
             [[{'activity_type':'WeightTraining', 'distance': 0, 'duration': 3600, 'average_heartrate_zone': 2},
