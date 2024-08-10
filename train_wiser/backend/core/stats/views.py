@@ -20,9 +20,15 @@ class TrainingStatsAPIView(APIView):
         if not (1 <= month <= 12):
             return Response({'error': "Month must be between 1 and 12."}, status.HTTP_400_BAD_REQUEST)
 
+        if request.user.strava_athlete_id is None:
+            return Response({'error': "Please authenticate your Strava account in order to access training history"},
+                            status.HTTP_400_BAD_REQUEST)
+
         try:
             weeks = get_weeks_covered_by_month(year, month)
-            activities = StravaActivity.objects.filter(start_date__year=year, start_date__week__in=weeks)
+            activities = StravaActivity.objects.filter(athlete_id=request.user.strava_athlete_id,
+                                                       start_date__year=year,
+                                                       start_date__week__in=weeks)
 
             weekly_data = {}
             for week in weeks:

@@ -65,12 +65,12 @@
 
             <Spinner
                 android:id="@+id/spinner_month"
-                android:layout_width="105dp"
+                android:layout_width="85dp"
                 android:layout_height="wrap_content"
-                android:textColor="@color/for_text_on_buttons"
                 android:fontFamily="@font/alata"
-                android:textStyle="bold"
-                android:textSize="17sp" />
+                android:textColor="@color/for_text_on_buttons"
+                android:textSize="17sp"
+                android:textStyle="bold" />
         </LinearLayout>
 
         <Button
