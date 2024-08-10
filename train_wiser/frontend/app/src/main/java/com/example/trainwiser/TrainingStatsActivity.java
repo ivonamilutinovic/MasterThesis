@@ -1,7 +1,5 @@
 package com.example.trainwiser;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -11,10 +9,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.trainwiser.network.APIClientWithInterceptorForTokens;
 import com.example.trainwiser.network.APIInterfaceWithInterceptorForTokens;
@@ -24,9 +19,11 @@ import org.json.JSONObject;
 
 import java.net.HttpURLConnection;
 import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class TrainingStatsActivity extends AppCompatActivity {
     private Spinner spinnerYear, spinnerMonth;
@@ -130,7 +127,7 @@ public class TrainingStatsActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<TrainingStatsResponseData> call, Throwable t) {
-
+                        Utils.onFailureLogging(TrainingStatsActivity.this, t);
                     }
 
                 });

@@ -9,11 +9,11 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.trainwiser.network.APIClientWithInterceptorForTokens;
 import com.example.trainwiser.network.APIInterfaceWithInterceptorForTokens;
-import com.example.trainwiser.network.api_models.stats.TrainingStatsResponseData;
 import com.example.trainwiser.network.api_models.trainings.TrainingResponseData;
 
 import org.json.JSONObject;
@@ -136,7 +136,7 @@ public class TrainingsSuggestionsActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<List<List<List<TrainingResponseData>>>> call, Throwable t) {
-
+                        Utils.onFailureLogging(TrainingsSuggestionsActivity.this, t);
                     }
 
                 });

@@ -14,9 +14,8 @@ class StravaAthlete(models.Model):
     access_token_expires_at = models.PositiveIntegerField()
     access_token = models.CharField(max_length=255)
     refresh_token = models.CharField(max_length=255)
-    # scope_permissions = models.CharField(null=True)
     hr_zones = models.JSONField(null=True)
-    backfill_progress = models.PositiveIntegerField(default=0, null=True)  # TODO: Add description
+    backfill_progress = models.PositiveIntegerField(default=0, null=True)
 
 
 class StravaActivity(models.Model):

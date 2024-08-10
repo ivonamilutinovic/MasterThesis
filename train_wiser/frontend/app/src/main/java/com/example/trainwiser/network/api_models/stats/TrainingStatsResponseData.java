@@ -1,8 +1,9 @@
 package com.example.trainwiser.network.api_models.stats;
 
 import com.google.gson.annotations.SerializedName;
-import java.util.Map;
+
 import java.util.List;
+import java.util.Map;
 
 public class TrainingStatsResponseData {
     @SerializedName("training_weeks")

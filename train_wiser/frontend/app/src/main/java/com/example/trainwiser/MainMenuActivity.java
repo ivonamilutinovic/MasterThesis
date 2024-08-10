@@ -126,6 +126,7 @@ public class MainMenuActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
+                Utils.onFailureLogging(MainMenuActivity.this, t);
                 logout_user();
             }
         });

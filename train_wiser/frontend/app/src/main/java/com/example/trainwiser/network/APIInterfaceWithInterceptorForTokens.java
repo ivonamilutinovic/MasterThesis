@@ -1,7 +1,6 @@
 package com.example.trainwiser.network;
 
 import com.example.trainwiser.network.api_models.account.AccountDataResponse;
-import com.example.trainwiser.network.api_models.results_prediction.ResultsPredictionRequestData;
 import com.example.trainwiser.network.api_models.results_prediction.ResultsPredictionResponseData;
 import com.example.trainwiser.network.api_models.stats.TrainingStatsResponseData;
 import com.example.trainwiser.network.api_models.trainings.TrainingResponseData;
@@ -14,7 +13,6 @@ import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.PATCH;
-import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 

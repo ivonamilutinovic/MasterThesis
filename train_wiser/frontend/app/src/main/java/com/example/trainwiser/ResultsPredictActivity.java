@@ -1,31 +1,17 @@
 package com.example.trainwiser;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
-import androidx.appcompat.app.AppCompatActivity;
-import android.os.Bundle;
-import android.view.View;
 import android.widget.Toast;
 
-import com.example.trainwiser.common.PreferenceType;
-import com.example.trainwiser.common.SharedPreferenceSingleton;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.trainwiser.network.APIClientWithInterceptorForTokens;
 import com.example.trainwiser.network.APIInterfaceWithInterceptorForTokens;
-import com.example.trainwiser.network.Oauth2Interface;
-import com.example.trainwiser.network.Oauth2RetrofitClient;
-import com.example.trainwiser.network.api_models.account.AccountDataResponse;
-import com.example.trainwiser.network.api_models.login.LoginResponseData;
-import com.example.trainwiser.network.api_models.results_prediction.ResultsPredictionRequestData;
 import com.example.trainwiser.network.api_models.results_prediction.ResultsPredictionResponseData;
-import com.example.trainwiser.network.utils.APIKeys;
 
 import org.json.JSONObject;
 
@@ -105,7 +91,7 @@ public class ResultsPredictActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<ResultsPredictionResponseData> call, Throwable t) {
-
+                        Utils.onFailureLogging(ResultsPredictActivity.this, t);
                     }
 
                 });

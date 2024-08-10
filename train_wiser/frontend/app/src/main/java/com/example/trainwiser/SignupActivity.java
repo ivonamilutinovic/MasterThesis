@@ -89,7 +89,7 @@ public class SignupActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<RegisterResponseData> call, Throwable t) {
-
+                Utils.onFailureLogging(SignupActivity.this, t);
             }
         });
     }

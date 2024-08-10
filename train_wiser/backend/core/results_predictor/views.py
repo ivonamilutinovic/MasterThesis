@@ -15,7 +15,8 @@ class ResultPredictor(APIView):
     def get(self, request):
         race_distance = request.query_params.get('race_distance')
         if type(race_distance) != str:
-            return Response({'error': 'Invalid type of race distance'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'Invalid type of race distance. Race distance should be string.'},
+                            status=status.HTTP_400_BAD_REQUEST)
 
         runner_name = translate_to_unidecode_and_remove_spaces((request.user.first_name + request.user.last_name).lower().strip())
         try:

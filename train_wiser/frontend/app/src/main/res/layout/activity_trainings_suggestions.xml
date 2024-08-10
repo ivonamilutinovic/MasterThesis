@@ -42,11 +42,12 @@
           android:textSize="17sp"
           android:textStyle="bold"/>
 
-      <EditText
-          android:id="@+id/editText_race_distance"
+      <Spinner
+          android:id="@+id/distance_spinner"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:inputType="numberDecimal" />
+          android:layout_marginTop="16dp" />
+
     </LinearLayout>
 
     <LinearLayout

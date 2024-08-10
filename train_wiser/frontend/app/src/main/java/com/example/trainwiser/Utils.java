@@ -1,10 +1,13 @@
 package com.example.trainwiser;
 
+import android.content.Context;
+import android.util.Log;
+import android.widget.Toast;
+
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import android.content.Context;
 
 public class Utils {
     public static final Map<String, Integer> activityEmojisMap = new HashMap<>();
@@ -38,4 +41,9 @@ public class Utils {
         return String.format(Locale.US, "%02d:%02d:%02d", hours, minutes, seconds);
     }
 
+    public static void onFailureLogging(Context ctx, Throwable t) {
+        String errorMessage = "Error: " + t.getClass().getSimpleName() + " - " + t.getMessage();
+        Log.e("API Failure", errorMessage);
+        Toast.makeText(ctx, errorMessage, Toast.LENGTH_LONG).show();
+    }
 }

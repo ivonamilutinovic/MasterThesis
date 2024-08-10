@@ -1,12 +1,12 @@
 package com.example.trainwiser;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.trainwiser.common.GlobalAPIAccessData;
 import com.example.trainwiser.common.PreferenceType;
@@ -16,7 +16,6 @@ import com.example.trainwiser.network.Oauth2RetrofitClient;
 import com.example.trainwiser.network.api_models.login.LoginRequestData;
 import com.example.trainwiser.network.api_models.login.LoginResponseData;
 import com.example.trainwiser.network.utils.APIKeys;
-import com.example.trainwiser.network.utils.APIUtils;
 
 import org.json.JSONObject;
 
@@ -100,7 +99,7 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<LoginResponseData> call, Throwable t) {
-
+                Utils.onFailureLogging(LoginActivity.this, t);
             }
         });
     }

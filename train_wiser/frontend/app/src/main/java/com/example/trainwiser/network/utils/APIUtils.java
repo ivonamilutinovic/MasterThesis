@@ -2,7 +2,6 @@ package com.example.trainwiser.network.utils;
 
 import android.content.Context;
 
-import com.example.trainwiser.R;
 import com.example.trainwiser.Utils;
 import com.example.trainwiser.common.PreferenceType;
 import com.example.trainwiser.common.SharedPreferenceSingleton;

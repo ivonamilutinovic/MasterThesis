@@ -1,18 +1,15 @@
 package com.example.trainwiser;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.trainwiser.network.APIClientWithInterceptorForTokens;
 import com.example.trainwiser.network.APIInterfaceWithInterceptorForTokens;
-import com.example.trainwiser.network.Oauth2Interface;
-import com.example.trainwiser.network.Oauth2RetrofitClient;
-import com.example.trainwiser.network.api_models.account.AccountDataRequest;
 import com.example.trainwiser.network.api_models.account.AccountDataResponse;
 import com.example.trainwiser.network.utils.APIUtils;
 
@@ -147,7 +144,7 @@ public class ProfileActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<AccountDataResponse> call, Throwable t) {
-
+                        Utils.onFailureLogging(ProfileActivity.this, t);
                     }
                 });
     }
@@ -170,6 +167,7 @@ public class ProfileActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<Void> call, Throwable t) {
+                        Utils.onFailureLogging(ProfileActivity.this, t);
                         delete_user_account();
                     }
                 });

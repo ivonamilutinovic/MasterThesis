@@ -3,14 +3,12 @@ package com.example.trainwiser;
 
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.trainwiser.network.APIClientWithInterceptorForTokens;
 import com.example.trainwiser.network.APIInterfaceWithInterceptorForTokens;
-import com.example.trainwiser.network.APIRetrofitClient;
 import com.example.trainwiser.network.api_models.account.AccountDataResponse;
 
 import okhttp3.ResponseBody;
@@ -134,7 +132,7 @@ public class ProfileSingleton {
 
             @Override
             public void onFailure(Call<AccountDataResponse> call, Throwable t) {
-
+                Utils.onFailureLogging(activity, t);
             }
         });
     }
