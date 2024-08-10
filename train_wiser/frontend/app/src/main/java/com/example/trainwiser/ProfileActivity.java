@@ -142,26 +142,26 @@ public class ProfileActivity extends AppCompatActivity {
 
     public void onDeleteAccount(View view) {
         APIClientWithInterceptorForTokens.getAPIClient(ProfileActivity.this)
-                .create(APIInterfaceWithInterceptorForTokens.class)
-                .deleteAccount().enqueue(new Callback<Void>() {
-                    private void delete_user_account() {
-                        APIUtils.removeAPIKeysData(getApplicationContext());
-                        ProfileSingleton.getInstance().emptyProfileData();
-                        Intent intent = new Intent(ProfileActivity.this, LoginActivity.class);
-                        startActivity(intent);
-                        finish();
-                    }
-                    @Override
-                    public void onResponse(Call<Void> call, Response<Void> response) {
-                        delete_user_account();
-                    }
+            .create(APIInterfaceWithInterceptorForTokens.class)
+            .deleteAccount().enqueue(new Callback<Void>() {
+                private void delete_user_account() {
+                    APIUtils.removeAPIKeysData(getApplicationContext());
+                    ProfileSingleton.getInstance().emptyProfileData();
+                    Intent intent = new Intent(ProfileActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+                @Override
+                public void onResponse(Call<Void> call, Response<Void> response) {
+                    delete_user_account();
+                }
 
-                    @Override
-                    public void onFailure(Call<Void> call, Throwable t) {
-                        Utils.onFailureLogging(ProfileActivity.this, t);
-                        delete_user_account();
-                    }
-                });
+                @Override
+                public void onFailure(Call<Void> call, Throwable t) {
+                    Utils.onFailureLogging(ProfileActivity.this, t);
+                    delete_user_account();
+                }
+            });
     }
 
 }

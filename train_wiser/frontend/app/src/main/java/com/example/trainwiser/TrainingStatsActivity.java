@@ -118,7 +118,6 @@ public class TrainingStatsActivity extends AppCompatActivity {
                 });
     }
 
-    // todo: add constraint that this is possible only for strava users
     private void displayData(TrainingStatsResponseData trainingSummary) {
         StringBuilder sb = new StringBuilder();
 
@@ -130,28 +129,28 @@ public class TrainingStatsActivity extends AppCompatActivity {
             for (TrainingStatsResponseData.Activity activity : weekSummary.activities) {
                 String activityEmoji = Utils.getActivityEmoji(getApplicationContext(), activity.activityType);
                 if (!activity.activityType.equals("WeightTraining")){
-                    sb.append(activityEmoji).append(" :")
-                            .append("Distance: ").append(activity.distance).append(" km, ")
-                            .append("Duration: ").append(Utils.secondsInFormatedTime(activity.duration)).append(" , ")
-                            .append("Date: ").append(activity.startDate).append(" , ")
-                            .append("Avg HR Zone: ").append(activity.averageHeartrateZone).append("\n");
+                    sb.append("Date ").append(activity.startDate).append(": ")
+                            .append(activityEmoji).append(" ")
+                            .append(activity.distance).append(" km, ")
+                            .append(Utils.secondsInFormatedTime(activity.duration)).append(", ")
+                            .append("Z").append(activity.averageHeartrateZone).append("\n");
                 }else{
-                    sb.append(activityEmoji).append(" :")
-                            .append("Duration: ").append(Utils.secondsInFormatedTime(activity.duration)).append(" , ")
-                            .append("Date: ").append(activity.startDate).append(" , ")
-                            .append("Avg HR Zone: ").append(activity.averageHeartrateZone).append("\n");
+                    sb.append("Date ").append(activity.startDate).append(": ")
+                            .append(activityEmoji).append(" ")
+                            .append(Utils.secondsInFormatedTime(activity.duration)).append(", ")
+                            .append("Z").append(activity.averageHeartrateZone).append("\n");
                 }
             }
 
-            sb.append("Summary:\n");
+            sb.append("\nSummary:\n");
             for (String activityType : weekSummary.summary.keySet()) {
                 TrainingStatsResponseData.ActivitySummary summary = weekSummary.summary.get(activityType);
-                sb.append(activityType).append(": ")
-                        .append("Total Duration: ").append(Utils.secondsInFormatedTime(summary.totalDuration)).append(" , ")
-                        .append("Total Distance: ").append(summary.totalDistance).append(" km, ")
-                        .append("Avg HR Zone: ").append(summary.averageHeartrateZone).append("\n");
+                sb.append(activityType).append(":\n")
+                        .append("   • Total Duration: ").append(Utils.secondsInFormatedTime(summary.totalDuration)).append(" ,\n ")
+                        .append("   • Total Distance: ").append(summary.totalDistance).append(" km,\n ")
+                        .append("   • Avg HR Zone: Z").append(summary.averageHeartrateZone).append("\n");
             }
-            sb.append("\n");
+            sb.append("\n\n");
         }
 
         textView.setText(sb.toString());
