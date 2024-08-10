@@ -27,7 +27,6 @@ import retrofit2.Response;
 
 public class TrainingStatsActivity extends AppCompatActivity {
     private Spinner spinnerYear, spinnerMonth;
-    private Button buttonGetStatistics;
     private TextView textView;
     private int selectedYear, selectedMonth;
 
@@ -43,7 +42,6 @@ public class TrainingStatsActivity extends AppCompatActivity {
         textView = findViewById(R.id.textView);
         spinnerYear = findViewById(R.id.spinner_year);
         spinnerMonth = findViewById(R.id.spinner_month);
-        buttonGetStatistics = findViewById(R.id.button_get_statistics);
 
         setupSpinners();
     }

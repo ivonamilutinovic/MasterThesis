@@ -4,7 +4,10 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -19,6 +22,7 @@ import com.example.trainwiser.network.api_models.trainings.TrainingResponseData;
 import org.json.JSONObject;
 
 import java.net.HttpURLConnection;
+import java.util.Calendar;
 import java.util.List;
 
 import okhttp3.ResponseBody;
@@ -27,8 +31,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class TrainingsSuggestionsActivity extends AppCompatActivity {
+    private Spinner distanceSpinner;
 
-    private EditText editTextRaceDistance;
     private EditText editTextGoalTime;
     private TableLayout tableTrainings;
 
@@ -37,10 +41,16 @@ public class TrainingsSuggestionsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trainings_suggestions);
 
-        editTextRaceDistance = findViewById(R.id.editText_race_distance);
+        distanceSpinner = findViewById(R.id.distance_spinner);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.race_distances, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        distanceSpinner.setAdapter(adapter);
+        distanceSpinner.setSelection(0);
+
+
         editTextGoalTime = findViewById(R.id.editText_goal_time);
         tableTrainings = findViewById(R.id.tableTrainings);
-
         editTextGoalTime.addTextChangedListener(new TextWatcher() {
             private String current = "";
             private String hhmmss = "HHMMSS";
@@ -87,8 +97,17 @@ public class TrainingsSuggestionsActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        distanceSpinner.setSelection(0);
+        editTextGoalTime.setText("");
+        editTextGoalTime.setText("");
+    }
+
+
     public void onClickTrainingSuggestions(View view) {
-        String raceDistanceStr = editTextRaceDistance.getText().toString();
+        String raceDistanceStr = distanceSpinner.getSelectedItem().toString().replace("k", "");;
         String goalTimeStr = editTextGoalTime.getText().toString();
 
         if (raceDistanceStr.isEmpty() || goalTimeStr.length() != 8) {
@@ -125,63 +144,9 @@ public class TrainingsSuggestionsActivity extends AppCompatActivity {
                     public void onFailure(Call<List<List<List<TrainingResponseData>>>> call, Throwable t) {
                         Utils.onFailureLogging(TrainingsSuggestionsActivity.this, t);
                     }
-
                 });
-
     }
 
-//    private void displayTrainingSuggestions(List<List<List<TrainingResponseData>>> trainingSuggestions) {
-//        String activityEmoji;
-//
-//        tableTrainings.removeAllViews();
-//
-//        // Create header row
-//        TableRow headerRow = new TableRow(this);
-//        TextView headerWeeks = new TextView(this);
-//        headerWeeks.setText("Weeks\\Days");
-//        headerWeeks.setPadding(8, 8, 8, 8);
-//        headerRow.addView(headerWeeks);
-//
-//        for (int i = 1; i <= 7; i++) {
-//            TextView headerDay = new TextView(this);
-//            headerDay.setText("Day " + i);
-//            headerDay.setPadding(8, 8, 8, 8);
-//            headerRow.addView(headerDay);
-//        }
-//        tableTrainings.addView(headerRow);
-//
-//        for (int weekIndex = 0; weekIndex < trainingSuggestions.size(); weekIndex++) {
-//            TableRow weekRow = new TableRow(this);
-//
-//            TextView weekLabel = new TextView(this);
-//            weekLabel.setText("Week " + (weekIndex + 1));
-//            weekLabel.setPadding(8, 8, 8, 8);
-//            weekRow.addView(weekLabel);
-//
-//            List<List<TrainingResponseData>> week = trainingSuggestions.get(weekIndex);
-//            for (List<TrainingResponseData> day : week) {
-//                TextView dayLabel = new TextView(this);
-//                if (day.size() == 1 && day.get(0).getActivityType().equals("Rest day")) {
-//                    Utils.getActivityEmoji(getApplicationContext(), "RestDay");
-//                } else {
-//                    StringBuilder dayText = new StringBuilder();
-//                    for (TrainingResponseData training : day) {
-//                        activityEmoji = Utils.getActivityEmoji(getApplicationContext(), training.getActivityType());
-//                        dayText.append(activityEmoji)
-//                                .append(training.getDistance()).append("km, ")
-//                                .append(training.getDuration()).append(", ")
-//                                .append("Z")
-//                                .append(training.getAverageHeartrateZone())
-//                                .append("\n");
-//                    }
-//                    dayLabel.setText(dayText.toString().trim());
-//                }
-//                dayLabel.setPadding(8, 8, 8, 8);
-//                weekRow.addView(dayLabel);
-//            }
-//            tableTrainings.addView(weekRow);
-//        }
-//    }
 
     private void displayTrainingSuggestions(List<List<List<TrainingResponseData>>> trainingSuggestions) {
         String activityEmoji;
