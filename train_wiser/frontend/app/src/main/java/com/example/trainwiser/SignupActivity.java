@@ -71,19 +71,7 @@ public class SignupActivity extends AppCompatActivity {
                     startActivity(intent);
                 }
                 else{
-                    ResponseBody errorBody = response.errorBody();
-                    String errorText = "Unknown error";
-                    if (errorBody != null){
-                        try {
-                            String errorBodyStr = errorBody.string();
-                            JSONObject errorBodyJson = new JSONObject(errorBodyStr);
-
-                            errorText = errorBodyJson.optString("error", errorText);
-                        } catch (Exception ignored) {
-
-                        }
-                    }
-                    Toast.makeText(SignupActivity.this, "Error happen during sign up. Error code: " + response.code() + " (" + errorText + ")", Toast.LENGTH_LONG).show();
+                    Utils.onResponseErrorLogging(SignupActivity.this, response);
                 }
             }
 

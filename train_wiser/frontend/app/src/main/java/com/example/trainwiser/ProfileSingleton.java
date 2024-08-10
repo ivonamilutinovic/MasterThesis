@@ -118,15 +118,7 @@ public class ProfileSingleton {
                     mainHandler.post(callbackFunction);
                 }
                 else{
-                    ResponseBody errorBody = response.errorBody();
-                    String errorText = "Unknown error";
-                    if (errorBody != null){
-                        try {
-                            errorText = errorBody.string();
-                        } catch (Exception ignored) {
-                        }
-                    }
-                    Toast.makeText(activity, "Error code: " + response.code() + " (" + errorText + ")", Toast.LENGTH_LONG).show();
+                    Utils.onResponseErrorLogging(activity, response);
                 }
             }
 

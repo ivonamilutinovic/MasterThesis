@@ -117,22 +117,9 @@ public class TrainingsSuggestionsActivity extends AppCompatActivity {
                                 Toast.makeText(TrainingsSuggestionsActivity.this, "Empty response", Toast.LENGTH_LONG).show();
                             }
                         } else {
-                            ResponseBody errorBody = response.errorBody();
-                            String errorText = "Unknown error";
-                            if (errorBody != null) {
-                                try {
-                                    String errorBodyStr = errorBody.string();
-                                    JSONObject errorBodyJson = new JSONObject(errorBodyStr);
-
-                                    errorText = errorBodyJson.optString("error", errorText);
-                                } catch (Exception ignored) {
-
-                                }
-                            }
-
-                            Toast.makeText(TrainingsSuggestionsActivity.this,
-                                    "Error code: " + response.code() + " (" + errorText + ")", Toast.LENGTH_LONG).show();
-                        }}
+                            Utils.onResponseErrorLogging(TrainingsSuggestionsActivity.this, response);
+                        }
+                    }
 
                     @Override
                     public void onFailure(Call<List<List<List<TrainingResponseData>>>> call, Throwable t) {

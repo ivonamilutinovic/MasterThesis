@@ -28,7 +28,7 @@ public class APIUtils {
         SharedPreferenceSingleton.getInstance(ctx).removeData(APIKeys.API_REFRESH_TOKEN.toString());
     }
 
-    private static void refreshAccessTokenIfNeeded(Context ctx){
+    public static void refreshAccessTokenIfNeeded(Context ctx){
         String accessToken = getAccessToken(ctx);
         long expiresAt = getExpiresAt(ctx);
         String refreshToken = getRefreshToken(ctx);
@@ -40,7 +40,7 @@ public class APIUtils {
         int timeDelta = 30 * 60;
 
         if (expiresAt - timeDelta <= currentTime) {
-            
+            // todo: implement request
 
         }
     }

@@ -79,21 +79,7 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 }
                 else{
-                    ResponseBody errorBody = response.errorBody();
-                    String errorText = "Unknown error";
-                    if (errorBody != null){
-                        try {
-                            String errorBodyStr = errorBody.string();
-                            JSONObject errorBodyJson = new JSONObject(errorBodyStr);
-
-                            errorText = errorBodyJson.optString("error", errorText);
-                        } catch (Exception ignored) {
-
-                        }
-                    }
-
-                    Toast.makeText(LoginActivity.this, "Error happen during login. " +
-                            "Error code: " + response.code() + " (" + errorText + ")", Toast.LENGTH_LONG).show();
+                    Utils.onResponseErrorLogging(LoginActivity.this, response);
                 }
             }
 

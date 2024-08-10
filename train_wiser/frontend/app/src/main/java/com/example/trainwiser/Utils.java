@@ -4,10 +4,17 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.trainwiser.network.utils.APIUtils;
+
+import org.json.JSONObject;
+
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+
+import okhttp3.ResponseBody;
+import retrofit2.Response;
 
 public class Utils {
     public static final Map<String, Integer> activityEmojisMap = new HashMap<>();
@@ -39,6 +46,23 @@ public class Utils {
         seconds = remainder % 60;
 
         return String.format(Locale.US, "%02d:%02d:%02d", hours, minutes, seconds);
+    }
+
+    public static void onResponseErrorLogging(Context ctx, Response<?> response) {
+        ResponseBody errorBody = response.errorBody();
+        String errorMessage = "Unknown error - " + response.code();
+        if (errorBody != null){
+            try {
+                String errorBodyStr = errorBody.string();
+                JSONObject errorBodyJson = new JSONObject(errorBodyStr);
+
+                errorMessage = errorBodyJson.optString("error", errorMessage);
+            } catch (Exception ignored) {
+
+            }
+        }
+        Log.e("API Response Error", errorMessage);
+        Toast.makeText(ctx, errorMessage, Toast.LENGTH_LONG).show();
     }
 
     public static void onFailureLogging(Context ctx, Throwable t) {

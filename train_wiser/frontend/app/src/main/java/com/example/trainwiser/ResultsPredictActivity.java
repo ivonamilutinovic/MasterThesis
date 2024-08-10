@@ -72,22 +72,10 @@ public class ResultsPredictActivity extends AppCompatActivity {
                                 Toast.makeText(ResultsPredictActivity.this, "Empty response", Toast.LENGTH_LONG).show();
                             }
                         } else {
-                            ResponseBody errorBody = response.errorBody();
-                            String errorText = "Unknown error";
-                            if (errorBody != null) {
-                                try {
-                                    String errorBodyStr = errorBody.string();
-                                    JSONObject errorBodyJson = new JSONObject(errorBodyStr);
+                            Utils.onResponseErrorLogging(ResultsPredictActivity.this, response);
+                        }
 
-                                    errorText = errorBodyJson.optString("error", errorText);
-                                } catch (Exception ignored) {
-
-                                }
-                            }
-
-                            Toast.makeText(ResultsPredictActivity.this,
-                                    "Error code: " + response.code() + " (" + errorText + ")", Toast.LENGTH_LONG).show();
-                        }}
+                    }
 
                     @Override
                     public void onFailure(Call<ResultsPredictionResponseData> call, Throwable t) {

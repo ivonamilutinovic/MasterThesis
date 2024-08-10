@@ -129,16 +129,7 @@ public class ProfileActivity extends AppCompatActivity {
                             startActivity(intent);
                         }
                         else{
-                            ResponseBody errorBody = response.errorBody();
-                            String errorText = "Unknown error";
-                            if (errorBody != null){
-                                try {
-                                    errorText = errorBody.string();
-                                } catch (Exception ignored) {
-                                }
-                            }
-                            Toast.makeText(ProfileActivity.this, "Error code: " + response.code() + " (" + errorText + ")",
-                                    Toast.LENGTH_LONG).show();
+                            Utils.onResponseErrorLogging(ProfileActivity.this, response);
                         }
                     }
 

@@ -18,13 +18,16 @@ class ResultPredictor(APIView):
             return Response({'error': 'Invalid type of race distance. Race distance should be string.'},
                             status=status.HTTP_400_BAD_REQUEST)
 
-        runner_name = translate_to_unidecode_and_remove_spaces((request.user.first_name + request.user.last_name).lower().strip())
         try:
+            runner_name = translate_to_unidecode_and_remove_spaces((request.user.first_name + request.user.last_name).lower().strip())
             response_text = predict_next_race_time(runner_name, race_distance)
         except NoRunnerNameInRaceResultsSet:
             response_text = "User has no history of races held in Serbia"
         except NoRunnerDataInRaceResultsSet:
             response_text = "User has no history for races of specified distance"
+        except RuntimeError as error:
+            return Response({'error': f"Error during training statistics generation: {error}"},
+                            status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         return Response({"race_result": response_text}, status=status.HTTP_200_OK)
 
