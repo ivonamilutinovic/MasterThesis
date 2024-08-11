@@ -98,7 +98,10 @@ def prepare_data(file_paths, days=56):
 # List of CSV file paths
 file_paths = [
     '/home/hp/Desktop/MasterThesis/train_wiser/backend/training_data/training_suggestions/ivona_training_data.csv',
-    '/home/hp/Desktop/MasterThesis/train_wiser/backend/training_data/training_suggestions/milos_training_data.csv'
+    '/home/hp/Desktop/MasterThesis/train_wiser/backend/training_data/training_suggestions/ivona_training_data.csv',
+    '/home/hp/Desktop/MasterThesis/train_wiser/backend/training_data/training_suggestions/ivona_training_data.csv',
+    '/home/hp/Desktop/MasterThesis/train_wiser/backend/training_data/training_suggestions/ivona_training_data.csv',
+    # '/home/hp/Desktop/MasterThesis/train_wiser/backend/training_data/training_suggestions/milos_training_data.csv'
 ]
 
 # Obtain training sequences and targets
@@ -156,53 +159,90 @@ result_targets = np.expand_dims(result_targets, axis=1)
 print(f'Sample padded training sequence: {padded_training_sequences[0]}')
 print(f'Sample result target: {result_targets[0]}')
 
-# Function to create LSTM model
-def create_lstm_model(input_shape, output_shape):
-    model = Sequential()
-    # Masking layer to ignore -1 values
-    model.add(Masking(mask_value=-1, input_shape=input_shape))
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import LSTM, Dense, Attention
+
+from tensorflow.keras.models import Model
+from tensorflow.keras.layers import LSTM, Dense, Attention, Input, concatenate
+
+from tensorflow.keras.models import Model
+from tensorflow.keras.layers import LSTM, Dense, Embedding, Input, Flatten
+
+
+def create_lstm_model(vocab_size, input_length, output_shape):
+    inputs = Input(shape=(input_length,))
+
+    # Embedding layer to map input indices to dense vectors
+    embedding_out = Embedding(input_dim=vocab_size, output_dim=64, input_length=input_length)(inputs)
+
     # LSTM layers
-    model.add(LSTM(64, return_sequences=True))
-    model.add(LSTM(32))
-    # Dense layer
-    model.add(Dense(64, activation='relu'))
+    lstm_out = LSTM(64, return_sequences=True)(embedding_out)
+    lstm_out_2 = LSTM(32)(lstm_out)
+
+    # Dense layer to process the output
+    dense_out = Dense(64, activation='relu')(lstm_out_2)
+
     # Output layer
-    model.add(Dense(output_shape, activation='relu'))
+    outputs = Dense(output_shape, activation='linear')(dense_out)
+
+    model = Model(inputs, outputs)
+
     return model
 
-# Defining input and output shapes
-input_shape = (result_targets.shape[1], result_targets.shape[2])  # Input shape: [timesteps, features]
-output_shape = padded_training_sequences.shape[1] * padded_training_sequences.shape[2]  # Output shape: flattened training sequence
 
-from sklearn.model_selection import train_test_split
+# Primer vrednosti
+vocab_size = 1000  # Broj različitih ulaznih vrednosti (veličina vokabulara)
+input_length = 60  # Dužina sekvence
+output_shape = 4  # Oblik izlaza
 
-# Assuming you already have padded_training_sequences and result_targets ready
-X_train, X_test, y_train, y_test = train_test_split(result_targets, padded_training_sequences,test_size=0.2,
-                                                    random_state=42)
+model = create_lstm_model(vocab_size, input_length, output_shape)
+model.summary()
 
-# Now you can train your model with the training data and validate it with the test data.
-model = create_lstm_model((X_train.shape[1], X_train.shape[2]), y_train.shape[1] * y_train.shape[2])
+# Primer kodiranja ulaznih podataka
+# input_indices bi bili indeksirani elementi iz ulaznog skupa
+input_indices = np.random.randint(0, vocab_size, (1, input_length))
 
-model.compile(optimizer='adam', loss='mse')
+output = model.predict(input_indices)
+print("Output:", output)
 
-# Training the model using only the training set
-history = model.fit(X_train, y_train.reshape((y_train.shape[0], -1)), epochs=50, batch_size=32, validation_data=(X_test, y_test.reshape((y_test.shape[0], -1))))
-
-# Plotting training and validation loss
-import matplotlib.pyplot as plt
-
-plt.plot(history.history['loss'], label='Train Loss')
-plt.plot(history.history['val_loss'], label='Validation Loss')
-plt.xlabel('Epochs')
-plt.ylabel('Loss')
-plt.legend()
-plt.show()
-
-# If you want to test a specific sample from your test set, you can:
-sample_index = 0  # Example index
-sample_input = X_train[sample_index]
-sample_output = y_train[sample_index]
-
-sample_prediction = model.predict(np.expand_dims(sample_input, axis=0))
-print(f'Real output: {sample_output}')
-print(f'Predicted output: {sample_prediction}')
+# input_shape = (60, 4)  # Primer ulaznog oblika
+# output_shape = 4  # Oblik izlaza odgovara ulaznom
+#
+# model = create_lstm_model(input_shape, output_shape)
+# model.summary()
+##################
+# # Defining input and output shapes
+# input_shape = (result_targets.shape[1], result_targets.shape[2])  # Input shape: [timesteps, features]
+# output_shape = padded_training_sequences.shape[1] * padded_training_sequences.shape[2]  # Output shape: flattened training sequence
+#
+# from sklearn.model_selection import train_test_split
+#
+# # Assuming you already have padded_training_sequences and result_targets ready
+# X_train, X_test, y_train, y_test = train_test_split(result_targets, padded_training_sequences,test_size=0.2,
+#                                                     random_state=42)
+#
+# # Now you can train your model with the training data and validate it with the test data.
+#
+# model.compile(optimizer='adam', loss='mse')
+#
+# # Training the model using only the training set
+# history = model.fit(X_train, y_train.reshape((y_train.shape[0], -1)), epochs=50, batch_size=32, validation_data=(X_test, y_test.reshape((y_test.shape[0], -1))))
+#
+# # Plotting training and validation loss
+# import matplotlib.pyplot as plt
+#
+# plt.plot(history.history['loss'], label='Train Loss')
+# plt.plot(history.history['val_loss'], label='Validation Loss')
+# plt.xlabel('Epochs')
+# plt.ylabel('Loss')
+# plt.legend()
+# plt.show()
+#
+# # If you want to test a specific sample from your test set, you can:
+# sample_index = 0  # Example index
+# sample_input = X_train[sample_index]
+# sample_output = y_train[sample_index]
+#
+# sample_prediction = model.predict(np.expand_dims(sample_input, axis=0))
+# print(f'Real output: {sample_output}')
+# print(f'Predicted output: {sample_prediction}')

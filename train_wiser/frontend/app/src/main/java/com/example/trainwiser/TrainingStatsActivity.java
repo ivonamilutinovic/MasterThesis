@@ -131,7 +131,7 @@ public class TrainingStatsActivity extends AppCompatActivity {
                 if (!activity.activityType.equals("WeightTraining")){
                     sb.append("Date ").append(activity.startDate).append(": ")
                             .append(activityEmoji).append(" ")
-                            .append(activity.distance).append(" km, ")
+                            .append(activity.distance).append("km, ")
                             .append(Utils.secondsInFormatedTime(activity.duration)).append(", ")
                             .append("Z").append(activity.averageHeartrateZone).append("\n");
                 }else{
@@ -145,9 +145,16 @@ public class TrainingStatsActivity extends AppCompatActivity {
             sb.append("\nSummary:\n");
             for (String activityType : weekSummary.summary.keySet()) {
                 TrainingStatsResponseData.ActivitySummary summary = weekSummary.summary.get(activityType);
+                String totalDistance;
+
+                if (activityType.equals("WeightTraining")){
+                    totalDistance = "";
+                }else{
+                    totalDistance = "   • Total Distance: " + summary.totalDistance + "km\n";
+                }
                 sb.append(activityType).append(":\n")
-                        .append("   • Total Duration: ").append(Utils.secondsInFormatedTime(summary.totalDuration)).append(" ,\n ")
-                        .append("   • Total Distance: ").append(summary.totalDistance).append(" km,\n ")
+                        .append("   • Total Duration: ").append(Utils.secondsInFormatedTime(summary.totalDuration)).append("\n")
+                        .append(totalDistance)
                         .append("   • Avg HR Zone: Z").append(summary.averageHeartrateZone).append("\n");
             }
             sb.append("\n\n");
