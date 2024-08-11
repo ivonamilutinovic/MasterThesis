@@ -25,6 +25,8 @@ class StravaActivity(models.Model):
     name = models.CharField(max_length=255, null=True)
     activity_type = models.CharField(max_length=255, null=True)
     distance = models.FloatField(null=True)  # in kilometers
+    rounded_race_distance = models.FloatField(null=True)  # null in case activity is not race or not of relevant
+    # distance
     moving_time = models.PositiveIntegerField(null=True)
     elapsed_time = models.PositiveIntegerField(null=True)
     total_elevation_gain = models.FloatField(null=True)
