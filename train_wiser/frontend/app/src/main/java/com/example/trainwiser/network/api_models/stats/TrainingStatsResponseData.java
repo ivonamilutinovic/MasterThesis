@@ -27,7 +27,7 @@ public class TrainingStatsResponseData {
         @SerializedName("duration")
         public Integer duration;
 
-        @SerializedName("average_heartrate_zone")
+        @SerializedName("avg_hr_zone")
         public Integer averageHeartrateZone;
 
         @SerializedName("start_date")
@@ -41,7 +41,7 @@ public class TrainingStatsResponseData {
         @SerializedName("total_distance")
         public Float totalDistance;
 
-        @SerializedName("average_heartrate_zone")
+        @SerializedName("avg_hr_zone")
         public Integer averageHeartrateZone;
     }
 

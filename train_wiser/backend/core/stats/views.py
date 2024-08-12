@@ -47,14 +47,15 @@ class TrainingStatsAPIView(APIView):
                         {**activity,
                          'distance': round(activity['distance'], 2) if activity['distance'] else 0,
                          'duration': activity['moving_time'],
-                         'start_date': activity['start_date'].date()
+                         'start_date': activity['start_date'].date(),
+                         'avg_hr_zone': activity['average_heartrate_zone']
                         } for activity in activities_list
                     ],
                     'summary': {
                         entry['activity_type']: {
                             'total_duration': entry['total_duration'],
                             'total_distance': round(entry['total_distance'], 2) if entry['activity_type'] != 'WeightTraining' else 0,
-                            'average_heartrate_zone': round(entry['average_heartrate_zone']) if entry['average_heartrate_zone'] else 0
+                            'avg_hr_zone': round(entry['average_heartrate_zone']) if entry['average_heartrate_zone'] else 0
                         } for entry in summary
                     }
                 }

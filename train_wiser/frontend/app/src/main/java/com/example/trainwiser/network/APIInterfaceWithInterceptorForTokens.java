@@ -3,7 +3,7 @@ package com.example.trainwiser.network;
 import com.example.trainwiser.network.api_models.account.AccountDataResponse;
 import com.example.trainwiser.network.api_models.results_prediction.ResultsPredictionResponseData;
 import com.example.trainwiser.network.api_models.stats.TrainingStatsResponseData;
-import com.example.trainwiser.network.api_models.trainings.TrainingResponseData;
+import com.example.trainwiser.network.api_models.trainings.TrainingPlanResponse;
 
 import java.util.List;
 import java.util.Map;
@@ -37,7 +37,7 @@ public interface APIInterfaceWithInterceptorForTokens {
     );
 
     @GET("trainings/")
-    Call<List<List<List<TrainingResponseData>>>> getTrainingSuggestions(
+    Call<Map<String, List<List<List<TrainingPlanResponse>>>>> getTrainingPlan(
             @Query("goal_time") int goalTime,
             @Query("race_distance") float raceDistance
     );

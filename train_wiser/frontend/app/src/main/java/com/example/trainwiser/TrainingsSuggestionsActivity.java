@@ -3,10 +3,15 @@ package com.example.trainwiser;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.HorizontalScrollView;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -17,13 +22,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.trainwiser.network.APIClientWithInterceptorForTokens;
 import com.example.trainwiser.network.APIInterfaceWithInterceptorForTokens;
-import com.example.trainwiser.network.api_models.trainings.TrainingResponseData;
+import com.example.trainwiser.network.api_models.trainings.TrainingPlanResponse;
 
 import org.json.JSONObject;
 
 import java.net.HttpURLConnection;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -32,9 +38,12 @@ import retrofit2.Response;
 
 public class TrainingsSuggestionsActivity extends AppCompatActivity {
     private Spinner distanceSpinner;
-
     private EditText editTextGoalTime;
     private TableLayout tableTrainings;
+    LinearLayout buttonContainer;
+    HorizontalScrollView buttonScrollView;
+    HorizontalScrollView tableScrollView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,13 +134,13 @@ public class TrainingsSuggestionsActivity extends AppCompatActivity {
 
         APIClientWithInterceptorForTokens.getAPIClient(TrainingsSuggestionsActivity.this)
                 .create(APIInterfaceWithInterceptorForTokens.class)
-                .getTrainingSuggestions(goalTime, raceDistance).enqueue(new Callback<List<List<List<TrainingResponseData>>>>() {
+                .getTrainingPlan(goalTime, raceDistance).enqueue(new Callback<Map<String, List<List<List<TrainingPlanResponse>>>>>() {
                     @Override
-                    public void onResponse(Call<List<List<List<TrainingResponseData>>>> call, Response<List<List<List<TrainingResponseData>>>> response) {
+                    public void onResponse(Call<Map<String, List<List<List<TrainingPlanResponse>>>>> call, Response<Map<String, List<List<List<TrainingPlanResponse>>>>> response) {
                         if (response.code() == HttpURLConnection.HTTP_OK) {
                             if (response.body() != null) {
-                                List<List<List<TrainingResponseData>>> trainingSuggestions = response.body();
-                                displayTrainingSuggestions(trainingSuggestions);
+                                Map<String, List<List<List<TrainingPlanResponse>>>> trainingPlans = response.body();
+                                setRaceResultsButtons(trainingPlans);
                             } else {
                                 Toast.makeText(TrainingsSuggestionsActivity.this, "Empty response", Toast.LENGTH_LONG).show();
                             }
@@ -141,19 +150,41 @@ public class TrainingsSuggestionsActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onFailure(Call<List<List<List<TrainingResponseData>>>> call, Throwable t) {
+                    public void onFailure(Call<Map<String, List<List<List<TrainingPlanResponse>>>>> call, Throwable t) {
                         Utils.onFailureLogging(TrainingsSuggestionsActivity.this, t);
                     }
                 });
     }
 
 
-    private void displayTrainingSuggestions(List<List<List<TrainingResponseData>>> trainingSuggestions) {
+    private void setRaceResultsButtons(Map<String, List<List<List<TrainingPlanResponse>>>> trainingPlans) {
+        LinearLayout buttonContainer = findViewById(R.id.buttonContainer);
+        ScrollView buttonScrollView = findViewById(R.id.buttonScrollView);
+        HorizontalScrollView tableScrollView = findViewById(R.id.tableScrollView);
+        LayoutInflater inflater = LayoutInflater.from(this);
+        tableTrainings.removeAllViews();
+
+        for (String key : trainingPlans.keySet()) {
+            Button button = (Button) inflater.inflate(R.layout.training_plan_button, buttonContainer, false);
+            button.setText(key);
+
+            button.setOnClickListener(v -> {
+                buttonScrollView.setVisibility(View.GONE);
+                tableScrollView.setVisibility(View.VISIBLE);
+
+                List<List<List<TrainingPlanResponse>>> trainingPlan = trainingPlans.get(key);
+                displayTrainingSuggestions(trainingPlan);
+            });
+
+            buttonContainer.addView(button);
+        }
+    }
+
+    private void displayTrainingSuggestions(List<List<List<TrainingPlanResponse>>> trainingSuggestions) {
         String activityEmoji;
 
         tableTrainings.removeAllViews();
 
-        // Create header row
         TableRow headerRow = new TableRow(this);
         TextView headerWeeks = createTextView("Weeks\\Days", true);
         headerRow.addView(headerWeeks);
@@ -170,8 +201,8 @@ public class TrainingsSuggestionsActivity extends AppCompatActivity {
             TextView weekLabel = createTextView("Week " + (weekIndex + 1), true);
             weekRow.addView(weekLabel);
             weekLabel.setHeight(200);
-            List<List<TrainingResponseData>> week = trainingSuggestions.get(weekIndex);
-            for (List<TrainingResponseData> day : week) {
+            List<List<TrainingPlanResponse>> week = trainingSuggestions.get(weekIndex);
+            for (List<TrainingPlanResponse> day : week) {
                 TextView dayLabel = createTextView("", false);
                 dayLabel.setHeight(200);
                 if (day.size() == 1 && day.get(0).getActivityType().equals("RestDay")) {
@@ -179,10 +210,18 @@ public class TrainingsSuggestionsActivity extends AppCompatActivity {
                     dayLabel.setText(activityEmoji);
                 } else {
                     StringBuilder dayText = new StringBuilder();
-                    for (TrainingResponseData training : day) {
+                    for (TrainingPlanResponse training : day) {
                         activityEmoji = Utils.getActivityEmoji(getApplicationContext(), training.getActivityType());
+                        String distance;
+
+                        if (training.getActivityType().equals("WeightTraining")){
+                            distance = "";
+                        }else{
+                            distance = training.getDistance() + "km, ";
+                        }
+
                         dayText.append(activityEmoji)
-                                .append(training.getDistance()).append("km, ")
+                                .append(distance)
                                 .append(Utils.secondsInFormatedTime(training.getDuration()))
                                 .append(", Z").append(training.getAverageHeartrateZone())
                                 .append("\n");

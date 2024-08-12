@@ -2,7 +2,9 @@ package com.example.trainwiser.network.api_models.trainings;
 
 import com.google.gson.annotations.SerializedName;
 
-public class TrainingResponseData {
+import java.util.Map;
+
+public class TrainingPlanResponse {
     @SerializedName("activity_type")
     private String activityType;
 
@@ -12,7 +14,7 @@ public class TrainingResponseData {
     @SerializedName("duration")
     private int duration;
 
-    @SerializedName("average_heartrate_zone")
+    @SerializedName("avg_hr_zone")
     private int averageHeartrateZone;
 
     public String getActivityType() {
@@ -47,3 +49,4 @@ public class TrainingResponseData {
         this.averageHeartrateZone = averageHeartrateZone;
     }
 }
+

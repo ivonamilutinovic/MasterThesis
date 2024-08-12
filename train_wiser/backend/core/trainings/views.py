@@ -36,8 +36,9 @@ class TrainingsView(APIView):
 
             closest_races = get_closest_races(matching_races, goal_time)
 
-            training_plan_responses = []
-            number_of_training_days = race_dist_training_weeks[floor(race_distance)] * 7
+            training_plan_responses = {}
+            training_plan_counter = 0
+            number_of_training_days = race_dist_training_weeks[floor(race_distance)] * 7 - 1
             for closest_race in closest_races:
                 first_training_day = (closest_race.start_date - timedelta(days=number_of_training_days)).date()
                 current_date = first_training_day
@@ -47,7 +48,7 @@ class TrainingsView(APIView):
                 day_in_week_counter = 0
 
                 try:
-                    while current_date < closest_race.start_date.date():
+                    while current_date <= closest_race.start_date.date():
                         if day_in_week_counter % 7 == 0:
                             training_plan_response.append([])
                             day_in_week_counter = 0
@@ -62,14 +63,13 @@ class TrainingsView(APIView):
                                  .append({'activity_type': training.activity_type,
                                           'distance': round(training.distance, 2),
                                           'duration': training.moving_time,
-                                          'average_heartrate_zone': training.average_heartrate_zone}))
+                                          'avg_hr_zone': training.average_heartrate_zone}))
                         else:
                             (training_plan_response[week_counter][day_in_week_counter]
                              .append({'activity_type': 'RestDay',
                                       'distance': 0,
                                       'duration': 0,
-                                      'average_heartrate_zone': 0}))
-
+                                      'avg_hr_zone': 0}))
 
                         current_date += timedelta(days=1)
                         day_counter += 1
@@ -77,27 +77,23 @@ class TrainingsView(APIView):
                         if day_in_week_counter % 7 == 0:
                             week_counter += 1
 
-                    training_plan_responses.append(training_plan_response)
+                    calculate_difference = None
+                    if request.user.strava_athlete_id:
+                        calculate_difference = get_hr_zones_difference(request.user, closest_race.athlete_id)
+                    calculate_difference = f" - HR Zones Dissimilarity {calculate_difference}" \
+                        if calculate_difference else ""
+                    tp_key = (f"Training Plan {training_plan_counter + 1} - "
+                              f"{seconds_to_hms(closest_race.moving_time)}{calculate_difference}")
+                    training_plan_responses[tp_key] = training_plan_response
+                    training_plan_counter += 1
                 except IndexError as error:
                     raise IndexError(f"{error} + indexes {training_plan_response} || {day_counter}  "
                                      f"{day_in_week_counter}  {week_counter}")
-            # mock_data = [
-            #     [[{'activity_type':'WeightTraining', 'distance': 0, 'duration': 3600, 'average_heartrate_zone': 2},
-            #       {'activity_type':'Run', 'distance': 5.0, 'duration': 3600, 'average_heartrate_zone': 4},
-            #       {'activity_type': 'Run', 'distance': 5.0, 'duration': 3600, 'average_heartrate_zone': 4},
-            #       {'activity_type':'Swim', 'distance': 0.5, 'duration': 1800, 'average_heartrate_zone': 2}],
-            #      [{'activity_type':'WeightTraining', 'distance': 0, 'duration': 7200, 'average_heartrate_zone': 1}],
-            #      [{'activity_type':'RestDay', 'distance': 0, 'duration': 0, 'average_heartrate_zone': 0}],
-            #      [{'activity_type':'Ride', 'distance': 20.0, 'duration': 5400, 'average_heartrate_zone': 3}],
-            #      [{'activity_type':'Run', 'distance': 10.0, 'duration': 7200, 'average_heartrate_zone': 4}],
-            #      [{'activity_type':'RestDay', 'distance': 0, 'duration': 0, 'average_heartrate_zone': 0}],
-            #      [{'activity_type':'RestDay', 'distance': 0, 'duration': 0, 'average_heartrate_zone': 0}]],
-            # ] * 8
         except RuntimeError as error:
             return Response({'error': f"Error during training plan generation: {error}"},
                             status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-        return Response(training_plan_responses[0], status=status.HTTP_200_OK)
+        return Response(training_plan_responses, status=status.HTTP_200_OK)
 
 
 race_dist_training_weeks = {
@@ -117,6 +113,41 @@ def get_closest_races(matching_races, target_time):
         time_difference=Abs(F('moving_time') - Value(target_time, output_field=IntegerField()))
     )
     matching_races = matching_races.order_by('time_difference')
-    closest_races = matching_races[:3]
+    closest_races = matching_races[:5]
 
     return closest_races
+
+def seconds_to_hms(seconds):
+    hours = seconds // 3600
+    minutes = (seconds % 3600) // 60
+    seconds = seconds % 60
+    return f"{hours:02}:{minutes:02}:{seconds:02}"
+
+
+def get_hr_zones_difference(current_user, athlete_user_id):
+    if not (current_user.strava_athlete_id.hr_zones and athlete_user_id.hr_zones):
+        return None
+
+    current_user_zones = current_user.strava_athlete_id.hr_zones
+    athlete_zones = athlete_user_id.hr_zones
+
+    total_difference = 0.0
+    num_keys = 0
+    for key in ["2", "3", "4", "5"]:
+        value_current_user_zones = current_user_zones[key][0]
+        value_athlete_zones = athlete_zones[key][0]
+
+        if value_current_user_zones == 0:
+            continue
+
+        difference = (value_athlete_zones - value_current_user_zones) / value_current_user_zones
+        total_difference += difference
+        num_keys += 1
+
+    if num_keys == 0:
+        return None
+
+    average_difference = total_difference / num_keys
+    percentage_difference = average_difference * 100
+
+    return percentage_difference
