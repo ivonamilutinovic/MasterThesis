@@ -48,7 +48,7 @@ public class MainMenuActivity extends AppCompatActivity {
     }
 
     public void onClickSwitchToTrainingSuggestions(View view) {
-        Intent intent = new Intent(MainMenuActivity.this, TrainingsSuggestionsActivity.class);
+        Intent intent = new Intent(MainMenuActivity.this, TrainingsPlansActivity.class);
         startActivity(intent);
     }
 

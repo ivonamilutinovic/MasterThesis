@@ -5,7 +5,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -24,26 +23,20 @@ import com.example.trainwiser.network.APIClientWithInterceptorForTokens;
 import com.example.trainwiser.network.APIInterfaceWithInterceptorForTokens;
 import com.example.trainwiser.network.api_models.trainings.TrainingPlanResponse;
 
-import org.json.JSONObject;
-
 import java.net.HttpURLConnection;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class TrainingsSuggestionsActivity extends AppCompatActivity {
+public class TrainingsPlansActivity extends AppCompatActivity {
     private Spinner distanceSpinner;
     private EditText editTextGoalTime;
     private TableLayout tableTrainings;
-    LinearLayout buttonContainer;
-    HorizontalScrollView buttonScrollView;
-    HorizontalScrollView tableScrollView;
-
+    private String initialSelectedDistance;
+    private String initialGoalTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,7 +104,6 @@ public class TrainingsSuggestionsActivity extends AppCompatActivity {
         super.onResume();
         distanceSpinner.setSelection(0);
         editTextGoalTime.setText("");
-        editTextGoalTime.setText("");
     }
 
 
@@ -132,7 +124,7 @@ public class TrainingsSuggestionsActivity extends AppCompatActivity {
         int goalTime = hours * 3600 + minutes * 60 + seconds;
 
 
-        APIClientWithInterceptorForTokens.getAPIClient(TrainingsSuggestionsActivity.this)
+        APIClientWithInterceptorForTokens.getAPIClient(TrainingsPlansActivity.this)
                 .create(APIInterfaceWithInterceptorForTokens.class)
                 .getTrainingPlan(goalTime, raceDistance).enqueue(new Callback<Map<String, List<List<List<TrainingPlanResponse>>>>>() {
                     @Override
@@ -142,16 +134,16 @@ public class TrainingsSuggestionsActivity extends AppCompatActivity {
                                 Map<String, List<List<List<TrainingPlanResponse>>>> trainingPlans = response.body();
                                 setRaceResultsButtons(trainingPlans);
                             } else {
-                                Toast.makeText(TrainingsSuggestionsActivity.this, "Empty response", Toast.LENGTH_LONG).show();
+                                Toast.makeText(TrainingsPlansActivity.this, "Empty response", Toast.LENGTH_LONG).show();
                             }
                         } else {
-                            Utils.onResponseErrorLogging(TrainingsSuggestionsActivity.this, response);
+                            Utils.onResponseErrorLogging(TrainingsPlansActivity.this, response);
                         }
                     }
 
                     @Override
                     public void onFailure(Call<Map<String, List<List<List<TrainingPlanResponse>>>>> call, Throwable t) {
-                        Utils.onFailureLogging(TrainingsSuggestionsActivity.this, t);
+                        Utils.onFailureLogging(TrainingsPlansActivity.this, t);
                     }
                 });
     }
@@ -169,6 +161,13 @@ public class TrainingsSuggestionsActivity extends AppCompatActivity {
             button.setText(key);
 
             button.setOnClickListener(v -> {
+                String currentSelectedDistance = distanceSpinner.getSelectedItem().toString();
+                String currentGoalTime = editTextGoalTime.getText().toString();
+                if (currentSelectedDistance.equals(initialSelectedDistance) && currentGoalTime.equals(initialGoalTime)) {
+                    return;
+                }
+                initialSelectedDistance = distanceSpinner.getSelectedItem().toString();
+                initialGoalTime = editTextGoalTime.getText().toString();
                 buttonScrollView.setVisibility(View.GONE);
                 tableScrollView.setVisibility(View.VISIBLE);
 
