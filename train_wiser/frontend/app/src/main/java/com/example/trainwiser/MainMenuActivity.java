@@ -77,7 +77,6 @@ public class MainMenuActivity extends AppCompatActivity {
         });
     }
 
-
     public void onClickStravaConnection(View view) {
         Button button = findViewById(R.id.buttonConnectWithStrava);
         ProfileSingleton profile = ProfileSingleton.getInstance();
@@ -88,11 +87,9 @@ public class MainMenuActivity extends AppCompatActivity {
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(stravaAuthorizationURL));
                 MainMenuActivity.this.startActivity(intent);
 
-                // upisati access token ka stravi i strava id u profile klasu
-                // profile.setStravaId();
-
-                boolean connectionWithStravaSucceeded = true;
-                if (connectionWithStravaSucceeded) {
+                profile.renderProfileData(MainMenuActivity.this, null);
+                Integer stravaAthleteId = profile.getStrava_athlete_id();
+                if(stravaAthleteId != null) {
                     button.setText(R.string.strava_account_connected);
                     button.setClickable(false);
                     button.setBackgroundColor(getResources().getColor(R.color.negative_option_for_buttons, getTheme()));

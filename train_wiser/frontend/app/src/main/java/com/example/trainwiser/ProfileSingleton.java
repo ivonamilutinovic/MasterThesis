@@ -113,9 +113,11 @@ public class ProfileSingleton {
                     email = accountData.getEmail();
                     username = accountData.getUsername();
                     birth_date = accountData.getBirth_date();
-                    strava_athlete_id = accountData.getStrava_athlete_id();
-                    Handler mainHandler = new Handler(Looper.getMainLooper());
-                    mainHandler.post(callbackFunction);
+
+                    if (callbackFunction != null) {
+                        Handler mainHandler = new Handler(Looper.getMainLooper());
+                        mainHandler.post(callbackFunction);
+                    }
                 }
                 else{
                     Utils.onResponseErrorLogging(activity, response);
