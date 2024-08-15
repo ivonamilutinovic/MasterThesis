@@ -17,6 +17,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.trainwiser.network.APIClientWithInterceptorForTokens;
@@ -37,6 +38,8 @@ public class TrainingsPlansActivity extends AppCompatActivity {
     private TableLayout tableTrainings;
     private String initialSelectedDistance;
     private String initialGoalTime;
+    ScrollView buttonScrollView;
+    HorizontalScrollView tableScrollView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,8 +105,26 @@ public class TrainingsPlansActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
+        buttonScrollView = findViewById(R.id.buttonScrollView);
+        tableScrollView = findViewById(R.id.tableScrollView);
         distanceSpinner.setSelection(0);
         editTextGoalTime.setText("");
+
+        OnBackPressedCallback onBackPressedCallback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if (buttonScrollView.getVisibility() == View.GONE &&
+                        tableScrollView.getVisibility() == View.VISIBLE) {
+                    buttonScrollView.setVisibility(View.VISIBLE);
+                    tableScrollView.setVisibility(View.GONE);
+                } else {
+                    finish();
+                }
+            }
+        };
+
+        getOnBackPressedDispatcher().addCallback(this, onBackPressedCallback);
     }
 
 
@@ -120,7 +141,7 @@ public class TrainingsPlansActivity extends AppCompatActivity {
         initialGoalTime = editTextGoalTime.getText().toString();
 
         if (raceDistanceStr.isEmpty() || goalTimeStr.length() != 8) {
-            Toast.makeText(this, "Please enter valid values", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Please enter valid values", Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -142,7 +163,7 @@ public class TrainingsPlansActivity extends AppCompatActivity {
                                 Map<String, List<List<List<TrainingPlanResponse>>>> trainingPlans = response.body();
                                 setRaceResultsButtons(trainingPlans);
                             } else {
-                                Toast.makeText(TrainingsPlansActivity.this, "Empty response", Toast.LENGTH_LONG).show();
+                                Toast.makeText(TrainingsPlansActivity.this, "There are no available trainings for specified distance", Toast.LENGTH_LONG).show();
                             }
                         } else {
                             Utils.onResponseErrorLogging(TrainingsPlansActivity.this, response);
@@ -159,8 +180,8 @@ public class TrainingsPlansActivity extends AppCompatActivity {
 
     private void setRaceResultsButtons(Map<String, List<List<List<TrainingPlanResponse>>>> trainingPlans) {
         LinearLayout buttonContainer = findViewById(R.id.buttonContainer);
-        ScrollView buttonScrollView = findViewById(R.id.buttonScrollView);
-        HorizontalScrollView tableScrollView = findViewById(R.id.tableScrollView);
+        buttonScrollView = findViewById(R.id.buttonScrollView);
+        tableScrollView = findViewById(R.id.tableScrollView);
         LayoutInflater inflater = LayoutInflater.from(this);
         tableTrainings.removeAllViews();
 
