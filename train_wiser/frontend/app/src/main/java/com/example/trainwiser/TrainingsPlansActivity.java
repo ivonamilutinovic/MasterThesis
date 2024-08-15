@@ -111,6 +111,14 @@ public class TrainingsPlansActivity extends AppCompatActivity {
         String raceDistanceStr = distanceSpinner.getSelectedItem().toString().replace("k", "");;
         String goalTimeStr = editTextGoalTime.getText().toString();
 
+        String currentSelectedDistance = distanceSpinner.getSelectedItem().toString();
+        String currentGoalTime = editTextGoalTime.getText().toString();
+        if (currentSelectedDistance.equals(initialSelectedDistance) && currentGoalTime.equals(initialGoalTime)) {
+            return;
+        }
+        initialSelectedDistance = distanceSpinner.getSelectedItem().toString();
+        initialGoalTime = editTextGoalTime.getText().toString();
+
         if (raceDistanceStr.isEmpty() || goalTimeStr.length() != 8) {
             Toast.makeText(this, "Please enter valid values", Toast.LENGTH_SHORT).show();
             return;
@@ -161,13 +169,6 @@ public class TrainingsPlansActivity extends AppCompatActivity {
             button.setText(key);
 
             button.setOnClickListener(v -> {
-                String currentSelectedDistance = distanceSpinner.getSelectedItem().toString();
-                String currentGoalTime = editTextGoalTime.getText().toString();
-                if (currentSelectedDistance.equals(initialSelectedDistance) && currentGoalTime.equals(initialGoalTime)) {
-                    return;
-                }
-                initialSelectedDistance = distanceSpinner.getSelectedItem().toString();
-                initialGoalTime = editTextGoalTime.getText().toString();
                 buttonScrollView.setVisibility(View.GONE);
                 tableScrollView.setVisibility(View.VISIBLE);
 
