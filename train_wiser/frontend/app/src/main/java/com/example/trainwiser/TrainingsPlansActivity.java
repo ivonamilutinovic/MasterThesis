@@ -150,6 +150,25 @@ public class TrainingsPlansActivity extends AppCompatActivity {
         int hours = Integer.parseInt(goalTimeStr.substring(0, 2));
         int minutes = Integer.parseInt(goalTimeStr.substring(3, 5));
         int seconds = Integer.parseInt(goalTimeStr.substring(6, 8));
+
+        if (hours > 24) {
+            Toast.makeText(TrainingsPlansActivity.this, "Hours must be less than or equal to 24", Toast.LENGTH_LONG).show();
+            editTextGoalTime.setText("");
+            return;
+        }
+
+        if (minutes > 59) {
+            Toast.makeText(TrainingsPlansActivity.this, "Minutes must be less than or equal to 59", Toast.LENGTH_LONG).show();
+            editTextGoalTime.setText("");
+            return;
+        }
+
+        if (seconds > 59) {
+            Toast.makeText(TrainingsPlansActivity.this, "Seconds must be less than or equal to 59", Toast.LENGTH_LONG).show();
+            editTextGoalTime.setText("");
+            return;
+        }
+
         int goalTime = hours * 3600 + minutes * 60 + seconds;
 
 
