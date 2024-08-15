@@ -11,9 +11,10 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.trainwiser.network.APIClientWithInterceptorForTokens;
-import com.example.trainwiser.network.APIInterfaceWithInterceptorForTokens;
+import com.example.trainwiser.network.APIRetrofitClient;
+import com.example.trainwiser.network.APIInterface;
 import com.example.trainwiser.network.api_models.stats.TrainingStatsResponseData;
+import com.example.trainwiser.network.utils.APIUtils;
 
 import org.json.JSONObject;
 
@@ -58,7 +59,6 @@ public class TrainingStatsActivity extends AppCompatActivity {
         yearAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerYear.setAdapter(yearAdapter);
 
-        // Set the default selected year to the current year
         spinnerYear.setSelection(yearAdapter.getPosition(currentYear));
 
         spinnerYear.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -92,10 +92,11 @@ public class TrainingStatsActivity extends AppCompatActivity {
         });
     }
 
-    public void getStatistics(View view) {
-        APIClientWithInterceptorForTokens.getAPIClient(TrainingStatsActivity.this)
-                .create(APIInterfaceWithInterceptorForTokens.class)
-                .getMonthlyStats(selectedYear, selectedMonth).enqueue(new Callback<TrainingStatsResponseData>() {
+    public void getStatisticsRequest(){
+        String authHeader = APIUtils.getAuthorizationHeader(TrainingStatsActivity.this);
+        APIRetrofitClient.getAPIClient()
+                .create(APIInterface.class)
+                .getMonthlyStats(authHeader, selectedYear, selectedMonth).enqueue(new Callback<TrainingStatsResponseData>() {
                     @Override
                     public void onResponse(Call<TrainingStatsResponseData> call, Response<TrainingStatsResponseData> response) {
                         if (response.code() == HttpURLConnection.HTTP_OK) {
@@ -116,6 +117,14 @@ public class TrainingStatsActivity extends AppCompatActivity {
                     }
 
                 });
+    }
+    public void getStatistics(View view) {
+        APIUtils.refreshAccessTokenIfNeeded(TrainingStatsActivity.this,  new Runnable() {
+            @Override
+            public void run() {
+                getStatisticsRequest();
+            }
+        });
     }
 
     private void displayData(TrainingStatsResponseData trainingSummary) {

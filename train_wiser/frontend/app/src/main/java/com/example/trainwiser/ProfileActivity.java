@@ -8,8 +8,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.trainwiser.network.APIClientWithInterceptorForTokens;
-import com.example.trainwiser.network.APIInterfaceWithInterceptorForTokens;
+import com.example.trainwiser.network.APIRetrofitClient;
+import com.example.trainwiser.network.APIInterface;
 import com.example.trainwiser.network.api_models.account.AccountDataResponse;
 import com.example.trainwiser.network.utils.APIUtils;
 
@@ -106,12 +106,12 @@ public class ProfileActivity extends AppCompatActivity {
         return profileUpdates;
     }
 
-    public void onClickSaveChanges(View view) {
+    public void onClickSaveChangesRequest() {
         ProfileSingleton profile = ProfileSingleton.getInstance();
         Map<String, Object> profileUpdates = getUpdatedFields(profile);
-
-        APIClientWithInterceptorForTokens.getAPIClient(ProfileActivity.this).create(APIInterfaceWithInterceptorForTokens.class)
-                .updateAccount(profileUpdates).enqueue(new Callback<AccountDataResponse>() {
+        String authHeader = APIUtils.getAuthorizationHeader(ProfileActivity.this);
+        APIRetrofitClient.getAPIClient().create(APIInterface.class)
+                .updateAccount(authHeader, profileUpdates).enqueue(new Callback<AccountDataResponse>() {
                     @Override
                     public void onResponse(Call<AccountDataResponse> call, Response<AccountDataResponse> response) {
                         if (response.isSuccessful()) {
@@ -138,30 +138,49 @@ public class ProfileActivity extends AppCompatActivity {
                         Utils.onFailureLogging(ProfileActivity.this, t);
                     }
                 });
+
     }
 
-    public void onDeleteAccount(View view) {
-        APIClientWithInterceptorForTokens.getAPIClient(ProfileActivity.this)
-            .create(APIInterfaceWithInterceptorForTokens.class)
-            .deleteAccount().enqueue(new Callback<Void>() {
-                private void delete_user_account() {
-                    APIUtils.removeAPIKeysData(getApplicationContext());
-                    ProfileSingleton.getInstance().emptyProfileData();
-                    Intent intent = new Intent(ProfileActivity.this, LoginActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
-                @Override
-                public void onResponse(Call<Void> call, Response<Void> response) {
-                    delete_user_account();
-                }
+    public void onClickSaveChanges(View view) {
+        APIUtils.refreshAccessTokenIfNeeded(ProfileActivity.this,  new Runnable() {
+            @Override
+            public void run() {
+                onClickSaveChangesRequest();
+            }
+        });
+    }
 
-                @Override
-                public void onFailure(Call<Void> call, Throwable t) {
-                    Utils.onFailureLogging(ProfileActivity.this, t);
-                    delete_user_account();
-                }
-            });
+    public void onDeleteAccountRequest() {
+        String authHeader = APIUtils.getAuthorizationHeader(ProfileActivity.this);
+        APIRetrofitClient.getAPIClient()
+                .create(APIInterface.class)
+                .deleteAccount(authHeader).enqueue(new Callback<Void>() {
+                    private void delete_user_account() {
+                        APIUtils.removeAPIKeysData(getApplicationContext());
+                        ProfileSingleton.getInstance().emptyProfileData();
+                        Intent intent = new Intent(ProfileActivity.this, LoginActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                    @Override
+                    public void onResponse(Call<Void> call, Response<Void> response) {
+                        delete_user_account();
+                    }
+
+                    @Override
+                    public void onFailure(Call<Void> call, Throwable t) {
+                        Utils.onFailureLogging(ProfileActivity.this, t);
+                        delete_user_account();
+                    }
+                });
+    }
+    public void onDeleteAccount(View view) {
+        APIUtils.refreshAccessTokenIfNeeded(ProfileActivity.this,  new Runnable() {
+            @Override
+            public void run() {
+                onDeleteAccountRequest();
+            }
+        });
     }
 
 }

@@ -45,7 +45,6 @@ def token_exchange(request: HttpRequest):
     if StravaAthlete.objects.filter(athlete_id=athlete_id).exists():
         return HttpResponse(f"<p>Error: Athlete with id {athlete_id} is already registered "
                             f"in Train Wiser application.</p>")
-        # TODO: Maybe handle this by updating data
 
     strava_athlete = StravaAthlete.objects.create(athlete_id=response_json.get('athlete').get('id'),
                                                   access_token_expires_at=response_json.get('expires_at'),
@@ -69,7 +68,7 @@ def webhook_subscription(request: HttpRequest):
         post_config = {'client_id': config("CLIENT_ID"),
                        'client_secret': config("CLIENT_SECRET"),
                        'callback_url': f"https://{config('HOSTNAME1')}/strava_gateway/{config('WEBHOOK_ENDPOINT')}",
-                       'verify_token': 'STRAVA_WEBHOOK_SUBSCRIPTION'}  # TODO: Generate random token
+                       'verify_token': 'STRAVA_WEBHOOK_SUBSCRIPTION'}
 
         response = requests.post(url="https://www.strava.com/api/v3/push_subscriptions", json=post_config)
         if response.status_code == 201:

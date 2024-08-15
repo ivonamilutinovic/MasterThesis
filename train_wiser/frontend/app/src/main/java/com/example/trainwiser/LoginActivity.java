@@ -16,6 +16,7 @@ import com.example.trainwiser.network.Oauth2RetrofitClient;
 import com.example.trainwiser.network.api_models.login.LoginRequestData;
 import com.example.trainwiser.network.api_models.login.LoginResponseData;
 import com.example.trainwiser.network.utils.APIKeys;
+import com.example.trainwiser.network.utils.APIUtils;
 
 import org.json.JSONObject;
 
@@ -51,17 +52,10 @@ public class LoginActivity extends AppCompatActivity {
                 GlobalAPIAccessData.getClientSecret(),
                 grant_type);
 
-//        String accessToken = APIUtils.getAccessToken(getApplicationContext());
-//        String refreshToken = APIUtils.getRefreshToken(getApplicationContext());
-//        long expiresAt = APIUtils.getExpiresAt(getApplicationContext());
-
         Oauth2RetrofitClient.getOauth2Client().create(Oauth2Interface.class).loginUser(loginRequestData).enqueue(new Callback<LoginResponseData>() {
             @Override
             public void onResponse(Call<LoginResponseData> call, Response<LoginResponseData> response) {
                 if (response.code() == HttpURLConnection.HTTP_OK) {
-//                    assert response.body() != null;
-//                    Toast.makeText(SignupActivity.this, Integer.toString(response.body().getUser_id()), Toast.LENGTH_SHORT).show();
-
                     if (response.body() != null) {
                         String access_token = response.body().getAccess_token();
                         long expires_in = response.body().getExpires_in();
@@ -69,7 +63,7 @@ public class LoginActivity extends AppCompatActivity {
 
                         SharedPreferenceSingleton sharedPreference = SharedPreferenceSingleton.getInstance(LoginActivity.this);
                         sharedPreference.setValue(APIKeys.API_ACCESS_TOKEN.toString(), access_token, PreferenceType.STRING);
-                        sharedPreference.setValue(APIKeys.API_EXPIRES_AT.toString(), expires_in, PreferenceType.LONG);
+                        sharedPreference.setValue(APIKeys.API_EXPIRES_AT.toString(), APIUtils.getExpiresAt(expires_in), PreferenceType.LONG);
                         sharedPreference.setValue(APIKeys.API_REFRESH_TOKEN.toString(), refresh_token, PreferenceType.STRING);
 
                         Intent intent = new Intent(LoginActivity.this, MainMenuActivity.class);

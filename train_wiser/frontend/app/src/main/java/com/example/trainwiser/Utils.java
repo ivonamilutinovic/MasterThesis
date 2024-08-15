@@ -20,11 +20,11 @@ public class Utils {
     public static final Map<String, Integer> activityEmojisMap = new HashMap<>();
 
     static {
-        activityEmojisMap.put("Run", R.string.run_emoji); // 🏃
-        activityEmojisMap.put("Ride", R.string.ride_emoji); // 🚲
-        activityEmojisMap.put("Swim", R.string.swim_emoji); // 🏊
-        activityEmojisMap.put("WeightTraining", R.string.weight_training_emoji); // 🏋
-        activityEmojisMap.put("RestDay", R.string.rest_day_emoji); // 🏖
+        activityEmojisMap.put("Run", R.string.run_emoji);
+        activityEmojisMap.put("Ride", R.string.ride_emoji);
+        activityEmojisMap.put("Swim", R.string.swim_emoji);
+        activityEmojisMap.put("WeightTraining", R.string.weight_training_emoji);
+        activityEmojisMap.put("RestDay", R.string.rest_day_emoji);
     }
 
     public static String getActivityEmoji(Context context, String activityType) {

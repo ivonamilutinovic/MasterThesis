@@ -150,7 +150,7 @@ REST_FRAMEWORK = {
 
 OAUTH2_PROVIDER = {
     'OAUTH2_BACKEND_CLASS': 'oauth2_provider.oauth2_backends.JSONOAuthLibCore',
-    'ACCESS_TOKEN_EXPIRE_SECONDS': 36000  # todo: 7200
+    'ACCESS_TOKEN_EXPIRE_SECONDS': 120  # todo: 7200
 }
 
 # todo: update :) fill_activity_rd

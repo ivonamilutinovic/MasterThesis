@@ -9,9 +9,10 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.trainwiser.network.APIClientWithInterceptorForTokens;
-import com.example.trainwiser.network.APIInterfaceWithInterceptorForTokens;
+import com.example.trainwiser.network.APIRetrofitClient;
+import com.example.trainwiser.network.APIInterface;
 import com.example.trainwiser.network.api_models.results_prediction.ResultsPredictionResponseData;
+import com.example.trainwiser.network.utils.APIUtils;
 
 import org.json.JSONObject;
 
@@ -55,12 +56,13 @@ public class ResultsPredictActivity extends AppCompatActivity {
         predictRaceTime(selectedDistance);
     }
 
-    private void predictRaceTime(String distance) {
+    private void predictRaceTimeRequest(String distance) {
         String distanceWithoutK = distance.replace("k", "");
+        String authHeader = APIUtils.getAuthorizationHeader(ResultsPredictActivity.this);
 
-        APIClientWithInterceptorForTokens.getAPIClient(ResultsPredictActivity.this)
-                .create(APIInterfaceWithInterceptorForTokens.class)
-                .getResultsPrediction(distanceWithoutK).enqueue(new Callback<ResultsPredictionResponseData>() {
+        APIRetrofitClient.getAPIClient()
+                .create(APIInterface.class)
+                .getResultsPrediction(authHeader, distanceWithoutK).enqueue(new Callback<ResultsPredictionResponseData>() {
                     @Override
                     public void onResponse(Call<ResultsPredictionResponseData> call, Response<ResultsPredictionResponseData> response) {
                         if (response.code() == HttpURLConnection.HTTP_OK) {
@@ -83,5 +85,16 @@ public class ResultsPredictActivity extends AppCompatActivity {
                     }
 
                 });
+    }
+
+    private void predictRaceTime(String distance) {
+
+        APIUtils.refreshAccessTokenIfNeeded(ResultsPredictActivity.this,  new Runnable() {
+            @Override
+            public void run() {
+                predictRaceTimeRequest(distance);
+            }
+        });
+
     }
 }

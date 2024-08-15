@@ -7,9 +7,10 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.trainwiser.network.APIClientWithInterceptorForTokens;
-import com.example.trainwiser.network.APIInterfaceWithInterceptorForTokens;
+import com.example.trainwiser.network.APIRetrofitClient;
+import com.example.trainwiser.network.APIInterface;
 import com.example.trainwiser.network.api_models.account.AccountDataResponse;
+import com.example.trainwiser.network.utils.APIUtils;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -101,32 +102,40 @@ public class ProfileSingleton {
         this.birth_date = birth_date;
     }
 
-    public void renderProfileData(AppCompatActivity activity, Runnable callbackFunction){
-        APIClientWithInterceptorForTokens.getAPIClient(activity).create(APIInterfaceWithInterceptorForTokens.class)
-                .getAccount().enqueue(new Callback<AccountDataResponse>() {
-            @Override
-            public void onResponse(Call<AccountDataResponse> call, Response<AccountDataResponse> response) {
-                if (response.isSuccessful()) {
-                    AccountDataResponse accountData = response.body();
-                    first_name = accountData.getFirst_name();
-                    last_name = accountData.getLast_name();
-                    email = accountData.getEmail();
-                    username = accountData.getUsername();
-                    birth_date = accountData.getBirth_date();
+    public void getAccountRequest(AppCompatActivity activity, Runnable callbackFunction){
+        String authHeader = APIUtils.getAuthorizationHeader(activity);
+        APIRetrofitClient.getAPIClient().create(APIInterface.class)
+                .getAccount(authHeader).enqueue(new Callback<AccountDataResponse>() {
+                    @Override
+                    public void onResponse(Call<AccountDataResponse> call, Response<AccountDataResponse> response) {
+                        if (response.isSuccessful()) {
+                            AccountDataResponse accountData = response.body();
+                            first_name = accountData.getFirst_name();
+                            last_name = accountData.getLast_name();
+                            email = accountData.getEmail();
+                            username = accountData.getUsername();
+                            birth_date = accountData.getBirth_date();
 
-                    if (callbackFunction != null) {
-                        Handler mainHandler = new Handler(Looper.getMainLooper());
-                        mainHandler.post(callbackFunction);
+                            if (callbackFunction != null)
+                                callbackFunction.run();
+                        }
+                        else{
+                            Utils.onResponseErrorLogging(activity, response);
+                        }
                     }
-                }
-                else{
-                    Utils.onResponseErrorLogging(activity, response);
-                }
-            }
 
+                    @Override
+                    public void onFailure(Call<AccountDataResponse> call, Throwable t) {
+                        Utils.onFailureLogging(activity, t);
+                    }
+                });
+    }
+
+    public void renderProfileData(AppCompatActivity activity, Runnable callbackFunction){
+        APIUtils.refreshAccessTokenIfNeeded(activity,  new Runnable() {
             @Override
-            public void onFailure(Call<AccountDataResponse> call, Throwable t) {
-                Utils.onFailureLogging(activity, t);
+            public void run() {
+                getAccountRequest(activity, callbackFunction);
             }
         });
     }

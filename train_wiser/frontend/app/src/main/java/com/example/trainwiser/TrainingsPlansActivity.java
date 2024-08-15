@@ -20,9 +20,10 @@ import android.widget.Toast;
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.trainwiser.network.APIClientWithInterceptorForTokens;
-import com.example.trainwiser.network.APIInterfaceWithInterceptorForTokens;
+import com.example.trainwiser.network.APIRetrofitClient;
+import com.example.trainwiser.network.APIInterface;
 import com.example.trainwiser.network.api_models.trainings.TrainingPlanResponse;
+import com.example.trainwiser.network.utils.APIUtils;
 
 import java.net.HttpURLConnection;
 import java.util.List;
@@ -171,10 +172,19 @@ public class TrainingsPlansActivity extends AppCompatActivity {
 
         int goalTime = hours * 3600 + minutes * 60 + seconds;
 
+        APIUtils.refreshAccessTokenIfNeeded(TrainingsPlansActivity.this,  new Runnable() {
+            @Override
+            public void run() {
+                getTrainingPlansRequest(goalTime, raceDistance);
+            }
+        });
+    }
 
-        APIClientWithInterceptorForTokens.getAPIClient(TrainingsPlansActivity.this)
-                .create(APIInterfaceWithInterceptorForTokens.class)
-                .getTrainingPlan(goalTime, raceDistance).enqueue(new Callback<Map<String, List<List<List<TrainingPlanResponse>>>>>() {
+    public void getTrainingPlansRequest(int goalTime, float raceDistance){
+        String authHeader = APIUtils.getAuthorizationHeader(TrainingsPlansActivity.this);
+        APIRetrofitClient.getAPIClient()
+                .create(APIInterface.class)
+                .getTrainingPlan(authHeader, goalTime, raceDistance).enqueue(new Callback<Map<String, List<List<List<TrainingPlanResponse>>>>>() {
                     @Override
                     public void onResponse(Call<Map<String, List<List<List<TrainingPlanResponse>>>>> call, Response<Map<String, List<List<List<TrainingPlanResponse>>>>> response) {
                         if (response.code() == HttpURLConnection.HTTP_OK) {

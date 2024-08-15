@@ -101,7 +101,7 @@ public class MainMenuActivity extends AppCompatActivity {
         }
     }
 
-    public void onClickLogout(View view) {
+    public void getTrainingPlansRequest(){
         String token = APIUtils.getAccessToken(getApplicationContext());
         LogoutRequestData logoutRequestData = new LogoutRequestData(
                 GlobalAPIAccessData.getClientId(),
@@ -127,6 +127,16 @@ public class MainMenuActivity extends AppCompatActivity {
                 logout_user();
             }
         });
+    }
+
+    public void onClickLogout(View view) {
+        APIUtils.refreshAccessTokenIfNeeded(MainMenuActivity.this,  new Runnable() {
+            @Override
+            public void run() {
+                getTrainingPlansRequest();
+            }
+        });
+
     }
 
 }

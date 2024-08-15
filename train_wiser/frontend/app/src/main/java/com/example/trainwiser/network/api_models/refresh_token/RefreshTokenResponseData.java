@@ -9,6 +9,10 @@ public class RefreshTokenResponseData {
     @SerializedName("expires_in")
     private int expiresIn;
 
+    @SerializedName("refresh_token")
+    private String refreshToken;
+
+
     public String getAccessToken() {
         return accessToken;
     }
@@ -17,4 +21,7 @@ public class RefreshTokenResponseData {
         return expiresIn;
     }
 
+    public String getRefreshToken() {
+        return refreshToken;
+    }
 }
