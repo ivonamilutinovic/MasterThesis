@@ -21,7 +21,7 @@ class TrainingStatsAPIView(APIView):
             return Response({'error': "Month must be between 1 and 12."}, status.HTTP_400_BAD_REQUEST)
 
         if request.user.strava_athlete_id is None:
-            return Response({'error': "Please authenticate your Strava account in order to access training history"},
+            return Response({'error': "Please authenticate your Strava account to access training history"},
                             status.HTTP_400_BAD_REQUEST)
 
         try:

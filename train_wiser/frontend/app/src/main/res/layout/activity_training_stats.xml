@@ -44,28 +44,28 @@
 
             <Spinner
                 android:id="@+id/spinner_year"
-                android:layout_width="105dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="96dp"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginEnd="16dp">
+            android:layout_marginEnd="16dp"
+            android:orientation="vertical">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/alata"
                 android:text="@string/month"
                 android:textColor="@color/for_text_on_buttons"
-                android:fontFamily="@font/alata"
-                android:textStyle="bold"
-                android:textSize="17sp" />
+                android:textSize="17sp"
+                android:textStyle="bold" />
 
             <Spinner
                 android:id="@+id/spinner_month"
-                android:layout_width="85dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/alata"
                 android:textColor="@color/for_text_on_buttons"

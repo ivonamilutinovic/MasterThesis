@@ -1,6 +1,7 @@
-from rest_framework import serializers
+from rest_framework import serializers, status
 from rest_framework.exceptions import ValidationError
 from django.contrib.auth.hashers import make_password
+from rest_framework.response import Response
 
 from .models import CustomUser
 
@@ -10,11 +11,10 @@ class RegisterSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         return CustomUser.objects.create_user(**validated_data)
 
-    # todo: uncomment
-    # def validate_password(self, value):
-    #     if len(value) < 8:
-    #         raise ValidationError("Password must be at least 8 characters long.")
-    #     return value
+    def validate_password(self, value):
+        if len(value) < 8:
+            raise ValidationError("Password must be at least 8 characters long.")
+        return value
 
     class Meta:
         model = CustomUser
@@ -28,11 +28,10 @@ class UserAccountSerializer(serializers.ModelSerializer):
         fields = ('username', 'email', 'first_name', 'last_name', 'password',
                   'birth_date', 'strava_athlete_id')
 
-    # todo: uncomment
-    # def validate_password(self, value):
-    #     if len(value) < 8:
-    #         raise ValidationError("Password must be at least 8 characters long.")
-    #     return value
+    def validate_password(self, value):
+        if len(value) < 8:
+            raise ValidationError("Password must be at least 8 characters long.")
+        return value
 
     def update(self, instance, validated_data):
         password = validated_data.get('password', None)

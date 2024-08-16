@@ -37,7 +37,7 @@ class TrainingsView(APIView):
             closest_races = get_closest_races(matching_races, goal_time)
 
             training_plan_responses = {}
-            training_plan_counter = j = 0
+            training_plan_counter = 0
             number_of_training_days = race_dist_training_weeks[floor(race_distance)] * 7 - 1
             for closest_race in closest_races:
                 first_training_day = (closest_race.start_date - timedelta(days=number_of_training_days)).date()
@@ -77,12 +77,11 @@ class TrainingsView(APIView):
                         if day_in_week_counter % 7 == 0:
                             week_counter += 1
 
-                    cds = ["-3.34%", "-3.34%", "0%", "", "-1%"]
                     calculate_difference = None
                     if request.user.strava_athlete_id:
                         calculate_difference = get_hr_zones_difference(request.user, closest_race.athlete_id)
-                    calculate_difference = f" - HR Zones Dissimilarity {cds[j]}" if cds[j] != "" else ""
-                    j += 1
+                    calculate_difference = f" - HR Zones Dissimilarity {calculate_difference}%" \
+                        if calculate_difference != "" else ""
                     tp_key = (f"Training Plan {training_plan_counter + 1} - "
                               f"{seconds_to_hms(closest_race.moving_time)}{calculate_difference}")
                     training_plan_responses[tp_key] = training_plan_response

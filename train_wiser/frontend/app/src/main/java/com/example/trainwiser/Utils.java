@@ -49,16 +49,36 @@ public class Utils {
     }
 
     public static void onResponseErrorLogging(Context ctx, Response<?> response) {
+        if (response.code() == 401){
+            String errorMessage = "Session issues, please log in again";
+            Log.e("API Response Error", errorMessage);
+            Toast.makeText(ctx, errorMessage, Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        if (response.code() == 500){
+            String errorMessage = "Internal server error";
+            Log.e("API Response Error", errorMessage);
+            Toast.makeText(ctx, errorMessage, Toast.LENGTH_LONG).show();
+            return;
+        }
+
         ResponseBody errorBody = response.errorBody();
-        String errorMessage = "Unknown error - " + response.code();
+        String defaultErrorMessage = "Unknown error - " + response.code();
+        String errorMessage = defaultErrorMessage;
         if (errorBody != null){
+            String errorBodyStr;
+            JSONObject errorBodyJson;
+
             try {
-                String errorBodyStr = errorBody.string();
-                JSONObject errorBodyJson = new JSONObject(errorBodyStr);
-
-                errorMessage = errorBodyJson.optString("error", errorMessage);
+                errorBodyStr = errorBody.string();
+                errorBodyJson = new JSONObject(errorBodyStr);
+                errorMessage = errorBodyJson.optString("error_description");
+                if (errorMessage.equals(""))
+                    errorMessage = errorBodyJson.optString("error");
+                if (errorMessage.equals(""))
+                    errorMessage = errorBodyStr;
             } catch (Exception ignored) {
-
             }
         }
         Log.e("API Response Error", errorMessage);
