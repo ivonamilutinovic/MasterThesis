@@ -9,6 +9,7 @@ from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 
 from .models import StravaAthlete, StravaSettings, StravaActivity
+from users.models import CustomUser
 from .utils.athlete_utils import set_athlete_hr_zone
 
 REQUIRED_SCOPE_TOKENS = ['read', 'activity:read_all', 'profile:read_all']
@@ -31,6 +32,9 @@ def token_exchange(request: HttpRequest):
         if required_scope_token not in scope_tokens:
             return HttpResponse(f"<p>Error: Required scope is {REQUIRED_SCOPE_TOKENS}.</p>")
 
+    username: str = request.GET.get('state')
+
+
     post_config = {'client_id': config("CLIENT_ID"),
                    'client_secret': config("CLIENT_SECRET"),
                    'code': request.GET.get('code'),
@@ -46,16 +50,19 @@ def token_exchange(request: HttpRequest):
         return HttpResponse(f"<p>Error: Athlete with id {athlete_id} is already registered "
                             f"in Train Wiser application.</p>")
 
-    strava_athlete = StravaAthlete.objects.create(athlete_id=response_json.get('athlete').get('id'),
+    strava_id = response_json.get('athlete').get('id')
+    strava_athlete = StravaAthlete.objects.create(athlete_id=strava_id,
                                                   access_token_expires_at=response_json.get('expires_at'),
                                                   access_token=response_json.get('access_token'),
                                                   refresh_token=response_json.get('refresh_token'))
-
     set_athlete_hr_zone(strava_athlete)
 
-    return HttpResponse(f"<p>Code: {request.GET.get('code')}, scope {scope_tokens}, response code: "
-                        f"{response.status_code}, response content: {response.json()}\nTest {strava_athlete}\n"
-                        f"{response_json.get('athlete').get('id')}.</p>")
+    if CustomUser.objects.filter(username=username):
+        user = CustomUser.objects.filter(username=username).get()
+        user.strava_athlete_id = strava_athlete
+        user.save()
+
+    return HttpResponse(f"<p>Connection with Strava succeeded.</p>")
 
 @csrf_exempt
 def webhook_subscription(request: HttpRequest):

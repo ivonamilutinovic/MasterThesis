@@ -115,6 +115,7 @@ public class ProfileSingleton {
                             email = accountData.getEmail();
                             username = accountData.getUsername();
                             birth_date = accountData.getBirth_date();
+                            strava_athlete_id = accountData.getStrava_athlete_id();
 
                             if (callbackFunction != null)
                                 callbackFunction.run();

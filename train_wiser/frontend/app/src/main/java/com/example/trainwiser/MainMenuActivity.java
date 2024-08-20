@@ -32,6 +32,17 @@ public class MainMenuActivity extends AppCompatActivity {
         super.onResume();
         setContentView(R.layout.activity_main_menu);
 
+        ProfileSingleton profile = ProfileSingleton.getInstance();
+        profile.renderProfileData(MainMenuActivity.this,
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        updateStravaConnectionButton();
+                    }
+                });
+    }
+
+    public void updateStravaConnectionButton(){
         Button stravaConnectionButton = findViewById(R.id.buttonConnectWithStrava);
         ProfileSingleton profile = ProfileSingleton.getInstance();
 
@@ -78,23 +89,13 @@ public class MainMenuActivity extends AppCompatActivity {
     }
 
     public void onClickStravaConnection(View view) {
-        Button button = findViewById(R.id.buttonConnectWithStrava);
         ProfileSingleton profile = ProfileSingleton.getInstance();
 
         if (!profile.isUserConnectedWithStrava()) {
-            String stravaAuthorizationURL = GlobalAPIAccessData.getStravaAuthorizationURL();
+            String stravaAuthorizationURL = GlobalAPIAccessData.getStravaAuthorizationURL(profile.getUsername());
             if (stravaAuthorizationURL != null) {
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(stravaAuthorizationURL));
                 MainMenuActivity.this.startActivity(intent);
-
-                profile.renderProfileData(MainMenuActivity.this, null);
-                Integer stravaAthleteId = profile.getStrava_athlete_id();
-                if(stravaAthleteId != null) {
-                    button.setText(R.string.strava_account_connected);
-                    button.setClickable(false);
-                    button.setBackgroundColor(getResources().getColor(R.color.negative_option_for_buttons, getTheme()));
-                    button.setTextColor(getResources().getColor(R.color.for_text_on_negative_buttons, getTheme()));
-                }
             } else {
                 Toast.makeText(MainMenuActivity.this, "Error during Strava authorization", Toast.LENGTH_LONG).show();
             }
