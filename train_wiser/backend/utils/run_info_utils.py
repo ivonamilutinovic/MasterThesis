@@ -72,11 +72,9 @@ def translate_to_unidecode_and_remove_spaces(text: str):
 
 
 def count_number_of_data() -> Dict[str, int]:
-    # todo: refactor
     json_bgd_path = 'training_data/bgd_marathon_race_results.json'
     json_trka_rs_path = 'training_data/trka_rs_race_results.json'
     json_runtrace_path = 'training_data/runtrace_race_results.json'
-    prepared_training_data_json = 'training_data/bgd_marathon_race_name_to_date.json'
 
     with open(json_bgd_path, 'r', encoding='utf-8') as f:
         list_data_bgd = json.load(f)
@@ -86,9 +84,6 @@ def count_number_of_data() -> Dict[str, int]:
 
     with open(json_runtrace_path, 'r', encoding='utf-8') as f:
         list_data_runtrace = json.load(f)
-
-    # with open(prepared_training_data_json, 'r', encoding='utf-8') as f:
-    #     ff = json.load(f)
 
     participants_results_len_bgd = 0
     participants_results_len_trka_rs = 0

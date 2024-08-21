@@ -17,7 +17,6 @@ REQUIRED_SCOPE_TOKENS = ['read', 'activity:read_all', 'profile:read_all']
 logger = logging.getLogger(__name__)
 
 
-# TODO: Upgrade return response in case of errors
 def token_exchange(request: HttpRequest):
     if request.method != 'GET':
         return HttpResponse("<p>Not allowed</p>", status=405)

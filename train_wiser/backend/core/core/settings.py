@@ -150,14 +150,12 @@ REST_FRAMEWORK = {
 
 OAUTH2_PROVIDER = {
     'OAUTH2_BACKEND_CLASS': 'oauth2_provider.oauth2_backends.JSONOAuthLibCore',
-    'ACCESS_TOKEN_EXPIRE_SECONDS': 120  # todo: 7200
+    'ACCESS_TOKEN_EXPIRE_SECONDS': 7200
 }
 
-# todo: update :) fill_activity_rd
 CRONJOBS = [
-    # ('0 */1 * * *', 'strava_gateway.tasks.activity_backfill',
-    #  '>> ' + os.path.join('/home/hp/Desktop', 'train_wiser_crontab.log' + ' 2>&1 ')),
-    # ('30 */1 * * *', 'strava_gateway.tasks.fetch_activity_data')
+    ('0 */1 * * *', 'strava_gateway.tasks.activity_backfill'),
+    ('30 */1 * * *', 'strava_gateway.tasks.fetch_activity_data')
 ]
 
 
