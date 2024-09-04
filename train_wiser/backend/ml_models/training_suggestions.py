@@ -15,7 +15,8 @@ ACTIVITY_DICT['RestDay'] = 0
 
 def parse_date(date_str):
     date_formats = [
-        '%b %d, %Y, %I:%M:%S %p',   # Example: Sep 11, 2017, 8:05:09 PM
+        '%b %d, %Y, %I:%M:%S %p',  # For zero-padded days (e.g., Sep 11, 2017, 8:05:09 PM)
+        '%b %-d, %Y, %I:%M:%S %p',  # For non-zero-padded days (e.g., Jun 1, 2017, 7:07:02 PM) on Unix systems
         '%Y-%m-%d %H:%M:%S',        # Example: 2017-09-11 20:05:09
     ]
     for fmt in date_formats:
@@ -24,6 +25,7 @@ def parse_date(date_str):
         except ValueError:
             continue
     raise ValueError(f"Date format for {date_str} not recognized")
+
 
 def prepare_data(file_paths, days=56):
     training_sequences = []
@@ -41,7 +43,6 @@ def prepare_data(file_paths, days=56):
             'name': str
         })
 
-        # Convert the 'start_date' column to datetime format
         data['start_date'] = data['start_date'].apply(parse_date)
 
         data = data.sort_values(by='start_date')
@@ -85,8 +86,8 @@ def prepare_data(file_paths, days=56):
     return training_sequences, result_targets
 
 file_paths = [
-    '../../training_data/training_suggestions/training_set_0.csv',
-    #'../../training_data/training_suggestions/training_set_1.csv'
+    '../training_data/training_suggestions/training_set_0.csv',
+    '../training_data/training_suggestions/training_set_1.csv'
 ]
 
 # Obtain training sequences and targets

@@ -150,8 +150,3 @@ def write_results_in_json(results_per_runner_dict: Dict, results_per_runner_grou
     output_json = os.path.join(TRAINING_DATA_DIR, RACE_RESULTS_GROUPED_PER_RACE)
     with open(output_json, 'w', encoding='utf-8') as f:
         json.dump(results_per_runner_grouped_per_race_dict, f, indent=4, ensure_ascii=False)
-
-# def prepare_data_for_training():
-#     merged_results = os.path.join(TRAINING_DATA_DIR, JSON_DATA_FOR_TRAINING)
-#     with open(merged_results, 'r', encoding='utf-8') as f:
-#         results_per_runner = json.load(f)

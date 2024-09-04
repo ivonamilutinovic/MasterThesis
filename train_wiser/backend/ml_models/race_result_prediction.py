@@ -1,14 +1,16 @@
 import json
 import os.path
 from datetime import datetime
-from sklearn.metrics import mean_squared_error
+
 import matplotlib.pyplot as plt
 import numpy as np
 import tensorflow as tf
+from sklearn.metrics import mean_squared_error
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import MinMaxScaler
 from tensorflow.keras.layers import LSTM, Dense, Dropout, Bidirectional
 from tensorflow.keras.models import Sequential
+
 
 class RacePredictionModel:
     def __init__(self, sequence_length=3, start_date_str="1990-01-01"):
@@ -127,7 +129,7 @@ class RacePredictionModel:
                 f.write('\n')
 
 def train_model_for_race_result_prediction():
-    json_file = os.path.abspath('../../training_data/race_results.json')
+    json_file = os.path.abspath('../training_data/race_results.json')
     with open(json_file, 'r', encoding='utf-8') as f:
         runners_data = json.load(f)
     model = RacePredictionModel(sequence_length=3)
@@ -138,5 +140,6 @@ def train_model_for_race_result_prediction():
     loss = model.evaluate(X_test, y_test)
     print(f'Mean Squared Error: {loss}')
     model.evaluate_and_visualize(model, X_test, y_test, dates_test, distances_test)
+
 
 train_model_for_race_result_prediction()

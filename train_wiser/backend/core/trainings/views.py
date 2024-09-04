@@ -1,12 +1,11 @@
 from datetime import timedelta
 from math import floor
 
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
 from django.db.models import F, Value, IntegerField
 from django.db.models.functions import Abs
-
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.views import APIView
 from strava_gateway.models import StravaActivity
 
 

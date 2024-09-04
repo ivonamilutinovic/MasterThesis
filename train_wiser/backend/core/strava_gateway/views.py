@@ -7,9 +7,9 @@ from decouple import config
 from django.http import HttpRequest, JsonResponse
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
+from users.models import CustomUser
 
 from .models import StravaAthlete, StravaSettings, StravaActivity
-from users.models import CustomUser
 from .utils.athlete_utils import set_athlete_hr_zone
 
 REQUIRED_SCOPE_TOKENS = ['read', 'activity:read_all', 'profile:read_all']
@@ -73,7 +73,7 @@ def webhook_subscription(request: HttpRequest):
     if request.method == 'POST':
         post_config = {'client_id': config("CLIENT_ID"),
                        'client_secret': config("CLIENT_SECRET"),
-                       'callback_url': f"https://{config('HOSTNAME1')}/strava_gateway/{config('WEBHOOK_ENDPOINT')}",
+                       'callback_url': f"https://{config('HOSTNAME')}/strava_gateway/{config('WEBHOOK_ENDPOINT')}",
                        'verify_token': 'STRAVA_WEBHOOK_SUBSCRIPTION'}
 
         response = requests.post(url="https://www.strava.com/api/v3/push_subscriptions", json=post_config)
