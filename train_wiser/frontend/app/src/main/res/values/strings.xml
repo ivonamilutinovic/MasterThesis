@@ -52,4 +52,5 @@
     <string name="rest_day_emoji">🏖 Rest day</string>
     <string name="empty_training">Error</string>
     <string name="statistics">Statistics</string>
+    <string name="birth_date_label">Birth Date:</string>
 </resources>

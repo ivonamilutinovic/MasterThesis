@@ -58,7 +58,6 @@ public class TrainingStatsActivity extends AppCompatActivity {
         ArrayAdapter<Integer> yearAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, years);
         yearAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerYear.setAdapter(yearAdapter);
-
         spinnerYear.setSelection(yearAdapter.getPosition(currentYear));
 
         spinnerYear.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

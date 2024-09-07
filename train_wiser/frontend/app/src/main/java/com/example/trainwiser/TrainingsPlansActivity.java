@@ -45,7 +45,7 @@ public class TrainingsPlansActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_trainings_suggestions);
+        setContentView(R.layout.activity_training_plans);
 
         distanceSpinner = findViewById(R.id.distance_spinner);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
@@ -54,12 +54,11 @@ public class TrainingsPlansActivity extends AppCompatActivity {
         distanceSpinner.setAdapter(adapter);
         distanceSpinner.setSelection(0);
 
-
         editTextGoalTime = findViewById(R.id.editText_goal_time);
         tableTrainings = findViewById(R.id.tableTrainings);
         editTextGoalTime.addTextChangedListener(new TextWatcher() {
-            private String current = "";
-            private String hhmmss = "HHMMSS";
+            private String previousFormattedTime = "";
+            private String hhmmssPlaceholder = "HHMMSS";
             private final int[] selection = {2, 5, 8};
 
             @Override
@@ -70,36 +69,37 @@ public class TrainingsPlansActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (!s.toString().equals(current)) {
-                    String clean = s.toString().replaceAll("[^\\d]", "");
-                    String cleanC = current.replaceAll("[^\\d]", "");
+                if (!s.toString().equals(previousFormattedTime)) {
+                    String onlyDigitsInput = s.toString().replaceAll("[^\\d]", "");
+                    String onlyDigitsPrevious = previousFormattedTime.replaceAll("[^\\d]", "");
 
-                    int cl = clean.length();
-                    int sel = cl;
-                    for (int i : selection) {
-                        if (cl <= i) break;
-                        sel++;
+                    int inputLength = onlyDigitsInput.length();
+                    int cursorPosition = inputLength;
+                    for (int selectionIndex : selection) {
+                        if (inputLength <= selectionIndex) break;
+                        cursorPosition++;
                     }
 
-                    if (clean.equals(cleanC)) sel--;
+                    if (onlyDigitsInput.equals(onlyDigitsPrevious)) cursorPosition--;
 
-                    if (clean.length() < 6) {
-                        clean = clean + hhmmss.substring(clean.length());
+                    if (onlyDigitsInput.length() < 6) {
+                        onlyDigitsInput = onlyDigitsInput + hhmmssPlaceholder.substring(onlyDigitsInput.length());
                     } else {
-                        clean = clean.substring(0, 6);
+                        onlyDigitsInput = onlyDigitsInput.substring(0, 6);
                     }
 
-                    clean = String.format("%s:%s:%s",
-                            clean.substring(0, 2),
-                            clean.substring(2, 4),
-                            clean.substring(4, 6));
+                    onlyDigitsInput = String.format("%s:%s:%s",
+                            onlyDigitsInput.substring(0, 2),
+                            onlyDigitsInput.substring(2, 4),
+                            onlyDigitsInput.substring(4, 6));
 
-                    sel = Math.max(sel, 0);
-                    current = clean;
-                    editTextGoalTime.setText(current);
-                    editTextGoalTime.setSelection(Math.min(sel, current.length()));
+                    cursorPosition = Math.max(cursorPosition, 0);
+                    previousFormattedTime = onlyDigitsInput;
+                    editTextGoalTime.setText(previousFormattedTime);
+                    editTextGoalTime.setSelection(Math.min(cursorPosition, previousFormattedTime.length()));
                 }
             }
+
         });
     }
 

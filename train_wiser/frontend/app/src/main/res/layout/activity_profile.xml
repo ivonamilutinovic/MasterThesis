@@ -165,12 +165,11 @@
                     android:inputType="textPassword"/>
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- Birth Date Label -->
             <TextView
                 android:id="@+id/usernameBirthDateLabel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Birth Date:"
+                android:text="@string/birth_date_label"
                 android:fontFamily="@font/alata"
                 android:textStyle="bold"
                 android:textColor="@color/for_text_on_labels_darker"

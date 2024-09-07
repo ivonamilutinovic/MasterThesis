@@ -69,6 +69,10 @@ class TrainingStatsAPIView(APIView):
 
 def get_weeks_covered_by_month(year, month):
     first_day_of_month = datetime(year, month, 1)
+
+    # calendar.monthrange(year, month) returns a tuple:
+    # - The first value is the weekday of the first day of the month (Monday=0, Sunday=6).
+    # - The second value is the number of days in the month.
     last_day_of_month = datetime(year, month, calendar.monthrange(year, month)[1])
 
     # Start from the Monday of the week containing the first day of the month
@@ -76,6 +80,7 @@ def get_weeks_covered_by_month(year, month):
     # End on the Sunday of the week containing the last day of the month
     end_date = last_day_of_month + timedelta(days=(6 - last_day_of_month.weekday()))
 
+    # isocalendar() returns a tuple (ISO year, ISO week number, ISO weekday)
     start_week = start_date.isocalendar()[1]
     end_week = end_date.isocalendar()[1]
     return list(range(start_week, end_week + 1))

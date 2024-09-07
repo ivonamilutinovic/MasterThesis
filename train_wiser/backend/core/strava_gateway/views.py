@@ -33,7 +33,6 @@ def token_exchange(request: HttpRequest):
 
     username: str = request.GET.get('state')
 
-
     post_config = {'client_id': config("CLIENT_ID"),
                    'client_secret': config("CLIENT_SECRET"),
                    'code': request.GET.get('code'),
