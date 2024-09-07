@@ -44,7 +44,6 @@ To set up project, follow the steps below.
 
     This will apply all the migrations and set up the database for the Django application.
 
-
 5. For webhook subscription on Strava application, POST request must be sent on `webhook_subscription` rute to trigger webhook creation.
 
 ### Client-Side (Android)
@@ -53,18 +52,18 @@ To set up the Android client-side application, ensure you have the following ins
 
 1. Java Development Kit (JDK)
 
-  The application uses OpenJDK version 11. Current version of Java can be checked with the following command:
-
-  ```
-  java -version
-  ```
+     The application uses OpenJDK version 11. Current version of Java can be checked with the following command:
+   
+     ```
+     java -version
+     ```
 
 2. Android SDK
  
-The application uses Android SDK version 34 for compiling the app, with a minimum SDK version 26. 
-Ensure that the correct versions is installed by checking SDK settings in the build.gradle file:
-
-  ```
-    compileSdk = 34
-    minSdk = 26
-  ```
+   The application uses Android SDK version 34 for compiling the app, with a minimum SDK version 26. 
+   Ensure that the correct versions is installed by checking SDK settings in the build.gradle file:
+   
+     ```
+       compileSdk = 34
+       minSdk = 26
+     ```

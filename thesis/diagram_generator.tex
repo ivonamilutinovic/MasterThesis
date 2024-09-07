@@ -1,0 +1,22 @@
+\documentclass{standalone}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta}
+
+\begin{document}
+\begin{tikzpicture}[node distance=2cm, auto,]
+    % Nodes
+    \node (min) {Минут (0 - 59)};
+    \node (hour) [below of=min] {Сат (0 - 23)};
+    \node (dom) [below of=hour] {Дан у месецу (1 - 31)};
+    \node (mon) [below of=dom] {Месец (1 - 12)};
+    \node (dow) [below of=mon] {Дан у недељи (0 - 7) (недеља је 0 или 7)};
+    \node (cmd) [below of=dow] {Команда за извршавање};
+
+    % Connections
+    \draw[dashed] (min) -- (hour);
+    \draw[dashed] (hour) -- (dom);
+    \draw[dashed] (dom) -- (mon);
+    \draw[dashed] (mon) -- (dow);
+    \draw[dashed] (dow) -- (cmd);
+\end{tikzpicture}
+\end{document}
