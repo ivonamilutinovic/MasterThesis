@@ -80,7 +80,7 @@ class TrainingsView(APIView):
                     if request.user.strava_athlete_id:
                         calculate_difference = get_hr_zones_difference(request.user, closest_race.athlete_id)
                     calculate_difference = f" - HR Zones Dissimilarity {calculate_difference}%" \
-                        if calculate_difference != "" else ""
+                        if calculate_difference is not None else ""
                     tp_key = (f"Training Plan {training_plan_counter + 1} - "
                               f"{seconds_to_hms(closest_race.moving_time)}{calculate_difference}")
                     training_plan_responses[tp_key] = training_plan_response
@@ -146,7 +146,7 @@ def get_hr_zones_difference(current_user, athlete_user_id):
     if num_keys == 0:
         return None
 
-    average_difference = total_difference / num_keys
+    average_difference = round(total_difference / num_keys, 2)
     percentage_difference = average_difference * 100
 
     return percentage_difference

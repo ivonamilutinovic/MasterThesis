@@ -22,13 +22,17 @@ public class Utils {
     static {
         activityEmojisMap.put("Run", R.string.run_emoji);
         activityEmojisMap.put("Ride", R.string.ride_emoji);
+        activityEmojisMap.put("VirtualRide", R.string.ride_emoji);
         activityEmojisMap.put("Swim", R.string.swim_emoji);
         activityEmojisMap.put("WeightTraining", R.string.weight_training_emoji);
         activityEmojisMap.put("RestDay", R.string.rest_day_emoji);
     }
 
     public static String getActivityEmoji(Context context, String activityType) {
-        int emojiResId = activityEmojisMap.getOrDefault(activityType, R.string.empty_training);
+        int emojiResId = activityEmojisMap.getOrDefault(activityType, -1);
+        if (emojiResId == -1){
+            return activityType;
+        }
         return context.getString(emojiResId);
     }
 
